@@ -81,11 +81,12 @@ class TableView extends StatelessWidget {
                       childCount: seasonState.standingsResponse.list.length,
                     ),
                   ),
-                  headerSection(context, seasonState.nextWeek.name),
-                  FixturesView(
-                    week: seasonState.nextWeek,
+                  headerSection(context, 'מחזור הבא'),
+                  SliverToBoxAdapter(
+                    child: FixturesWeekView(
+                      week: seasonState.nextWeek,
+                    ),
                   )
-                  // ),
                 ],
               ),
             );

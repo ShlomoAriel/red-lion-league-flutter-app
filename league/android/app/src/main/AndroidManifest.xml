@@ -2,6 +2,7 @@
     package="com.example.league">
    <application
         android:label="league"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

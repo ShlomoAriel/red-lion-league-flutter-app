@@ -6,27 +6,55 @@ import 'package:league/bloc/league/league_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FixturesView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.grey[200],
+        padding: EdgeInsets.only(bottom: 10.0),
+        child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
+          if (state == null ||
+              state.isLoading ||
+              state.store == null ||
+              state.store[state.currentSeason] == null) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return WeekWrapper(
+              weeks: state.store[state.currentSeason].weeks,
+            );
+          }
+        }));
+  }
+}
+
+class FixturesWeekView extends StatelessWidget {
   final Week week;
 
-  const FixturesView({Key key, this.week}) : super(key: key);
+  const FixturesWeekView({Key key, this.week}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Card(
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        color: Colors.white,
-        child: ListView.builder(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: week.fixtures.keys.toList().length,
-          itemBuilder: (context, index) {
-            final keys = week.fixtures.keys.toList();
-            final list = week.fixtures[keys[index]];
-            return FixtureDayView(dateString: keys[index], matches: list);
-          },
-        ),
+    return Card(
+      margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Column(
+        children: [
+          Container(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Text('מחזור ' + week.name,
+                  style: Theme.of(context).textTheme.headline6)),
+          ListView.builder(
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: week.fixtures.keys.toList().length,
+            itemBuilder: (context, index) {
+              final keys = week.fixtures.keys.toList();
+              final list = week.fixtures[keys[index]];
+              return FixtureDayView(dateString: keys[index], matches: list);
+            },
+          )
+        ],
       ),
     );
   }
@@ -118,5 +146,31 @@ class FixtureView extends StatelessWidget {
             ],
           );
         }));
+  }
+}
+
+class WeekWrapper extends StatelessWidget {
+  final List<Week> weeks;
+
+  const WeekWrapper({Key key, this.weeks}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListView.separated(
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(width: 30);
+        },
+        shrinkWrap: true,
+        itemCount: weeks.length,
+        // scrollDirection: Axis.horizontal,
+        itemBuilder: (_, index) {
+          final week = weeks[index];
+          return FixturesWeekView(
+            week: week,
+          );
+        },
+      ),
+    );
   }
 }
