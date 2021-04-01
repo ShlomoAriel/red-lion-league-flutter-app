@@ -5,6 +5,8 @@ import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../header_view.dart';
+
 class FixturesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,16 +17,42 @@ class FixturesView extends StatelessWidget {
           if (state == null ||
               state.isLoading ||
               state.store == null ||
-              state.store[state.currentSeason] == null) {
+              state.store[state.currentSeason.id] == null) {
             return Center(
               child: CircularProgressIndicator(),
             );
           } else {
-            return WeekWrapper(
-              weeks: state.store[state.currentSeason].weeks,
-            );
+            var seasonState = state.store[state.currentSeason.id];
+            return CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
+                  WeekWrapperView(
+                    weeks: seasonState.weeks,
+                  )
+                ]);
           }
         }));
+  }
+}
+
+class WeekWrapperView extends StatelessWidget {
+  final List<Week> weeks;
+
+  const WeekWrapperView({Key key, this.weeks}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final week = weeks[index];
+          return FixturesWeekView(
+            week: week,
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -146,31 +174,5 @@ class FixtureView extends StatelessWidget {
             ],
           );
         }));
-  }
-}
-
-class WeekWrapper extends StatelessWidget {
-  final List<Week> weeks;
-
-  const WeekWrapper({Key key, this.weeks}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(width: 30);
-        },
-        shrinkWrap: true,
-        itemCount: weeks.length,
-        // scrollDirection: Axis.horizontal,
-        itemBuilder: (_, index) {
-          final week = weeks[index];
-          return FixturesWeekView(
-            week: week,
-          );
-        },
-      ),
-    );
   }
 }

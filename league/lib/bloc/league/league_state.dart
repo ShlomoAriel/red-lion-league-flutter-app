@@ -2,7 +2,7 @@ import 'league_models.dart';
 
 class LeagueState {
   bool isLoading;
-  String currentSeason;
+  Season currentSeason;
   String selectedTeam;
   List<Season> seasons;
   List<Goal> goals;

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
+import 'package:league/views/header_view.dart';
 
 class TeamDetailsView extends StatelessWidget {
   @override
@@ -15,28 +16,16 @@ class TeamDetailsView extends StatelessWidget {
           if (state == null ||
               state.isLoading ||
               state.selectedTeam == null ||
-              state.store[state.currentSeason] == null) {
+              state.store[state.currentSeason.id] == null) {
             return Center(
               child: CircularProgressIndicator(),
             );
           } else {
-            var seasonState = state.store[state.currentSeason];
+            var seasonState = state.store[state.currentSeason.id];
+            var team = seasonState.teamsMap[state.selectedTeam];
             return CustomScrollView(
               slivers: [
-                SliverAppBar(
-                  title: Text(
-                    'state.seasons',
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  backgroundColor: Color(0xFFEDF2F8),
-                  expandedHeight: 250,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Image.network(
-                        'https://scontent.fsdv3-1.fna.fbcdn.net/v/t31.0-8/12698529_231358233869155_5619845670877879998_o.png?_nc_cat=101&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=2EA7Ge84dF8AX9Zkzga&_nc_ht=scontent.fsdv3-1.fna&oh=e4bf096459653b87c3ce6570161678cc&oe=608202A1',
-                        fit: BoxFit.cover),
-                  ),
-                ),
-                headerSection(context, state.selectedTeam ?? ''),
+                MySliverAppBar(team.name, seasonState.season.name),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   sliver: SliverList(
@@ -45,6 +34,7 @@ class TeamDetailsView extends StatelessWidget {
                         final player = seasonState
                             .teamsMap[state.selectedTeam].seasonPlayers[index];
                         return TeamDetailsRowView(
+                          team: team,
                           callback: () {
                             // BlocProvider.of<LeagueCubit>(context)
                             //     .setTeamSeasonPlayers(
@@ -71,8 +61,9 @@ class TeamDetailsView extends StatelessWidget {
 class TeamDetailsRowView extends StatelessWidget {
   final VoidCallback callback;
   final Player tableLine;
+  final Team team;
 
-  const TeamDetailsRowView({Key key, this.callback, this.tableLine})
+  const TeamDetailsRowView({Key key, this.callback, this.tableLine, this.team})
       : super(key: key);
 
   @override
@@ -104,8 +95,10 @@ class TeamDetailsRowView extends StatelessWidget {
                       FadeInImage(
                         width: 30,
                         height: 30,
-                        placeholder: AssetImage('assets/images/gold.png'),
-                        image: NetworkImage('https://i.imgur.com/bTa4y4S.png'),
+                        placeholder:
+                            AssetImage('assets/images/shield-placeholder.png'),
+                        image: AssetImage(
+                            'assets/images/logos/' + team.id + '.png'),
                         fit: BoxFit.cover,
                       ),
                       SizedBox(width: 8),

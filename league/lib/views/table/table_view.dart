@@ -4,8 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
+import 'package:league/views/fixtures/fixtures_view.dart';
 
-import 'fixtures_view.dart';
+import '../header_view.dart';
 
 class TableView extends StatelessWidget {
   @override
@@ -16,49 +17,24 @@ class TableView extends StatelessWidget {
           if (state == null ||
               state.isLoading ||
               state.store == null ||
-              state.store[state.currentSeason] == null) {
+              state.store[state.currentSeason.id] == null) {
             return Container(
                 color: Colors.grey[200],
                 child: Center(
                   child: CircularProgressIndicator(),
                 ));
           } else {
-            var seasonState = state.store[state.currentSeason];
-            var stretchModes2 = [
-              StretchMode.zoomBackground,
-              // StretchMode.blurBackground,
-              StretchMode.fadeTitle,
-            ];
+            var seasonState = state.store[state.currentSeason.id];
             return Container(
               color: Colors.grey[200],
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  SliverAppBar(
-                    expandedHeight: 60,
-                    stretch: true,
-                    flexibleSpace: FlexibleSpaceBar(
-                      title: Text(
-                        seasonState.season.name,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      stretchModes: stretchModes2,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: DropdownButton<String>(
-                      value: state.currentSeason,
-                      items: state.seasons.map((value) {
-                        return new DropdownMenuItem<String>(
-                          value: value.id,
-                          child: new Text(value.id),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        print(value);
-                        BlocProvider.of<LeagueCubit>(context).setSeason(value);
-                      },
-                    ),
+                  MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
+                  // headerSection(context, 'טבלה'),
+                  SliverPadding(
+                    sliver: SliverToBoxAdapter(child: SeasonDropDown()),
+                    padding: EdgeInsets.only(left: 20),
                   ),
                   tableHeader(context),
                   SliverList(
@@ -69,7 +45,7 @@ class TableView extends StatelessWidget {
                         return TableRowView(
                           callback: () {
                             BlocProvider.of<LeagueCubit>(context)
-                                .setTeamSeasonPlayers(state.currentSeason,
+                                .setTeamSeasonPlayers(state.currentSeason.id,
                                     standing.id.toString());
                             Navigator.of(context).pushNamed(
                               '/teamDetails',
@@ -94,6 +70,31 @@ class TableView extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class SeasonDropDown extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
+      return DropdownButton<Season>(
+        icon: Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+        elevation: 16,
+        style: Theme.of(context).textTheme.bodyText1,
+        value: state.currentSeason,
+        items: state.seasons.map((value) {
+          return new DropdownMenuItem<Season>(
+            value: value,
+            child: new Text(value.name),
+          );
+        }).toList(),
+        onChanged: (value) {
+          print(value);
+          BlocProvider.of<LeagueCubit>(context).setSeason(value);
+        },
+      );
+    });
   }
 }
 

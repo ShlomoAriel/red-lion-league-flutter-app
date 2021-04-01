@@ -22,10 +22,11 @@ class LeagueCubit extends Cubit<LeagueState> {
       store[season.id] = new SeasonState();
     }
 
-    var currentSeason =
-        seasons != null && seasons.length > 0 ? seasons[0].id : '2014';
-    SeasonState seasonState = await createSeasonState(currentSeason);
-    store[currentSeason] = seasonState;
+    var currentSeason = seasons != null && seasons.length > 0
+        ? seasons[0]
+        : Season(id: '2014', name: 'טמפ');
+    SeasonState seasonState = await createSeasonState(currentSeason.id);
+    store[currentSeason.id] = seasonState;
     LeagueState leagueState = new LeagueState(
         currentSeason: currentSeason,
         store: store,
@@ -63,24 +64,24 @@ class LeagueCubit extends Cubit<LeagueState> {
     return seasonState;
   }
 
-  void setSeason(String seasonId) async {
+  void setSeason(Season season) async {
     // Check if season exists in store
-    if (state.store[seasonId].refreshed != null) {
+    if (state.store[season.id].refreshed != null) {
       LeagueState tempState = new LeagueState.from(state);
-      tempState.currentSeason = seasonId;
+      tempState.currentSeason = season;
       emit(tempState);
       return;
     }
     // Update selected season loading
     LeagueState tempState = new LeagueState.from(state);
     tempState.isLoading = true;
-    tempState.currentSeason = seasonId;
+    tempState.currentSeason = season;
     emit(tempState);
     // Download and set season
-    SeasonState seasonState = await createSeasonState(seasonId);
+    SeasonState seasonState = await createSeasonState(season.id);
     LeagueState leagueState = new LeagueState.from(state);
-    leagueState.store[seasonId] = seasonState;
-    leagueState.currentSeason = seasonId;
+    leagueState.store[season.id] = seasonState;
+    leagueState.currentSeason = season;
     leagueState.isLoading = false;
     emit(leagueState);
   }
@@ -91,13 +92,13 @@ class LeagueCubit extends Cubit<LeagueState> {
     emit(tempState);
     TeamPlayersResponse response = await getTeamSeasonPlayers(seasonId, teamId);
     var team = new Team();
-    if (state.store[state.currentSeason].teamsMap[teamId] != null) {
-      team = Team.from(state.store[state.currentSeason].teamsMap[teamId]);
+    if (state.store[state.currentSeason.id].teamsMap[teamId] != null) {
+      team = Team.from(state.store[state.currentSeason.id].teamsMap[teamId]);
     }
     var newState = new LeagueState.from(state);
     team.seasonPlayers = response.list;
     newState.selectedTeam = team.id;
-    newState.store[state.currentSeason].teamsMap[teamId] = team;
+    newState.store[state.currentSeason.id].teamsMap[teamId] = team;
     newState.isLoading = false;
     emit(newState);
   }
