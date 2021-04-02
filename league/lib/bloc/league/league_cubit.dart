@@ -14,17 +14,22 @@ class LeagueCubit extends Cubit<LeagueState> {
   void init() async {
     var seasons = await getSeasons();
     var goals = await getGoals();
-    LeagueState preState =
-        new LeagueState(seasons: seasons, goals: goals, isLoading: true);
-    emit(preState);
     var store = new Map<String, SeasonState>();
     for (var season in seasons) {
-      store[season.id] = new SeasonState();
+      store[season.id] = new SeasonState(season: season);
     }
-
     var currentSeason = seasons != null && seasons.length > 0
         ? seasons[0]
         : Season(id: '2014', name: 'טמפ');
+
+    LeagueState preState = new LeagueState(
+        seasons: seasons,
+        goals: goals,
+        store: store,
+        isLoading: true,
+        currentSeason: currentSeason);
+    emit(preState);
+
     SeasonState seasonState = await createSeasonState(currentSeason.id);
     store[currentSeason.id] = seasonState;
     LeagueState leagueState = new LeagueState(

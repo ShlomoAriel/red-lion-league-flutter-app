@@ -5,7 +5,7 @@ import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:league/views/fixtures/fixtures_view.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import '../header_view.dart';
 
 class TableView extends StatelessWidget {
@@ -57,11 +57,75 @@ class TableView extends StatelessWidget {
                       childCount: seasonState.standingsResponse.list.length,
                     ),
                   ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    sliver: SliverToBoxAdapter(
+                        child: CarouselSlider(
+                      options: CarouselOptions(
+                          height: 220.0,
+                          // enlargeCenterPage: true,
+                          autoPlay: true,
+                          aspectRatio: 16 / 9,
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enableInfiniteScroll: true,
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 800),
+                          viewportFraction: 1),
+                      items: [
+                        'https://i.imgur.com/128iWylh.jpg',
+                        'https://i.imgur.com/IOOuJPzh.jpg',
+                        'https://i.imgur.com/CDTbIghh.jpg',
+                        'https://i.imgur.com/cEp4nvhh.jpg',
+                        'https://i.imgur.com/c0WQhRIh.jpg',
+                        'https://i.imgur.com/jJD28Srh.jpg',
+                        'https://i.imgur.com/ehdBfUkh.jpg',
+                        'https://i.imgur.com/oBAXUCqh.jpg',
+                        'https://i.imgur.com/ZAwJAlAh.jpg',
+                        'https://i.imgur.com/jJD28Srh.jpg',
+                        'https://i.imgur.com/7cSF86Mh.jpg',
+                        'https://i.imgur.com/pA6NAkph.jpg'
+                      ].map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width - 20,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5.0),
+                                child: FadeInImage.assetNetwork(
+                                  placeholder:
+                                      'assets/images/LOGO CLEAN BACKGROUND.png',
+                                  image: i,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            );
+                            // return Container(
+                            //   child: FadeInImage.memoryNetwork(
+                            //     placeholder: kTransparentImage,
+                            //     image: i,
+                            //     fit: BoxFit.contain,
+                            //   ),
+                            // );
+                            // return Container(
+                            //     margin: EdgeInsets.symmetric(horizontal: 2.0),
+                            //     decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(5.0),
+                            //       image: DecorationImage(
+                            //           image: NetworkImage(i), fit: BoxFit.cover),
+                            //     ));
+                          },
+                        );
+                      }).toList(),
+                    )),
+                  ),
                   headerSection(context, 'מחזור הבא'),
                   SliverToBoxAdapter(
                     child: FixturesWeekView(
                       week: seasonState.nextWeek,
                     ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: 10),
                   )
                 ],
               ),

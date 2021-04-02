@@ -12,7 +12,6 @@ class FixturesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: Colors.grey[200],
-        padding: EdgeInsets.only(bottom: 10.0),
         child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
           if (state == null ||
               state.isLoading ||
@@ -43,14 +42,18 @@ class FixturesSliverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final week = weeks[index];
-          return FixturesWeekView(
-            week: week,
-          );
-        },
+    return SliverPadding(
+      padding: EdgeInsets.only(top: 10),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final week = weeks[index];
+            return FixturesWeekView(
+              week: week,
+            );
+          },
+          childCount: weeks.length,
+        ),
       ),
     );
   }
