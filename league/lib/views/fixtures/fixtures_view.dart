@@ -27,7 +27,7 @@ class FixturesView extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
-                  WeekWrapperView(
+                  FixturesSliverView(
                     weeks: seasonState.weeks,
                   )
                 ]);
@@ -36,10 +36,10 @@ class FixturesView extends StatelessWidget {
   }
 }
 
-class WeekWrapperView extends StatelessWidget {
+class FixturesSliverView extends StatelessWidget {
   final List<Week> weeks;
 
-  const WeekWrapperView({Key key, this.weeks}) : super(key: key);
+  const FixturesSliverView({Key key, this.weeks}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -97,24 +97,27 @@ class FixtureDayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-          margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
-          alignment: Alignment.centerLeft,
-          child:
-              Text(dateString, style: Theme.of(context).textTheme.subtitle2)),
-      Container(
-        child: ListView.builder(
-          padding: EdgeInsets.zero,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: matches.length,
-          itemBuilder: (context, index) {
-            return FixtureView(match: matches[index]);
-          },
-        ),
-      )
-    ]);
+    return Column(
+        mainAxisAlignment:
+            MainAxisAlignment.center, //Center Row contents horizontally,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
+              child: Text(dateString,
+                  style: Theme.of(context).textTheme.subtitle2)),
+          Container(
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: matches.length,
+              itemBuilder: (context, index) {
+                return FixtureView(match: matches[index]);
+              },
+            ),
+          )
+        ]);
   }
 }
 
