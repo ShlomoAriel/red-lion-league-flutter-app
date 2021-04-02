@@ -139,10 +139,13 @@ class FixtureView extends StatelessWidget {
                 CrossAxisAlignment.center, //Center Row contents vertically,
             children: [
               Container(
-                  alignment: Alignment.centerRight,
                   width: 100,
-                  child: Text(match.homeName,
-                      style: Theme.of(context).textTheme.bodyText1)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(match.homeName,
+                            style: Theme.of(context).textTheme.bodyText1)
+                      ])),
               SizedBox(width: 10),
               FadeInImage(
                 width: 30,
@@ -170,10 +173,13 @@ class FixtureView extends StatelessWidget {
               ),
               SizedBox(width: 10),
               Container(
-                  alignment: Alignment.centerLeft,
                   width: 100,
-                  child: Text(match.awayName,
-                      style: Theme.of(context).textTheme.bodyText1)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(match.awayName,
+                            style: Theme.of(context).textTheme.bodyText1)
+                      ])),
             ],
           );
         }));
