@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
+import 'package:league/views/common/sliver_section_view.dart';
+import 'package:league/views/common/table_header_view.dart';
 import 'package:league/views/fixtures/fixtures_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../header_view.dart';
@@ -25,18 +27,66 @@ class TableView extends StatelessWidget {
                 ));
           } else {
             var seasonState = state.store[state.currentSeason.id];
+            var columns = [
+              TableHeaderColumnView(
+                index: 1,
+                width: 50,
+                label: '#',
+              ),
+              TableHeaderColumnView(
+                index: 2,
+                width: 45,
+                label: 'קבוצה',
+              ),
+              TableHeaderColumnView(
+                index: 2,
+                width: 100,
+                label: '',
+              ),
+              TableHeaderColumnView(
+                index: 3,
+                width: 30,
+                label: 'מש',
+              ),
+              TableHeaderColumnView(
+                index: 3,
+                width: 30,
+                label: 'נצ',
+              ),
+              TableHeaderColumnView(
+                index: 3,
+                width: 30,
+                label: 'תק',
+              ),
+              TableHeaderColumnView(
+                index: 3,
+                width: 30,
+                label: 'הפ',
+              ),
+              TableHeaderColumnView(
+                index: 3,
+                width: 30,
+                label: 'הפרש',
+              ),
+              TableHeaderColumnView(
+                index: 3,
+                width: 30,
+                label: 'נק',
+              )
+            ];
             return Container(
               color: Colors.grey[200],
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
-                  // headerSection(context, 'טבלה'),
                   SliverPadding(
                     sliver: SliverToBoxAdapter(child: SeasonDropDown()),
-                    padding: EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(left: 20, right: 20),
                   ),
-                  tableHeader(context),
+                  TableHeader(
+                    tableRowColumns: columns,
+                  ),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -58,7 +108,7 @@ class TableView extends StatelessWidget {
                     ),
                   ),
                   SliverPadding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    padding: EdgeInsets.only(top: 10),
                     sliver: SliverToBoxAdapter(
                         child: CarouselSlider(
                       options: CarouselOptions(
@@ -118,7 +168,7 @@ class TableView extends StatelessWidget {
                       }).toList(),
                     )),
                   ),
-                  headerSection(context, 'מחזור הבא'),
+                  SliverSectionView(title: 'מחזור הבא'),
                   SliverToBoxAdapter(
                     child: FixturesWeekView(
                       week: seasonState.nextWeek,
@@ -277,87 +327,6 @@ class TableRowView extends StatelessWidget {
     );
   }
 }
-
-Widget headerSection(BuildContext context, String title) => SliverPadding(
-      padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
-      sliver: SliverToBoxAdapter(
-        child: Text(title, style: Theme.of(context).textTheme.headline5),
-      ),
-    );
-
-Widget tableHeader(BuildContext context) => SliverPadding(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-      sliver: SliverToBoxAdapter(
-        child: Row(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              width: 50,
-              child: Text(
-                '#',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              width: 145,
-              child: Text(
-                'Club',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 30,
-              child: Text(
-                'PL',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 30,
-              child: Text(
-                'W',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 30,
-              child: Text(
-                'D',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 30,
-              child: Text(
-                'L',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 30,
-              child: Text(
-                'GD',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 30,
-              child: Text(
-                'Pts',
-                style: Theme.of(context).textTheme.overline,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
 
 class ClientMembersDelegate extends SliverPersistentHeaderDelegate {
   final Color backgroundColor;

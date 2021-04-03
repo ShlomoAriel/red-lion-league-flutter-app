@@ -43,7 +43,7 @@ class MyFlexiableAppBar extends StatelessWidget {
         ],
       )),
       decoration: new BoxDecoration(
-        color: Colors.red,
+        color: Color(0xffDD294D),
       ),
     );
   }
@@ -59,7 +59,7 @@ class MySliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       title: MyAppBar(barTitle),
-      pinned: true,
+      pinned: false,
       expandedHeight: 150.0,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [

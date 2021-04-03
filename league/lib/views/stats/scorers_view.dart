@@ -3,6 +3,8 @@ import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:league/views/common/sliver_section_view.dart';
+import 'package:league/views/common/table_header_view.dart';
 
 import '../header_view.dart';
 
@@ -12,6 +14,12 @@ class ScorersView extends StatelessWidget {
   Widget build(Object context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
       var seasonState = state.store[state.currentSeason?.id ?? null];
+      var currentStats = [
+        Stat('שערים', '7', '12'),
+        Stat('נצחונות', '6', '8'),
+        Stat('שער נקי', '1', '4'),
+        Stat(' הפסדים', '1025', '4')
+      ];
       return Container(
         color: Colors.grey[200],
         child: CustomScrollView(
@@ -20,8 +28,221 @@ class ScorersView extends StatelessWidget {
             slivers: [
               MySliverAppBar(
                   'ליגת האריה האדום', seasonState?.season?.name ?? 'ss'),
+              SliverSectionView(title: 'כללי'),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                sliver: SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final stat = currentStats[index];
+                      return Card(
+                        elevation: 15,
+                        shadowColor: Colors.black26,
+                        color: Colors.white, //(0xff44044B),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              // width: MediaQuery.of(context).size.width,
+                              // margin: EdgeInsets.only(top: 10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5.0),
+                                child: FadeInImage(
+                                  width: 100,
+                                  height: 100,
+                                  placeholder: AssetImage(
+                                      'assets/images/shield-placeholder.png'),
+                                  image: AssetImage('assets/images/logos/' +
+                                      stat.teamId +
+                                      '.png'),
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ),
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                  // padding: EdgeInsets.all(4),
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.all(5),
+                                  height: 70,
+                                  color: Color(0xff2F0238),
+                                  child: Column(
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(stat.value,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4
+                                              .apply(
+                                                  color: Color(0xffF62880),
+                                                  fontFamily:
+                                                      'OpenSansHebrew-Bold')),
+                                      Text(stat.title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2
+                                              .apply(
+                                                color: Colors.white,
+                                              )),
+                                    ],
+                                  ),
+                                ))
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: currentStats.length,
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 0,
+                    crossAxisSpacing: 0,
+                    childAspectRatio: 0.92,
+                  ),
+                ),
+              ),
+              SliverSectionView(title: 'כובשים'),
+              TableHeader(
+                tableRowColumns: [
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 20,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 25,
+                    label: '#',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 30,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 50,
+                    label: 'שחקן',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 200,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 50,
+                    label: 'שערים',
+                  )
+                ],
+              ),
               showSliver(seasonState),
-              showSliver(seasonState)
+              SliverSectionView(title: 'ממוצע כיבושים'),
+              TableHeader(
+                tableRowColumns: [
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 20,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 25,
+                    label: '#',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 50,
+                    label: 'קבוצה',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 80,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 60,
+                    label: 'משחקים',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 5,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 60,
+                    label: 'שערי זכות',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 5,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 80,
+                    label: 'ממוצע',
+                  )
+                ],
+              ),
+              buildGoalsScoredTable(seasonState),
+              SliverSectionView(title: 'ממוצע ספיגות'),
+              TableHeader(
+                tableRowColumns: [
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 20,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 25,
+                    label: '#',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 50,
+                    label: 'קבוצה',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 80,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 60,
+                    label: 'משחקים',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 5,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 60,
+                    label: 'שערי חובה',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 5,
+                    label: '',
+                  ),
+                  TableHeaderColumnView(
+                    index: 1,
+                    width: 80,
+                    label: 'ממוצע',
+                  )
+                ],
+              ),
+              buildGoalsConcededTable(seasonState),
+              SliverPadding(padding: EdgeInsets.only(bottom: 10))
             ]),
       );
     });
@@ -35,17 +256,86 @@ class ScorersView extends StatelessWidget {
     } else {
       return SliverToBoxAdapter(
         child: Card(
-          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: ListView.builder(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
             physics: const NeverScrollableScrollPhysics(),
             controller: scrollController,
             shrinkWrap: true,
             itemCount: seasonState.scorers.length,
             itemBuilder: (context, index) {
               final scorer = seasonState.scorers[index];
-              return ScorerRowView(
-                  scorer: scorer, position: (index + 1).toString());
+              final tableRow = TableRow((index + 1).toString(), scorer.teamId,
+                  scorer.name, [TableRowColumn(30, scorer.goals.toString())]);
+              return StatsRowView(tableRow: tableRow);
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget buildGoalsScoredTable(SeasonState seasonState) {
+    if (seasonState == null || seasonState.standingsResponse == null) {
+      return SliverToBoxAdapter(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      var sortedList = seasonState.standingsResponse.list.toList();
+      sortedList
+          .sort((a, b) => b.goalsFortAverage.compareTo(a.goalsFortAverage));
+      return SliverToBoxAdapter(
+        child: Card(
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: ListView.builder(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            physics: const NeverScrollableScrollPhysics(),
+            controller: scrollController,
+            shrinkWrap: true,
+            itemCount: sortedList.length,
+            itemBuilder: (context, index) {
+              final stat = sortedList[index];
+              final tableRow =
+                  TableRow((index + 1).toString(), stat.id, stat.name, [
+                TableRowColumn(40, stat.games.toString()),
+                TableRowColumn(60, stat.goalsFor.toString()),
+                TableRowColumn(50, stat.goalsFortAverage.toStringAsFixed(2)),
+              ]);
+              return StatsRowView(tableRow: tableRow);
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget buildGoalsConcededTable(SeasonState seasonState) {
+    if (seasonState == null || seasonState.standingsResponse == null) {
+      return SliverToBoxAdapter(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      var sortedList = seasonState.standingsResponse.list.toList();
+      sortedList.sort(
+          (a, b) => a.goalsAgainstAverage.compareTo(b.goalsAgainstAverage));
+      return SliverToBoxAdapter(
+        child: Card(
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: ListView.builder(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            physics: const NeverScrollableScrollPhysics(),
+            controller: scrollController,
+            shrinkWrap: true,
+            itemCount: sortedList.length,
+            itemBuilder: (context, index) {
+              final stat = sortedList[index];
+              final tableRow =
+                  TableRow((index + 1).toString(), stat.id, stat.name, [
+                TableRowColumn(40, stat.games.toString()),
+                TableRowColumn(60, stat.goalsAgainst.toString()),
+                TableRowColumn(50, stat.goalsAgainstAverage.toStringAsFixed(2)),
+              ]);
+              return StatsRowView(tableRow: tableRow);
             },
           ),
         ),
@@ -54,70 +344,98 @@ class ScorersView extends StatelessWidget {
   }
 }
 
-class ScorerRowView extends StatelessWidget {
-  final Scorer scorer;
-  final String position;
+class Stat {
+  final title;
+  final teamId;
+  final value;
 
-  const ScorerRowView({Key key, this.scorer, this.position}) : super(key: key);
+  Stat(this.title, this.teamId, this.value);
+}
+
+class TableRowColumn {
+  final double width;
+  final String label;
+
+  TableRowColumn(this.width, this.label);
+}
+
+class TableRow {
+  final String position;
+  final String teamId;
+  final String title;
+  final List<TableRowColumn> trailingColumns;
+  List<Widget> trailingColumnsView;
+
+  TableRow(this.position, this.teamId, this.title, this.trailingColumns) {
+    this.trailingColumnsView = new List<Widget>();
+    for (var item in this.trailingColumns) {
+      this.trailingColumnsView.add(Row(children: [
+            Container(
+              width: item.width,
+              child: Text(item.label),
+            ),
+            SizedBox(width: 10)
+          ]));
+    }
+  }
+}
+
+// class StatsTableView extends StatelessWidget {
+//   final TableRow tableRow;
+//   final TableHeaderView tableHeader;
+
+//   const StatsTableView({Key key, this.tableRow}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
+
+class StatsRowView extends StatelessWidget {
+  final TableRow tableRow;
+
+  const StatsRowView({Key key, this.tableRow}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0.0),
-          ),
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-          color: Colors.white,
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(width: 20),
-                      Container(
-                        width: 20,
-                        child: Text(position,
-                            style: Theme.of(context).textTheme.bodyText1),
-                      ),
-                      FadeInImage(
-                        width: 30,
-                        height: 30,
-                        placeholder:
-                            AssetImage('assets/images/shield-placeholder.png'),
-                        image: AssetImage(
-                            'assets/images/logos/' + scorer.teamId + '.png'),
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        scorer.name,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ],
-                  ),
-                  Row(children: [
-                    SizedBox(width: 10),
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    SizedBox(width: 20),
                     Container(
                       width: 20,
-                      child: Text(scorer.goals.toString() ?? ''),
+                      child: Text(tableRow.position,
+                          style: Theme.of(context).textTheme.bodyText1),
                     ),
-                    SizedBox(width: 20),
-                  ]),
-                ],
-              ),
-              SizedBox(height: 10),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                height: 1,
-                color: Colors.grey[200],
-              ),
-            ],
-          ),
+                    FadeInImage(
+                      width: 30,
+                      height: 30,
+                      placeholder:
+                          AssetImage('assets/images/shield-placeholder.png'),
+                      image: AssetImage(
+                          'assets/images/logos/' + tableRow.teamId + '.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      tableRow.title,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                Row(children: tableRow.trailingColumnsView),
+              ],
+            ),
+            SizedBox(height: 10)
+          ],
         ),
       ),
     );

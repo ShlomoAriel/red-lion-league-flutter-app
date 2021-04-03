@@ -153,6 +153,8 @@ class TableLine {
   int position;
   int goalsFor;
   int goalsAgainst;
+  double goalsAgainstAverage;
+  double goalsFortAverage;
   int goalsDifference;
   int points;
   int games;
@@ -170,8 +172,10 @@ class TableLine {
         .toList();
     this.goalsAgainst = json['GoalsAgainst'];
     this.goalsDifference = json['GoalsDifference'];
-    this.points = json['Points'];
     this.games = json['Games'];
+    this.goalsFortAverage = (this.goalsFor / this.games);
+    this.goalsAgainstAverage = (this.goalsAgainst / this.games);
+    this.points = json['Points'];
     this.wins = json['Wins'];
     this.draws = json['Draws'];
     this.losses = json['Losses'];

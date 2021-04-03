@@ -19,20 +19,20 @@ class TabNavigationItem {
         TabNavigationItem(
           page: Directionality(
               textDirection: TextDirection.rtl, child: TableView()),
-          icon: Icon(Icons.list),
+          icon: Icon(Icons.table_chart),
           title: "Table",
         ),
         TabNavigationItem(
           page: Directionality(
               textDirection: TextDirection.rtl, child: FixturesView()),
-          icon: Icon(Icons.shopping_basket),
+          icon: Icon(Icons.calendar_today),
           title: "Fixtures",
         ),
         TabNavigationItem(
           page: Directionality(
               textDirection: TextDirection.rtl, child: ScorersView()),
-          icon: Icon(Icons.shopping_basket),
-          title: "Scorers",
+          icon: Icon(Icons.leaderboard),
+          title: "Stats",
         ),
       ];
 }
