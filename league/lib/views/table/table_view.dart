@@ -80,10 +80,11 @@ class TableView extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
-                  SliverPadding(
-                    sliver: SliverToBoxAdapter(child: SeasonDropDown()),
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                  ),
+                  // SliverPadding(
+                  //   sliver: SliverToBoxAdapter(child: SeasonDropDown()),
+                  //   padding: EdgeInsets.only(
+                  //       left: 20, right: 20, top: 10, bottom: 10),
+                  // ),
                   TableHeader(
                     tableRowColumns: columns,
                   ),
@@ -191,22 +192,43 @@ class SeasonDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-      return DropdownButton<Season>(
-        icon: Icon(Icons.arrow_drop_down),
-        iconSize: 24,
-        elevation: 16,
-        style: Theme.of(context).textTheme.bodyText1,
-        value: state.currentSeason,
-        items: state.seasons.map((value) {
-          return new DropdownMenuItem<Season>(
-            value: value,
-            child: new Text(value.name),
-          );
-        }).toList(),
-        onChanged: (value) {
-          print(value);
-          BlocProvider.of<LeagueCubit>(context).setSeason(value);
-        },
+      return Container(
+        // width: 200,
+        // padding: EdgeInsets.only(left: 200),
+        child: PopupMenuButton<Season>(
+          itemBuilder: (BuildContext context) {
+            return state.seasons.map((value) {
+              return new PopupMenuItem<Season>(
+                value: value,
+                child: new Text(value.name),
+              );
+            }).toList();
+          },
+          initialValue: state.currentSeason,
+          onSelected: (value) {
+            print(value);
+            BlocProvider.of<LeagueCubit>(context).setSeason(value);
+          },
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0))),
+          child: Container(
+              decoration: BoxDecoration(
+                  // color: Colors.white,
+                  borderRadius: BorderRadius.circular(5)),
+              padding: EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
+              child: Row(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(state.currentSeason.name,
+                      style: Theme.of(context).textTheme.headline6),
+                  Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: Icon(Icons.arrow_drop_down))
+                ],
+              )),
+          elevation: 16,
+        ),
       );
     });
   }

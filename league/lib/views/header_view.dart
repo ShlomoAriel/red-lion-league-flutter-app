@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:league/views/table/table_view.dart';
 
 class MyFlexiableAppBar extends StatelessWidget {
   final double appBarHeight = 66.0;
@@ -32,11 +33,7 @@ class MyFlexiableAppBar extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Container(
-                    child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.headline6,
-                ))
+                SeasonDropDown(),
               ],
             ),
           ),
@@ -60,7 +57,7 @@ class MySliverAppBar extends StatelessWidget {
     return SliverAppBar(
       title: MyAppBar(barTitle),
       pinned: false,
-      expandedHeight: 150.0,
+      expandedHeight: 160.0,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [
           StretchMode.zoomBackground,
