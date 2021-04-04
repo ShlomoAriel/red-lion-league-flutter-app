@@ -14,12 +14,6 @@ class ScorersView extends StatelessWidget {
   Widget build(Object context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
       var seasonState = state.store[state.currentSeason?.id ?? null];
-      var currentStats = [
-        Stat('שערים', '7', '12'),
-        Stat('נצחונות', '6', '8'),
-        Stat('שער נקי', '1', '4'),
-        Stat(' הפסדים', '1025', '4')
-      ];
       return Container(
         color: Colors.grey[200],
         child: CustomScrollView(
@@ -29,81 +23,7 @@ class ScorersView extends StatelessWidget {
               MySliverAppBar(
                   'ליגת האריה האדום', seasonState?.season?.name ?? 'ss'),
               SliverSectionView(title: 'כללי'),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                sliver: SliverGrid(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final stat = currentStats[index];
-                      return Card(
-                        elevation: 15,
-                        shadowColor: Colors.black26,
-                        color: Colors.white, //(0xff44044B),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              // width: MediaQuery.of(context).size.width,
-                              // margin: EdgeInsets.only(top: 10),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: FadeInImage(
-                                  width: 100,
-                                  height: 100,
-                                  placeholder: AssetImage(
-                                      'assets/images/shield-placeholder.png'),
-                                  image: AssetImage('assets/images/logos/' +
-                                      stat.teamId +
-                                      '.png'),
-                                  fit: BoxFit.fitHeight,
-                                ),
-                              ),
-                            ),
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
-                                  // padding: EdgeInsets.all(4),
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: EdgeInsets.all(5),
-                                  height: 70,
-                                  color: Color(0xff2F0238),
-                                  child: Column(
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(stat.value,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4
-                                              .apply(
-                                                  color: Color(0xffF62880),
-                                                  fontFamily:
-                                                      'OpenSansHebrew-Bold')),
-                                      Text(stat.title,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2
-                                              .apply(
-                                                color: Colors.white,
-                                              )),
-                                    ],
-                                  ),
-                                ))
-                          ],
-                        ),
-                      );
-                    },
-                    childCount: currentStats.length,
-                  ),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 0,
-                    crossAxisSpacing: 0,
-                    childAspectRatio: 0.92,
-                  ),
-                ),
-              ),
+              showStats(seasonState),
               SliverSectionView(title: 'כובשים'),
               TableHeader(
                 tableRowColumns: [
@@ -248,6 +168,86 @@ class ScorersView extends StatelessWidget {
     });
   }
 
+  Widget showStats(SeasonState seasonState) {
+    if (seasonState == null || seasonState.scorers == null) {
+      return SliverToBoxAdapter(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        sliver: SliverGrid(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final stat = seasonState.stats[index];
+              return Card(
+                elevation: 15,
+                shadowColor: Colors.black26,
+                color: Colors.white, //(0xff44044B),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      // width: MediaQuery.of(context).size.width,
+                      // margin: EdgeInsets.only(top: 10),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5.0),
+                        child: FadeInImage(
+                          width: 100,
+                          height: 100,
+                          placeholder: AssetImage(
+                              'assets/images/shield-placeholder.png'),
+                          image: AssetImage(
+                              'assets/images/logos/' + stat.teamId + '.png'),
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                    ),
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.all(5),
+                          height: 70,
+                          color: Color(0xff2F0238),
+                          child: Column(
+                            children: [
+                              Text(stat.value.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      .apply(
+                                          color: Color(0xffF62880),
+                                          fontFamily: 'OpenSansHebrew-Bold')),
+                              Text(stat.title,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      .apply(
+                                        color: Colors.white,
+                                      )),
+                            ],
+                          ),
+                        ))
+                  ],
+                ),
+              );
+            },
+            childCount: seasonState.stats.length,
+          ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 0,
+            crossAxisSpacing: 0,
+            childAspectRatio: 0.92,
+          ),
+        ),
+      );
+    }
+  }
+
   Widget showSliver(SeasonState seasonState) {
     if (seasonState == null || seasonState.scorers == null) {
       return SliverToBoxAdapter(
@@ -344,14 +344,6 @@ class ScorersView extends StatelessWidget {
   }
 }
 
-class Stat {
-  final title;
-  final teamId;
-  final value;
-
-  Stat(this.title, this.teamId, this.value);
-}
-
 class TableRowColumn {
   final double width;
   final String label;
@@ -379,18 +371,6 @@ class TableRow {
     }
   }
 }
-
-// class StatsTableView extends StatelessWidget {
-//   final TableRow tableRow;
-//   final TableHeaderView tableHeader;
-
-//   const StatsTableView({Key key, this.tableRow}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }
 
 class StatsRowView extends StatelessWidget {
   final TableRow tableRow;

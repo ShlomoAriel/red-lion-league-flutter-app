@@ -11,6 +11,7 @@ class SeasonState {
   List<Week> weeks;
   List<Goal> goals;
   Map<String, Team> teamsMap;
+  List<Stat> stats;
 
   SeasonState(
       {this.season,
@@ -24,6 +25,26 @@ class SeasonState {
       for (var standing in standingsResponse.list) {
         teamsMap[standing.id] = new Team.fromStanding(standing);
       }
+      var mostWins =
+          standingsResponse.list.reduce((a, b) => a.wins > b.wins ? a : b);
+      var mostGoals = standingsResponse.list
+          .reduce((a, b) => a.goalsFor > b.goalsFor ? a : b);
+      var leastGoals = standingsResponse.list
+          .reduce((a, b) => a.goalsAgainst < b.goalsAgainst ? a : b);
+      var goalDifference = standingsResponse.list
+          .reduce((a, b) => a.goalsDifference > b.goalsDifference ? a : b);
+      var draws =
+          standingsResponse.list.reduce((a, b) => a.draws > b.draws ? a : b);
+      var losses =
+          standingsResponse.list.reduce((a, b) => a.losses > b.losses ? a : b);
+      this.stats = [
+        Stat('נצחונות', mostWins.id, mostWins.wins),
+        Stat('שערים', mostGoals.id, mostGoals.goalsFor),
+        Stat('ספיגות', leastGoals.id, leastGoals.goalsAgainst),
+        Stat('תיקו', draws.id, draws.draws),
+        Stat('הפסדים', losses.id, losses.losses),
+        Stat('הפרש שערים', goalDifference.id, goalDifference.goalsDifference)
+      ];
     }
     if (weeks != null) {
       for (var week in weeks) {
@@ -339,4 +360,12 @@ class Team {
     this.allPlayers = List.empty();
     this.seasonPlayers = List.empty();
   }
+}
+
+class Stat {
+  final title;
+  final teamId;
+  final value;
+
+  Stat(this.title, this.teamId, this.value);
 }
