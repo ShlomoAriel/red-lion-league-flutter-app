@@ -17,9 +17,22 @@ class FixturesView extends StatelessWidget {
               state.isLoading ||
               state.store == null ||
               state.store[state.currentSeason.id] == null) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Container(
+                color: Colors.grey[200],
+                child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      MySliverAppBar(
+                          'ליגת האריה האדום', 'seasonState.season.name'),
+                      SliverToBoxAdapter(
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
+                    ]));
           } else {
             var seasonState = state.store[state.currentSeason.id];
             return CustomScrollView(

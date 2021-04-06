@@ -171,7 +171,7 @@ class ScorersView extends StatelessWidget {
   Widget showStats(SeasonState seasonState) {
     if (seasonState == null || seasonState.scorers == null) {
       return SliverToBoxAdapter(
-        child: CircularProgressIndicator(),
+        child: Center(child: CircularProgressIndicator()),
       );
     } else {
       return SliverPadding(
@@ -183,15 +183,13 @@ class ScorersView extends StatelessWidget {
               return Card(
                 elevation: 15,
                 shadowColor: Colors.black26,
-                color: Colors.white, //(0xff44044B),
+                color: Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      // width: MediaQuery.of(context).size.width,
-                      // margin: EdgeInsets.only(top: 10),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.0),
                         child: FadeInImage(
@@ -251,7 +249,7 @@ class ScorersView extends StatelessWidget {
   Widget showSliver(SeasonState seasonState) {
     if (seasonState == null || seasonState.scorers == null) {
       return SliverToBoxAdapter(
-        child: CircularProgressIndicator(),
+        child: Center(child: CircularProgressIndicator()),
       );
     } else {
       return SliverToBoxAdapter(
@@ -278,7 +276,7 @@ class ScorersView extends StatelessWidget {
   Widget buildGoalsScoredTable(SeasonState seasonState) {
     if (seasonState == null || seasonState.standingsResponse == null) {
       return SliverToBoxAdapter(
-        child: CircularProgressIndicator(),
+        child: Center(child: CircularProgressIndicator()),
       );
     } else {
       var sortedList = seasonState.standingsResponse.list.toList();
@@ -312,7 +310,7 @@ class ScorersView extends StatelessWidget {
   Widget buildGoalsConcededTable(SeasonState seasonState) {
     if (seasonState == null || seasonState.standingsResponse == null) {
       return SliverToBoxAdapter(
-        child: CircularProgressIndicator(),
+        child: Center(child: CircularProgressIndicator()),
       );
     } else {
       var sortedList = seasonState.standingsResponse.list.toList();
