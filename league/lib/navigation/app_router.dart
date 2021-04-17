@@ -5,7 +5,7 @@ import 'package:league/views/catalog/catalog_view.dart';
 import 'package:league/views/catalog/product_details_view.dart';
 import 'package:league/views/catalog/product_list_view.dart';
 import 'package:league/views/catalog/collection_list_view.dart';
-import 'package:league/views/table/team_details_view.dart';
+import 'package:league/views/main/team_details_view.dart';
 
 class AppRouter {
   Route onGenerateRoute(RouteSettings settings) {

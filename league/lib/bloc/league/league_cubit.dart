@@ -18,9 +18,8 @@ class LeagueCubit extends Cubit<LeagueState> {
     for (var season in seasons) {
       store[season.id] = new SeasonState(season: season);
     }
-    var currentSeason = seasons != null && seasons.length > 0
-        ? seasons[0]
-        : Season(id: '2014', name: 'טמפ');
+    var currentSeason =
+        seasons != null && seasons.length > 0 ? seasons[0] : Season(id: '2014', name: 'טמפ');
 
     LeagueState preState = new LeagueState(
         seasons: seasons,
@@ -33,10 +32,7 @@ class LeagueCubit extends Cubit<LeagueState> {
     SeasonState seasonState = await createSeasonState(currentSeason.id);
     store[currentSeason.id] = seasonState;
     LeagueState leagueState = new LeagueState(
-        currentSeason: currentSeason,
-        store: store,
-        seasons: seasons,
-        isLoading: false);
+        currentSeason: currentSeason, store: store, seasons: seasons, isLoading: false);
 
     emit(leagueState);
   }
@@ -106,5 +102,43 @@ class LeagueCubit extends Cubit<LeagueState> {
     newState.store[state.currentSeason.id].teamsMap[teamId] = team;
     newState.isLoading = false;
     emit(newState);
+  }
+
+  void setWeeksTeam(Team team) {
+    LeagueState leagueState = new LeagueState.from(state);
+    leagueState.store[state.currentSeason.id].weeksWeek = null;
+    leagueState.store[leagueState.currentSeason.id].filteredWeeks =
+        state.store[leagueState.currentSeason.id].weeks.map((e) => Week.clone(e)).toList();
+    if (team == leagueState.store[state.currentSeason.id].weeksTeam) {
+      leagueState.store[state.currentSeason.id].weeksTeam = null;
+    } else {
+      leagueState.store[state.currentSeason.id].weeksTeam = team;
+      for (Week week in leagueState.store[leagueState.currentSeason.id].filteredWeeks) {
+        var filteredMatches = new Map<String, List<Match>>();
+        week.fixtures.forEach((key, value) {
+          for (var item in value) {
+            if (item.awayId == leagueState.store[state.currentSeason.id].weeksTeam.id ||
+                item.homeId == leagueState.store[state.currentSeason.id].weeksTeam.id) {
+              filteredMatches[key] = [item];
+              break;
+            }
+          }
+        });
+        week.fixtures = filteredMatches;
+      }
+    }
+    emit(leagueState);
+  }
+
+  void setWeeksWeek(Week week) {
+    LeagueState leagueState = new LeagueState.from(state);
+    var seasonState = state.store[state.currentSeason.id];
+    leagueState.store[state.currentSeason.id].weeksWeek = week;
+    leagueState.store[state.currentSeason.id].weeksTeam = null;
+    leagueState.store[leagueState.currentSeason.id].filteredWeeks = state
+        .store[leagueState.currentSeason.id].weeks
+        .where((element) => element.id == seasonState.weeksWeek.id)
+        .toList();
+    emit(leagueState);
   }
 }

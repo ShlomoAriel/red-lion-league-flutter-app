@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
-import 'package:league/views/header_view.dart';
+import 'package:league/views/common/header_view.dart';
 
 class TeamDetailsView extends StatelessWidget {
   @override
@@ -31,8 +31,8 @@ class TeamDetailsView extends StatelessWidget {
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        final player = seasonState
-                            .teamsMap[state.selectedTeam].seasonPlayers[index];
+                        final player =
+                            seasonState.teamsMap[state.selectedTeam].seasonPlayers[index];
                         return TeamDetailsRowView(
                           team: team,
                           callback: () {
@@ -44,8 +44,7 @@ class TeamDetailsView extends StatelessWidget {
                           tableLine: player,
                         );
                       },
-                      childCount: seasonState
-                          .teamsMap[state.selectedTeam].seasonPlayers.length,
+                      childCount: seasonState.teamsMap[state.selectedTeam].seasonPlayers.length,
                     ),
                   ),
                 ),
@@ -63,8 +62,7 @@ class TeamDetailsRowView extends StatelessWidget {
   final Player tableLine;
   final Team team;
 
-  const TeamDetailsRowView({Key key, this.callback, this.tableLine, this.team})
-      : super(key: key);
+  const TeamDetailsRowView({Key key, this.callback, this.tableLine, this.team}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +93,8 @@ class TeamDetailsRowView extends StatelessWidget {
                       FadeInImage(
                         width: 30,
                         height: 30,
-                        placeholder:
-                            AssetImage('assets/images/shield-placeholder.png'),
-                        image: AssetImage(
-                            'assets/images/logos/' + team.id + '.png'),
+                        placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                        image: AssetImage('assets/images/logos/' + team.id + '.png'),
                         fit: BoxFit.cover,
                       ),
                       SizedBox(width: 8),
@@ -150,17 +146,14 @@ class ClientMembersDelegate extends SliverPersistentHeaderDelegate {
   final String imageURL;
   final String sku;
 
-  ClientMembersDelegate(
-      this.backgroundColor, this._title, this.imageURL, this.sku);
+  ClientMembersDelegate(this.backgroundColor, this._title, this.imageURL, this.sku);
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
         color: backgroundColor,
         child: Center(
-          child: Image.network(imageURL,
-              width: 600, height: 400, fit: BoxFit.fitWidth),
+          child: Image.network(imageURL, width: 600, height: 400, fit: BoxFit.fitWidth),
         ));
   }
 

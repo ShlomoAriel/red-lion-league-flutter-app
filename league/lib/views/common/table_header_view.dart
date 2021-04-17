@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 
 class TableHeaderColumnView extends StatelessWidget {
   final double width;
-  final int index;
   final String label;
-  const TableHeaderColumnView({Key key, this.width, this.index, this.label})
-      : super(key: key);
+  const TableHeaderColumnView({Key key, this.width, this.label}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +18,10 @@ class TableHeaderColumnView extends StatelessWidget {
   }
 }
 
-class TableHeader extends StatelessWidget {
+class SliverRow extends StatelessWidget {
   final List<TableHeaderColumnView> tableRowColumns;
 
-  const TableHeader({Key key, this.tableRowColumns}) : super(key: key);
+  const SliverRow({Key key, this.tableRowColumns}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,72 +30,23 @@ class TableHeader extends StatelessWidget {
       sliver: SliverToBoxAdapter(
         child: Row(
           children: tableRowColumns,
-          // children: [
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: 50,
-          //     child: Text(
-          //       '#',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          //   Container(
-          //     width: 145,
-          //     child: Text(
-          //       'Club',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: 30,
-          //     child: Text(
-          //       'PL',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: 30,
-          //     child: Text(
-          //       'W',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: 30,
-          //     child: Text(
-          //       'D',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: 30,
-          //     child: Text(
-          //       'L',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: 30,
-          //     child: Text(
-          //       'GD',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: 30,
-          //     child: Text(
-          //       'Pts',
-          //       style: Theme.of(context).textTheme.overline,
-          //     ),
-          //   ),
-          // ],
         ),
+      ),
+    );
+  }
+}
+
+class TableHeader extends StatelessWidget {
+  final List<TableHeaderColumnView> tableRowColumns;
+
+  const TableHeader({Key key, this.tableRowColumns}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Row(
+        children: tableRowColumns,
       ),
     );
   }

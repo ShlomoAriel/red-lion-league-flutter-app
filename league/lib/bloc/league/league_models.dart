@@ -9,9 +9,12 @@ class SeasonState {
   List<Match> matches;
   List<Scorer> scorers;
   List<Week> weeks;
+  List<Week> filteredWeeks;
   List<Goal> goals;
   Map<String, Team> teamsMap;
   List<Stat> stats;
+  Team weeksTeam;
+  Week weeksWeek;
 
   SeasonState(
       {this.season,
@@ -21,22 +24,20 @@ class SeasonState {
       this.goals,
       this.standingsResponse,
       this.teamsMap}) {
+    weeksTeam = null;
+    weeksWeek = null;
     if (standingsResponse != null) {
       for (var standing in standingsResponse.list) {
         teamsMap[standing.id] = new Team.fromStanding(standing);
       }
-      var mostWins =
-          standingsResponse.list.reduce((a, b) => a.wins > b.wins ? a : b);
-      var mostGoals = standingsResponse.list
-          .reduce((a, b) => a.goalsFor > b.goalsFor ? a : b);
-      var leastGoals = standingsResponse.list
-          .reduce((a, b) => a.goalsAgainst < b.goalsAgainst ? a : b);
-      var goalDifference = standingsResponse.list
-          .reduce((a, b) => a.goalsDifference > b.goalsDifference ? a : b);
-      var draws =
-          standingsResponse.list.reduce((a, b) => a.draws > b.draws ? a : b);
-      var losses =
-          standingsResponse.list.reduce((a, b) => a.losses > b.losses ? a : b);
+      var mostWins = standingsResponse.list.reduce((a, b) => a.wins > b.wins ? a : b);
+      var mostGoals = standingsResponse.list.reduce((a, b) => a.goalsFor > b.goalsFor ? a : b);
+      var leastGoals =
+          standingsResponse.list.reduce((a, b) => a.goalsAgainst < b.goalsAgainst ? a : b);
+      var goalDifference =
+          standingsResponse.list.reduce((a, b) => a.goalsDifference > b.goalsDifference ? a : b);
+      var draws = standingsResponse.list.reduce((a, b) => a.draws > b.draws ? a : b);
+      var losses = standingsResponse.list.reduce((a, b) => a.losses > b.losses ? a : b);
       this.stats = [
         Stat('נצחונות', mostWins.id, mostWins.wins),
         Stat('שערים', mostGoals.id, mostGoals.goalsFor),
@@ -48,17 +49,16 @@ class SeasonState {
     }
     if (weeks != null) {
       for (var week in weeks) {
-        week.matches =
-            matches.where((element) => element.weekId == week.id).toList();
+        week.matches = matches.where((element) => element.weekId == week.id).toList();
         // week.fixtures =
         var t = groupBy(week.matches, (Match obj) {
           return DateFormat('yyyy-MM-dd').format(obj.date);
         });
         week.fixtures = t;
       }
+      filteredWeeks = weeks;
       if (this.season.nextWeek != null && this.season.nextWeek != '0') {
-        this.nextWeek =
-            weeks.firstWhere((element) => element.id == this.season.nextWeek);
+        this.nextWeek = weeks.firstWhere((element) => element.id == this.season.nextWeek);
       } else {
         this.nextWeek = weeks[0];
       }
@@ -72,6 +72,11 @@ class SeasonState {
     this.teamsMap = season.teamsMap;
     this.weeks = season.weeks;
     this.standingsResponse = season.standingsResponse;
+    this.weeksTeam = season.weeksTeam;
+    this.weeksWeek = season.weeksWeek;
+    this.nextWeek = season.nextWeek;
+    this.refreshed = season.refreshed;
+    this.stats = season.stats;
   }
 }
 
@@ -93,14 +98,7 @@ class TeamPlayersResponse {
 }
 
 class Goal {
-  Goal(
-      {this.id,
-      this.matchId,
-      this.playerId,
-      this.seasonId,
-      this.weekId,
-      this.match,
-      this.player});
+  Goal({this.id, this.matchId, this.playerId, this.seasonId, this.weekId, this.match, this.player});
 
   String id;
   String matchId;
@@ -188,9 +186,8 @@ class TableLine {
     this.name = json['Name'];
     this.position = json['Position'];
     this.goalsFor = json['GoalsFor'];
-    this.matchForm = (json['MatchForm'] as List)
-        .map((matchForm) => new MatchForm.fromJson(matchForm))
-        .toList();
+    this.matchForm =
+        (json['MatchForm'] as List).map((matchForm) => new MatchForm.fromJson(matchForm)).toList();
     this.goalsAgainst = json['GoalsAgainst'];
     this.goalsDifference = json['GoalsDifference'];
     this.games = json['Games'];
@@ -204,13 +201,7 @@ class TableLine {
 }
 
 class MatchForm {
-  MatchForm(
-      {this.id,
-      this.name,
-      this.goalsAgainst,
-      this.goalsFor,
-      this.result,
-      this.resultClass});
+  MatchForm({this.id, this.name, this.goalsAgainst, this.goalsFor, this.result, this.resultClass});
 
   String id;
   String name;
@@ -260,6 +251,21 @@ class Week {
     this.id = json['Id'].toString();
     this.name = json['Number'];
     this.seasonId = json['SeasonId'];
+  }
+
+  Week.clone(Week week) {
+    id = week.id;
+    name = week.name;
+    seasonId = week.seasonId;
+    matches = week.matches;
+    fixtures = week.fixtures;
+  }
+
+  getWeekFixtures() {
+    var t = groupBy(this.matches, (Match obj) {
+      return DateFormat('yyyy-MM-dd').format(obj.date);
+    });
+    this.fixtures = t;
   }
 }
 
@@ -332,12 +338,7 @@ class Match {
 }
 
 class Team {
-  Team(
-      {this.id,
-      this.name,
-      this.matchForm,
-      this.allPlayers,
-      this.seasonPlayers});
+  Team({this.id, this.name, this.matchForm, this.allPlayers, this.seasonPlayers});
 
   String id;
   String name;
