@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import "package:collection/collection.dart";
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SeasonState {
@@ -208,7 +211,9 @@ class MatchForm {
   int goalsAgainst;
   int goalsFor;
   String result;
+  Color resultColor;
   String resultClass;
+  String resultText;
 
   MatchForm.fromJson(Map<String, dynamic> json) {
     this.id = json['Id'].toString();
@@ -216,8 +221,20 @@ class MatchForm {
     this.goalsAgainst = json['GoalsAgainst'];
     this.goalsFor = json['GoalsFor'];
     this.result = json['Result'];
+    this.resultText = formTextMap[json['ResultClass'].toString()];
     this.resultClass = json['ResultClass'];
+    this.resultColor = formColorMap[json['ResultClass'].toString()];
   }
+  var formColorMap = {
+    'win': Colors.green,
+    'draw': Colors.blue,
+    'loss': Colors.red,
+  };
+  var formTextMap = {
+    'win': 'W',
+    'draw': 'D',
+    'loss': 'L',
+  };
 }
 
 class Season {

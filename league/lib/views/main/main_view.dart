@@ -12,6 +12,7 @@ import 'image_gallery_view.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
 
 class MainView extends StatelessWidget {
+  final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,52 +39,15 @@ class MainView extends StatelessWidget {
                 ]));
           } else {
             var seasonState = state.store[state.currentSeason.id];
-            var columns = [
-              TableHeaderColumnView(
-                width: 50,
-                label: '#',
-              ),
-              TableHeaderColumnView(
-                width: 45,
-                label: 'קבוצה',
-              ),
-              TableHeaderColumnView(
-                width: 100,
-                label: '',
-              ),
-              TableHeaderColumnView(
-                width: 30,
-                label: 'מש',
-              ),
-              TableHeaderColumnView(
-                width: 30,
-                label: 'נצ',
-              ),
-              TableHeaderColumnView(
-                width: 30,
-                label: 'תק',
-              ),
-              TableHeaderColumnView(
-                width: 30,
-                label: 'הפ',
-              ),
-              TableHeaderColumnView(
-                width: 30,
-                label: 'הפרש',
-              ),
-              TableHeaderColumnView(
-                width: 40,
-                label: 'נק',
-              )
-            ];
             return Container(
               color: Colors.grey[200],
               child: CustomScrollView(
+                controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
-                  SliverRow(tableRowColumns: columns),
                   TableView(
+                      scrollController: scrollController,
                       seasonId: state.currentSeason.id,
                       standingsList: seasonState.standingsResponse.list),
                   SliverPadding(
