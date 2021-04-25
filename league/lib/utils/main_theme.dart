@@ -54,14 +54,14 @@ TextTheme mainTextTheme(TextTheme base) {
     ),
     headline5: base.headline5.copyWith(
       letterSpacing: 0,
-      fontFamily: 'OpenSansHebrew-Regular',
-      fontSize: 24.0,
+      fontFamily: 'OpenSansHebrew-Bold',
+      fontSize: 18.0,
       color: Colors.grey[600],
     ),
     headline6: base.headline6.copyWith(
       letterSpacing: 0.15,
       fontFamily: 'OpenSansHebrew-Bold',
-      fontSize: 20.0,
+      fontSize: 18.0,
       color: Colors.black,
     ),
     subtitle1: base.subtitle1.copyWith(

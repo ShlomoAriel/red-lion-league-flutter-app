@@ -3,6 +3,7 @@ import 'dart:ui';
 import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class SeasonState {
   Week nextWeek;
@@ -51,11 +52,13 @@ class SeasonState {
       ];
     }
     if (weeks != null) {
+      initializeDateFormatting();
       for (var week in weeks) {
         week.matches = matches.where((element) => element.weekId == week.id).toList();
         // week.fixtures =
+
         var t = groupBy(week.matches, (Match obj) {
-          return DateFormat('yyyy-MM-dd').format(obj.date);
+          return DateFormat('EEEE dd MMMM yyyy', 'HE').format(obj.date);
         });
         week.fixtures = t;
       }
@@ -359,6 +362,7 @@ class Team {
 
   String id;
   String name;
+  TableLine standing;
   List<MatchForm> matchForm;
   List<Player> allPlayers;
   List<Player> seasonPlayers;
@@ -367,6 +371,7 @@ class Team {
     this.id = team.id;
     this.name = team.name;
     this.matchForm = team.matchForm;
+    this.standing = team.standing;
     this.allPlayers = team.allPlayers;
     this.seasonPlayers = team.seasonPlayers;
   }
@@ -375,6 +380,7 @@ class Team {
     this.id = team.id;
     this.name = team.name;
     this.matchForm = team.matchForm;
+    this.standing = team;
     this.allPlayers = List.empty();
     this.seasonPlayers = List.empty();
   }

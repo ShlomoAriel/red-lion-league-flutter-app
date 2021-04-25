@@ -91,12 +91,13 @@ class TeamDropDown extends StatelessWidget {
         var seasonState = state.store[state.currentSeason.id];
         var teams = seasonState.teamsMap.values;
         return Container(
+          margin: EdgeInsets.only(top: 10, bottom: 0, right: 5, left: 5),
           child: PopupMenuButton<Team>(
             itemBuilder: (BuildContext context) {
               return teams.map((value) {
                 return new PopupMenuItem<Team>(
                   value: value,
-                  child: new Text(value?.name ?? 'NA'),
+                  child: new Text(value?.name ?? 'NA', style: Theme.of(context).textTheme.button),
                 );
               }).toList();
             },
@@ -105,16 +106,16 @@ class TeamDropDown extends StatelessWidget {
               print(value);
               BlocProvider.of<LeagueCubit>(context).setWeeksTeam(value);
             },
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
             child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white),
                 padding: EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(margin: EdgeInsets.only(left: 5), child: Icon(Icons.arrow_drop_down)),
                     Text(seasonState.weeksTeam?.name ?? 'קבוצה',
-                        style: Theme.of(context).textTheme.headline6),
+                        style: Theme.of(context).textTheme.button),
                   ],
                 )),
             elevation: 16,
@@ -141,12 +142,13 @@ class WeeksDropDown extends StatelessWidget {
         var seasonState = state.store[state.currentSeason.id];
         var weeks = seasonState.weeks;
         return Container(
+          margin: EdgeInsets.only(top: 10, bottom: 0, right: 5, left: 5),
           child: PopupMenuButton<Week>(
             itemBuilder: (BuildContext context) {
               return weeks.map((value) {
                 return new PopupMenuItem<Week>(
                   value: value,
-                  child: new Text(value?.name ?? 'NA'),
+                  child: new Text(value?.name ?? 'NA', style: Theme.of(context).textTheme.button),
                 );
               }).toList();
             },
@@ -157,14 +159,15 @@ class WeeksDropDown extends StatelessWidget {
             },
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
             child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white),
                 padding: EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(margin: EdgeInsets.only(left: 5), child: Icon(Icons.arrow_drop_down)),
                     Text(seasonState.weeksWeek?.name ?? 'מחזור',
-                        style: Theme.of(context).textTheme.headline6),
+                        style: Theme.of(context).textTheme.button),
                   ],
                 )),
             elevation: 16,

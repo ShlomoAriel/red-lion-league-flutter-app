@@ -36,7 +36,8 @@ class AppRouter {
         );
       case '/teamDetails':
         return MaterialPageRoute(
-          builder: (_) => TeamDetailsView(),
+          builder: (_) =>
+              Directionality(textDirection: TextDirection.rtl, child: TeamDetailsView()),
         );
       default:
         return null;

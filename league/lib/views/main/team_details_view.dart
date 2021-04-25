@@ -5,6 +5,7 @@ import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:league/views/common/header_view.dart';
+import 'package:league/views/common/sliver_section_view.dart';
 
 class TeamDetailsView extends StatelessWidget {
   @override
@@ -26,6 +27,82 @@ class TeamDetailsView extends StatelessWidget {
             return CustomScrollView(
               slivers: [
                 MySliverAppBar(team.name, seasonState.season.name),
+                SliverSectionView(title: 'משחקים אחרונים'),
+                SliverToBoxAdapter(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          for (var item in team.matchForm.getRange(0, 5))
+                            Container(
+                              decoration:
+                                  BoxDecoration(color: item.resultColor, shape: BoxShape.circle),
+                              padding: EdgeInsets.all(4),
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(left: 5),
+                              width: 30,
+                              child: Text(
+                                item.resultText,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .apply(color: Colors.white),
+                              ),
+                            ),
+                        ]),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverSectionView(title: 'העונה'),
+                SliverToBoxAdapter(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          Container(
+                            color: Colors.green,
+                            padding: EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'נצחונות: ' + team.standing?.wins.toString(),
+                              style:
+                                  Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
+                            ),
+                          ),
+                          Container(
+                            color: Colors.blue,
+                            padding: EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'תיקו: ' + team.standing?.draws.toString(),
+                              style:
+                                  Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
+                            ),
+                          ),
+                          Container(
+                            color: Colors.red,
+                            padding: EdgeInsets.all(10),
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'הפסדים: ' + team.standing?.losses.toString(),
+                              style:
+                                  Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
+                            ),
+                          ),
+                        ]),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverSectionView(title: 'שחקנים'),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   sliver: SliverList(
@@ -35,12 +112,7 @@ class TeamDetailsView extends StatelessWidget {
                             seasonState.teamsMap[state.selectedTeam].seasonPlayers[index];
                         return TeamDetailsRowView(
                           team: team,
-                          callback: () {
-                            // BlocProvider.of<LeagueCubit>(context)
-                            //     .setTeamSeasonPlayers(
-                            //         state.currentSeason.id.toString(),
-                            //         standing.id.toString());
-                          },
+                          // callback: () {},
                           tableLine: player,
                         );
                       },

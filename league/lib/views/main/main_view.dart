@@ -51,7 +51,7 @@ class MainView extends StatelessWidget {
                       seasonId: state.currentSeason.id,
                       standingsList: seasonState.standingsResponse.list),
                   SliverPadding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 0),
                     sliver: SliverToBoxAdapter(child: ImageGallery()),
                   ),
                   SliverSectionView(title: 'מחזור הבא'),

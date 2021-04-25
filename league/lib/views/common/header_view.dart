@@ -3,6 +3,7 @@ import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyFlexiableAppBar extends StatelessWidget {
   final double appBarHeight = 66.0;
@@ -29,13 +30,13 @@ class MyFlexiableAppBar extends StatelessWidget {
                   child: FadeInImage(
                     width: 60,
                     height: 60,
-                    placeholder:
-                        AssetImage('assets/images/shield-placeholder.png'),
-                    image:
-                        AssetImage('assets/images/LOGO CLEAN BACKGROUND.png'),
+                    placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                    image: AssetImage('assets/images/LOGO CLEAN BACKGROUND.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
+                Text('ליגת האריה האדום',
+                    style: Theme.of(context).textTheme.headline6.apply(color: Colors.white)),
                 SeasonDropDown(),
               ],
             ),
@@ -58,17 +59,31 @@ class MySliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: MyAppBar(barTitle),
-      pinned: false,
+      backgroundColor: Color(0xffDD294D),
+      // title: MyAppBar(barTitle),
+      pinned: true,
       expandedHeight: 160.0,
-      flexibleSpace: FlexibleSpaceBar(
-        stretchModes: [
-          StretchMode.zoomBackground,
-          // StretchMode.blurBackground,
-          StretchMode.fadeTitle,
-        ],
-        background: MyFlexiableAppBar(expandedBarTitle),
-      ),
+      flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+        var top = constraints.biggest.height;
+        return FlexibleSpaceBar(
+            title: AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: top > 104 ? 0.0 : 1.0,
+                // opacity: 1,
+                child: Text(
+                  top > 104 ? "" : 'ליגת האריה האדום',
+                  style: Theme.of(context).textTheme.headline6.apply(color: Colors.white),
+                )),
+            background: MyFlexiableAppBar(expandedBarTitle));
+      }),
+      // flexibleSpace: FlexibleSpaceBar(
+      //   stretchModes: [
+      //     StretchMode.zoomBackground,
+      //     StretchMode.blurBackground,
+      //     StretchMode.fadeTitle,
+      //   ],
+      //   background: MyFlexiableAppBar(expandedBarTitle),
+      // ),
     );
   }
 }
@@ -89,7 +104,7 @@ class MyAppBar extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.button.apply(color: Colors.white),
               ),
             ),
           ),
@@ -103,16 +118,25 @@ class SeasonDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-      if (state == null ||
-          state.seasons == null ||
-          state.currentSeason == null) {
+      if (state == null || state.seasons == null || state.currentSeason == null) {
         return Container(
             margin: EdgeInsets.only(top: 10, bottom: 10),
-            height: 20,
-            width: 20,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ));
+            child: Shimmer.fromColors(
+                baseColor: Colors.grey[400],
+                highlightColor: Colors.grey[100],
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: 100,
+                    height: 10,
+                    color: Colors.grey,
+                  ),
+                ])));
       } else {
         return Container(
           child: PopupMenuButton<Season>(
@@ -120,7 +144,7 @@ class SeasonDropDown extends StatelessWidget {
               return state.seasons.map((value) {
                 return new PopupMenuItem<Season>(
                   value: value,
-                  child: new Text(value?.name ?? 'NA'),
+                  child: new Text(value?.name ?? 'NA', style: Theme.of(context).textTheme.button),
                 );
               }).toList();
             },
@@ -129,21 +153,18 @@ class SeasonDropDown extends StatelessWidget {
               print(value);
               BlocProvider.of<LeagueCubit>(context).setSeason(value);
             },
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5.0))),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
             child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                padding:
-                    EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                padding: EdgeInsets.only(left: 30, top: 2, bottom: 7, right: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(left: 5),
-                        child: Icon(Icons.arrow_drop_down)),
+                        // margin: EdgeInsets.only(left: 0),
+                        child: Icon(Icons.arrow_drop_down, color: Colors.white70)),
                     Text(state.currentSeason.name,
-                        style: Theme.of(context).textTheme.headline6),
+                        style: Theme.of(context).textTheme.button.apply(color: Colors.white70)),
                   ],
                 )),
             elevation: 16,

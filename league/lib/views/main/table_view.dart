@@ -3,90 +3,124 @@ import 'package:flutter/material.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/league_models.dart';
-import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:league/views/common/table_header_view.dart';
 
-class TableView extends StatelessWidget {
-  final standingsList;
-  final seasonId;
-  final scrollController;
-  final _selectedSegment_0 = AdvancedSegmentController('all');
-
-  TableView({Key key, this.standingsList, this.seasonId, this.scrollController}) : super(key: key);
+class _TableViewState extends State<TableView> {
+  var _isForm = false;
+  var columns = [
+    TableHeaderColumnView(
+      width: 50,
+      label: '#',
+    ),
+    TableHeaderColumnView(
+      width: 45,
+      label: 'קבוצה',
+    ),
+    TableHeaderColumnView(
+      width: 100,
+      label: '',
+    ),
+    TableHeaderColumnView(
+      width: 30,
+      label: 'מש',
+    ),
+    TableHeaderColumnView(
+      width: 30,
+      label: 'נצ',
+    ),
+    TableHeaderColumnView(
+      width: 30,
+      label: 'תק',
+    ),
+    TableHeaderColumnView(
+      width: 30,
+      label: 'הפ',
+    ),
+    TableHeaderColumnView(
+      width: 30,
+      label: 'הפרש',
+    ),
+    TableHeaderColumnView(
+      width: 40,
+      label: 'נק',
+    )
+  ];
 
   @override
   Widget build(Object context) {
-    var columns = [
-      TableHeaderColumnView(
-        width: 50,
-        label: '#',
-      ),
-      TableHeaderColumnView(
-        width: 45,
-        label: 'קבוצה',
-      ),
-      TableHeaderColumnView(
-        width: 100,
-        label: '',
-      ),
-      TableHeaderColumnView(
-        width: 30,
-        label: 'מש',
-      ),
-      TableHeaderColumnView(
-        width: 30,
-        label: 'נצ',
-      ),
-      TableHeaderColumnView(
-        width: 30,
-        label: 'תק',
-      ),
-      TableHeaderColumnView(
-        width: 30,
-        label: 'הפ',
-      ),
-      TableHeaderColumnView(
-        width: 30,
-        label: 'הפרש',
-      ),
-      TableHeaderColumnView(
-        width: 40,
-        label: 'נק',
-      )
-    ];
     return SliverToBoxAdapter(
-      child: Column(children: [
-        AdvancedSegment(
-          segments: {
-            'all': 'All',
-            'starred': 'Starred',
-          },
-          controller: _selectedSegment_0,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: FilterChip(
+            backgroundColor: Colors.white,
+            label: Text(
+              'כושר',
+              style: Theme.of(context).textTheme.button,
+            ),
+            showCheckmark: false,
+            selected: _isForm,
+            elevation: 1,
+            selectedColor: Colors.grey[300],
+            onSelected: (bool selected) {
+              setState(() {
+                _isForm = !_isForm;
+              });
+            },
+          ),
         ),
-        TableHeader(tableRowColumns: columns),
+        Container(color: Colors.white, child: TableHeader(tableRowColumns: columns)),
         ListView.builder(
-          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
           physics: const NeverScrollableScrollPhysics(),
-          controller: scrollController,
+          controller: widget.scrollController,
           shrinkWrap: true,
-          itemCount: standingsList.length,
+          itemCount: widget.standingsList.length,
           itemBuilder: (context, index) {
-            final standing = standingsList[index];
-            return TableFormRowView(
-              callback: () {
-                BlocProvider.of<LeagueCubit>(context)
-                    .setTeamSeasonPlayers(seasonId, standing.id.toString());
-                Navigator.of(context).pushNamed(
-                  '/teamDetails',
-                );
-              },
-              tableLine: standing,
-            );
+            final standing = widget.standingsList[index];
+            return showRow(standing, context);
           },
         )
       ]),
     );
   }
+
+  Widget showRow(standing, context) {
+    if (_isForm) {
+      return TableFormRowView(
+        callback: () {
+          BlocProvider.of<LeagueCubit>(context)
+              .setTeamSeasonPlayers(widget.seasonId, standing.id.toString());
+          Navigator.of(context).pushNamed(
+            '/teamDetails',
+          );
+        },
+        tableLine: standing,
+      );
+    } else {
+      return TableRowView(
+        callback: () {
+          BlocProvider.of<LeagueCubit>(context)
+              .setTeamSeasonPlayers(widget.seasonId, standing.id.toString());
+          Navigator.of(context).pushNamed(
+            '/teamDetails',
+          );
+        },
+        tableLine: standing,
+      );
+    }
+  }
+}
+
+class TableView extends StatefulWidget {
+  final standingsList;
+  final seasonId;
+  final scrollController;
+  final isForm;
+  TableView({Key key, this.standingsList, this.seasonId, this.scrollController, this.isForm})
+      : super(key: key);
+
+  _TableViewState createState() => _TableViewState();
 }
 
 class TableRowView extends StatelessWidget {
@@ -260,7 +294,7 @@ class TableFormRowView extends StatelessWidget {
                       width: 30,
                       child: Text(
                         item.resultText,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
                       ),
                     ),
                   SizedBox(width: 15),
