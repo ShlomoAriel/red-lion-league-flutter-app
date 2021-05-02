@@ -50,9 +50,11 @@ class _TableViewState extends State<TableView> {
   Widget build(Object context) {
     return SliverToBoxAdapter(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+        Container(
+          height: 53,
+          margin: EdgeInsets.symmetric(horizontal: 10),
           child: FilterChip(
+            labelPadding: EdgeInsets.only(top: 2, bottom: 2, left: 15, right: 15),
             backgroundColor: Colors.white,
             label: Text(
               'כושר',

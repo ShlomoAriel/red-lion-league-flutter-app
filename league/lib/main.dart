@@ -32,6 +32,7 @@ class ClientelingApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: mainTheme(),
         onGenerateRoute: appRouter.onGenerateRoute,

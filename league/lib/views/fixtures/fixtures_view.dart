@@ -277,7 +277,7 @@ class FixtureView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
             children: [
               Container(
-                  width: 100,
+                  width: 80,
                   child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     Text(match.homeName, style: Theme.of(context).textTheme.bodyText1)
                   ])),
@@ -305,7 +305,7 @@ class FixtureView extends StatelessWidget {
               ),
               SizedBox(width: 10),
               Container(
-                  width: 100,
+                  width: 80,
                   child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                     Text(match.awayName, style: Theme.of(context).textTheme.bodyText1)
                   ])),
