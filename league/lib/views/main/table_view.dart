@@ -71,7 +71,7 @@ class _TableViewState extends State<TableView> {
             },
           ),
         ),
-        Container(color: Colors.white, child: TableHeader(tableRowColumns: columns)),
+        TableHeaderRowView(columnList: ['מש', 'נצ', 'תק', 'הפ', 'הש', 'נק']),
         ListView.builder(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
           physics: const NeverScrollableScrollPhysics(),
@@ -176,6 +176,7 @@ class TableRowView extends StatelessWidget {
                   SizedBox(width: 10),
                   Container(
                     width: 20,
+                    alignment: Alignment.center,
                     child: Text(
                       tableLine.games.toString(),
                       style: Theme.of(context).textTheme.bodyText2,
@@ -184,6 +185,7 @@ class TableRowView extends StatelessWidget {
                   SizedBox(width: 10),
                   Container(
                     width: 20,
+                    alignment: Alignment.center,
                     child: Text(
                       tableLine.wins.toString(),
                       style: Theme.of(context).textTheme.bodyText2,
@@ -192,6 +194,7 @@ class TableRowView extends StatelessWidget {
                   SizedBox(width: 10),
                   Container(
                     width: 20,
+                    alignment: Alignment.center,
                     child: Text(
                       tableLine.draws.toString(),
                       style: Theme.of(context).textTheme.bodyText2,
@@ -200,22 +203,28 @@ class TableRowView extends StatelessWidget {
                   SizedBox(width: 10),
                   Container(
                     width: 20,
+                    alignment: Alignment.center,
                     child: Text(
                       tableLine.losses.toString(),
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
                   SizedBox(width: 10),
-                  Container(
-                    width: 20,
-                    child: Text(
-                      tableLine.goalsDifference.toString(),
-                      style: Theme.of(context).textTheme.bodyText2,
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Container(
+                      width: 20,
+                      alignment: Alignment.center,
+                      child: Text(
+                        tableLine.goalsDifference.toString(),
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                     ),
                   ),
                   SizedBox(width: 10),
                   Container(
                     width: 20,
+                    alignment: Alignment.center,
                     child: Text(
                       tableLine.points.toString(),
                       style: Theme.of(context).textTheme.bodyText1,
@@ -287,7 +296,8 @@ class TableFormRowView extends StatelessWidget {
                 ),
                 Row(children: [
                   SizedBox(width: 10),
-                  for (var item in tableLine.matchForm.getRange(0, 5))
+                  for (var item in tableLine.matchForm
+                      .getRange(tableLine.matchForm.length - 5, tableLine.matchForm.length))
                     Container(
                       decoration: BoxDecoration(color: item.resultColor, shape: BoxShape.circle),
                       padding: EdgeInsets.all(4),
@@ -308,6 +318,72 @@ class TableFormRowView extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
               height: 1,
               color: Colors.grey[200],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TableHeaderRowView extends StatelessWidget {
+  final columnList;
+  const TableHeaderRowView({Key key, this.columnList}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0.0),
+        ),
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        color: Colors.white,
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    SizedBox(width: 20),
+                    Container(
+                      width: 20,
+                      child: Text(
+                        '#',
+                        style: Theme.of(context).textTheme.overline,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      width: 70,
+                      child: Text(
+                        'קבוצה',
+                        style: Theme.of(context).textTheme.overline,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                  ],
+                ),
+                Row(children: [
+                  for (var item in columnList)
+                    Row(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          // color: Colors.red,
+                          width: 20,
+                          child: Text(
+                            item,
+                            style: Theme.of(context).textTheme.overline,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                      ],
+                    ),
+                  SizedBox(width: 5),
+                ]),
+              ],
             ),
           ],
         ),

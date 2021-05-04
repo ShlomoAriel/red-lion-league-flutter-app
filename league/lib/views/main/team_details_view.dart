@@ -35,7 +35,8 @@ class TeamDetailsView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(children: [
-                          for (var item in team.matchForm.getRange(0, 5))
+                          for (var item in team.matchForm
+                              .getRange(team.matchForm.length - 5, team.matchForm.length))
                             Container(
                               decoration:
                                   BoxDecoration(color: item.resultColor, shape: BoxShape.circle),
