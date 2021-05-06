@@ -55,9 +55,11 @@ class ScorersView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
+                      alignment: Alignment.center,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.0),
                         child: FadeInImage(
+                          alignment: Alignment.center,
                           width: 100,
                           height: 100,
                           placeholder: AssetImage('assets/images/shield-placeholder.png'),
@@ -111,34 +113,7 @@ class ScorersView extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Column(children: [
-            TableHeader(
-              tableRowColumns: [
-                TableHeaderColumnView(
-                  width: 10,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 25,
-                  label: '#',
-                ),
-                TableHeaderColumnView(
-                  width: 30,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 50,
-                  label: 'שחקן',
-                ),
-                TableHeaderColumnView(
-                  width: 200,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 50,
-                  label: 'שערים',
-                )
-              ],
-            ),
+            TableHeaderRowView(columnList: ['שערים'], columnWidth: 35.0),
             ListView.builder(
               padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
               physics: const NeverScrollableScrollPhysics(),
@@ -148,7 +123,7 @@ class ScorersView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final scorer = seasonState.scorers[index];
                 final tableRow = TableRow((index + 1).toString(), scorer.teamId, scorer.name,
-                    [TableRowColumn(30, scorer.goals.toString())]);
+                    [TableRowColumn(35, scorer.goals.toString())]);
                 return StatsRowView(tableRow: tableRow);
               },
             )
@@ -168,46 +143,7 @@ class ScorersView extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Column(children: [
-            TableHeader(
-              tableRowColumns: [
-                TableHeaderColumnView(
-                  width: 5,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 25,
-                  label: '#',
-                ),
-                TableHeaderColumnView(
-                  width: 50,
-                  label: 'קבוצה',
-                ),
-                TableHeaderColumnView(
-                  width: 80,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 60,
-                  label: 'משחקים',
-                ),
-                TableHeaderColumnView(
-                  width: 5,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 60,
-                  label: 'שערי זכות',
-                ),
-                TableHeaderColumnView(
-                  width: 5,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 80,
-                  label: 'ממוצע',
-                )
-              ],
-            ),
+            TableHeaderRowView(columnList: ['משחקים', 'שערי זכות', 'ממוצע'], columnWidth: 55.0),
             ListView.builder(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               physics: const NeverScrollableScrollPhysics(),
@@ -217,9 +153,9 @@ class ScorersView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final stat = sortedList[index];
                 final tableRow = TableRow((index + 1).toString(), stat.id, stat.name, [
-                  TableRowColumn(40, stat.games.toString()),
-                  TableRowColumn(60, stat.goalsFor.toString()),
-                  TableRowColumn(50, stat.goalsFortAverage.toStringAsFixed(2)),
+                  TableRowColumn(55, stat.games.toString()),
+                  TableRowColumn(55, stat.goalsFor.toString()),
+                  TableRowColumn(55, stat.goalsFortAverage.toStringAsFixed(2)),
                 ]);
                 return StatsRowView(tableRow: tableRow);
               },
@@ -240,46 +176,7 @@ class ScorersView extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Column(children: [
-            TableHeader(
-              tableRowColumns: [
-                TableHeaderColumnView(
-                  width: 5,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 25,
-                  label: '#',
-                ),
-                TableHeaderColumnView(
-                  width: 50,
-                  label: 'קבוצה',
-                ),
-                TableHeaderColumnView(
-                  width: 80,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 60,
-                  label: 'משחקים',
-                ),
-                TableHeaderColumnView(
-                  width: 5,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 60,
-                  label: 'שערי חובה',
-                ),
-                TableHeaderColumnView(
-                  width: 5,
-                  label: '',
-                ),
-                TableHeaderColumnView(
-                  width: 80,
-                  label: 'ממוצע',
-                )
-              ],
-            ),
+            TableHeaderRowView(columnList: ['משחקים', 'ספיגות', 'ממוצע'], columnWidth: 55.0),
             ListView.builder(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               physics: const NeverScrollableScrollPhysics(),
@@ -289,9 +186,9 @@ class ScorersView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final stat = sortedList[index];
                 final tableRow = TableRow((index + 1).toString(), stat.id, stat.name, [
-                  TableRowColumn(40, stat.games.toString()),
-                  TableRowColumn(60, stat.goalsAgainst.toString()),
-                  TableRowColumn(50, stat.goalsAgainstAverage.toStringAsFixed(2)),
+                  TableRowColumn(55, stat.games.toString()),
+                  TableRowColumn(55, stat.goalsAgainst.toString()),
+                  TableRowColumn(55, stat.goalsAgainstAverage.toStringAsFixed(2)),
                 ]);
                 return StatsRowView(tableRow: tableRow);
               },
@@ -323,7 +220,10 @@ class TableRow {
       this.trailingColumnsView.add(Row(children: [
             Container(
               width: item.width,
-              child: Text(item.label),
+              alignment: Alignment.center,
+              child: Text(
+                item.label,
+              ),
             ),
             SizedBox(width: 10)
           ]));

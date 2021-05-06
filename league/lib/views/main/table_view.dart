@@ -7,45 +7,6 @@ import 'package:league/views/common/table_header_view.dart';
 
 class _TableViewState extends State<TableView> {
   var _isForm = false;
-  var columns = [
-    TableHeaderColumnView(
-      width: 50,
-      label: '#',
-    ),
-    TableHeaderColumnView(
-      width: 45,
-      label: 'קבוצה',
-    ),
-    TableHeaderColumnView(
-      width: 100,
-      label: '',
-    ),
-    TableHeaderColumnView(
-      width: 30,
-      label: 'מש',
-    ),
-    TableHeaderColumnView(
-      width: 30,
-      label: 'נצ',
-    ),
-    TableHeaderColumnView(
-      width: 30,
-      label: 'תק',
-    ),
-    TableHeaderColumnView(
-      width: 30,
-      label: 'הפ',
-    ),
-    TableHeaderColumnView(
-      width: 30,
-      label: 'הפרש',
-    ),
-    TableHeaderColumnView(
-      width: 40,
-      label: 'נק',
-    )
-  ];
-
   @override
   Widget build(Object context) {
     return SliverToBoxAdapter(
@@ -57,7 +18,7 @@ class _TableViewState extends State<TableView> {
             labelPadding: EdgeInsets.only(top: 2, bottom: 2, left: 15, right: 15),
             backgroundColor: Colors.white,
             label: Text(
-              'כושר',
+              'משחקים אחרונים',
               style: Theme.of(context).textTheme.button,
             ),
             showCheckmark: false,
@@ -71,18 +32,32 @@ class _TableViewState extends State<TableView> {
             },
           ),
         ),
-        TableHeaderRowView(columnList: ['מש', 'נצ', 'תק', 'הפ', 'הש', 'נק']),
-        ListView.builder(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-          physics: const NeverScrollableScrollPhysics(),
-          controller: widget.scrollController,
-          shrinkWrap: true,
-          itemCount: widget.standingsList.length,
-          itemBuilder: (context, index) {
-            final standing = widget.standingsList[index];
-            return showRow(standing, context);
-          },
-        )
+        Card(
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          // color: Colors.red,
+          child: Column(
+            children: [
+              _isForm
+                  ? TableHeaderRowView(
+                      columnList: ['5 משחקים אחרונים'],
+                      columnWidth: 150.0,
+                    )
+                  : TableHeaderRowView(
+                      columnList: ['מש', 'נצ', 'תק', 'הפ', 'הש', 'נק'], columnWidth: 20.0),
+              ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                physics: const NeverScrollableScrollPhysics(),
+                controller: widget.scrollController,
+                shrinkWrap: true,
+                itemCount: widget.standingsList.length,
+                itemBuilder: (context, index) {
+                  final standing = widget.standingsList[index];
+                  return showRow(standing, context);
+                },
+              )
+            ],
+          ),
+        ),
       ]),
     );
   }
@@ -135,113 +110,106 @@ class TableRowView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: callback,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.0),
-        ),
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: 20),
-                    Container(
-                      width: 20,
-                      child: Text(
-                        tableLine.position.toString(),
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    FadeInImage(
-                      width: 30,
-                      height: 30,
-                      placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                      image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      tableLine.name,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  SizedBox(width: 20),
+                  Container(
+                    width: 20,
+                    child: Text(
+                      tableLine.position.toString(),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                  ],
+                  ),
+                  SizedBox(width: 10),
+                  FadeInImage(
+                    width: 30,
+                    height: 30,
+                    placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                    image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    tableLine.name,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ],
+              ),
+              Row(children: [
+                SizedBox(width: 10),
+                Container(
+                  width: 20,
+                  alignment: Alignment.center,
+                  child: Text(
+                    tableLine.games.toString(),
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
                 ),
-                Row(children: [
-                  SizedBox(width: 10),
-                  Container(
+                SizedBox(width: 10),
+                Container(
+                  width: 20,
+                  alignment: Alignment.center,
+                  child: Text(
+                    tableLine.wins.toString(),
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Container(
+                  width: 20,
+                  alignment: Alignment.center,
+                  child: Text(
+                    tableLine.draws.toString(),
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Container(
+                  width: 20,
+                  alignment: Alignment.center,
+                  child: Text(
+                    tableLine.losses.toString(),
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Container(
                     width: 20,
                     alignment: Alignment.center,
                     child: Text(
-                      tableLine.games.toString(),
+                      tableLine.goalsDifference.toString(),
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 20,
-                    alignment: Alignment.center,
-                    child: Text(
-                      tableLine.wins.toString(),
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
+                ),
+                SizedBox(width: 10),
+                Container(
+                  width: 20,
+                  alignment: Alignment.center,
+                  child: Text(
+                    tableLine.points.toString(),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 20,
-                    alignment: Alignment.center,
-                    child: Text(
-                      tableLine.draws.toString(),
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 20,
-                    alignment: Alignment.center,
-                    child: Text(
-                      tableLine.losses.toString(),
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Container(
-                      width: 20,
-                      alignment: Alignment.center,
-                      child: Text(
-                        tableLine.goalsDifference.toString(),
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 20,
-                    alignment: Alignment.center,
-                    child: Text(
-                      tableLine.points.toString(),
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                ]),
-              ],
-            ),
-            SizedBox(height: 9),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              height: 1,
-              color: Colors.grey[200],
-            ),
-          ],
-        ),
+                ),
+                SizedBox(width: 10),
+              ]),
+            ],
+          ),
+          SizedBox(height: 9),
+          // Container(
+          //   margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          //   height: 1,
+          //   color: Colors.grey[200],
+          // ),
+        ],
       ),
     );
   }
@@ -326,68 +294,71 @@ class TableFormRowView extends StatelessWidget {
   }
 }
 
-class TableHeaderRowView extends StatelessWidget {
-  final columnList;
-  const TableHeaderRowView({Key key, this.columnList}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.0),
-        ),
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: 20),
-                    Container(
-                      width: 20,
-                      child: Text(
-                        '#',
-                        style: Theme.of(context).textTheme.overline,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 70,
-                      child: Text(
-                        'קבוצה',
-                        style: Theme.of(context).textTheme.overline,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                  ],
-                ),
-                Row(children: [
-                  for (var item in columnList)
-                    Row(
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          // color: Colors.red,
-                          width: 20,
-                          child: Text(
-                            item,
-                            style: Theme.of(context).textTheme.overline,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                      ],
-                    ),
-                  SizedBox(width: 5),
-                ]),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// class TableHeaderRowView extends StatelessWidget {
+//   final columnList;
+//   final columnWidth;
+
+//   const TableHeaderRowView({Key key, this.columnList, this.columnWidth}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       child: Card(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(0.0),
+//         ),
+//         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+//         color: Colors.white,
+//         child: Column(
+//           children: [
+//             SizedBox(height: 10),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Row(
+//                   children: [
+//                     SizedBox(width: 20),
+//                     Container(
+//                       width: 20,
+//                       child: Text(
+//                         '#',
+//                         style: Theme.of(context).textTheme.overline,
+//                       ),
+//                     ),
+//                     SizedBox(width: 10),
+//                     Container(
+//                       width: 70,
+//                       child: Text(
+//                         'קבוצה',
+//                         style: Theme.of(context).textTheme.overline,
+//                       ),
+//                     ),
+//                     SizedBox(width: 8),
+//                   ],
+//                 ),
+//                 Row(children: [
+//                   for (var item in columnList)
+//                     Row(
+//                       children: [
+//                         Container(
+//                           alignment: Alignment.center,
+//                           // color: Colors.red,
+//                           width: columnWidth,
+//                           child: Text(
+//                             item,
+//                             style: Theme.of(context).textTheme.overline,
+//                           ),
+//                         ),
+//                         SizedBox(width: 10),
+//                       ],
+//                     ),
+//                   SizedBox(width: 5),
+//                 ]),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

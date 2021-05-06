@@ -51,3 +51,61 @@ class TableHeader extends StatelessWidget {
     );
   }
 }
+
+class TableHeaderRowView extends StatelessWidget {
+  final columnList;
+  final columnWidth;
+
+  const TableHeaderRowView({Key key, this.columnList, this.columnWidth}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SizedBox(width: 20),
+                Container(
+                  width: 20,
+                  child: Text(
+                    '#',
+                    style: Theme.of(context).textTheme.overline,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Container(
+                  width: 70,
+                  child: Text(
+                    'קבוצה',
+                    style: Theme.of(context).textTheme.overline,
+                  ),
+                ),
+                SizedBox(width: 8),
+              ],
+            ),
+            Row(children: [
+              for (var item in columnList)
+                Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      width: columnWidth,
+                      child: Text(
+                        item,
+                        style: Theme.of(context).textTheme.overline,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                  ],
+                ),
+            ]),
+          ],
+        ),
+      ],
+    );
+  }
+}
