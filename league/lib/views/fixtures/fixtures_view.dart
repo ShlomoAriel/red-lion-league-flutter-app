@@ -65,7 +65,7 @@ class FixturesView extends StatelessWidget {
               MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
               SliverToBoxAdapter(
                 child: Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
+                  margin: EdgeInsets.only(left: 5, right: 5, top: 5),
                   child: Row(
                     children: [TeamDropDown(), WeeksDropDown()],
                   ),
@@ -95,7 +95,6 @@ class TeamDropDown extends StatelessWidget {
         var teams = [Team(id: '-1', name: 'כל הקבוצות')];
         teams.addAll(seasonState.teamsMap.values);
         return Container(
-          margin: EdgeInsets.only(top: 10, bottom: 0, right: 5, left: 5),
           child: PopupMenuButton<Team>(
             itemBuilder: (BuildContext context) {
               return teams.map((value) {
@@ -151,7 +150,6 @@ class WeeksDropDown extends StatelessWidget {
         ];
         weeks.addAll(seasonState.weeks.toList());
         return Container(
-          margin: EdgeInsets.only(top: 10, bottom: 0, right: 5, left: 5),
           child: PopupMenuButton<Week>(
             itemBuilder: (BuildContext context) {
               return weeks.map((value) {
@@ -197,7 +195,7 @@ class FixturesSliverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 5),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
