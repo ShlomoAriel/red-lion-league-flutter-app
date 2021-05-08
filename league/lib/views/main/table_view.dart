@@ -33,8 +33,7 @@ class _TableViewState extends State<TableView> {
           ),
         ),
         Card(
-          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-          // color: Colors.red,
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: Column(
             children: [
               _isForm
@@ -204,11 +203,6 @@ class TableRowView extends StatelessWidget {
             ],
           ),
           SizedBox(height: 9),
-          // Container(
-          //   margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          //   height: 1,
-          //   color: Colors.grey[200],
-          // ),
         ],
       ),
     );
