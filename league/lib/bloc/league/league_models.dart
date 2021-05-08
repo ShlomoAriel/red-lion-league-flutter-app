@@ -393,3 +393,10 @@ class Stat {
 
   Stat(this.title, this.teamId, this.value);
 }
+
+class Sponser {
+  final name;
+  final logoURL;
+
+  Sponser(this.name, this.logoURL);
+}

@@ -219,70 +219,58 @@ class TableFormRowView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: callback,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.0),
-        ),
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: 20),
-                    Container(
-                      width: 20,
-                      child: Text(
-                        tableLine.position.toString(),
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    FadeInImage(
-                      width: 30,
-                      height: 30,
-                      placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                      image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      tableLine.name,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  SizedBox(width: 20),
+                  Container(
+                    width: 20,
+                    child: Text(
+                      tableLine.position.toString(),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                  ],
-                ),
-                Row(children: [
+                  ),
                   SizedBox(width: 10),
-                  for (var item in tableLine.matchForm
-                      .getRange(tableLine.matchForm.length - 5, tableLine.matchForm.length))
-                    Container(
-                      decoration: BoxDecoration(color: item.resultColor, shape: BoxShape.circle),
-                      padding: EdgeInsets.all(4),
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(left: 5),
-                      width: 30,
-                      child: Text(
-                        item.resultText,
-                        style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
-                      ),
+                  FadeInImage(
+                    width: 30,
+                    height: 30,
+                    placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                    image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    tableLine.name,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ],
+              ),
+              Row(children: [
+                SizedBox(width: 10),
+                for (var item in tableLine.matchForm
+                    .getRange(tableLine.matchForm.length - 5, tableLine.matchForm.length))
+                  Container(
+                    decoration: BoxDecoration(color: item.resultColor, shape: BoxShape.circle),
+                    padding: EdgeInsets.all(4),
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: 5),
+                    width: 30,
+                    child: Text(
+                      item.resultText,
+                      style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
                     ),
-                  SizedBox(width: 15),
-                ]),
-              ],
-            ),
-            SizedBox(height: 9),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              height: 1,
-              color: Colors.grey[200],
-            ),
-          ],
-        ),
+                  ),
+                SizedBox(width: 15),
+              ]),
+            ],
+          ),
+          SizedBox(height: 9)
+        ],
       ),
     );
   }

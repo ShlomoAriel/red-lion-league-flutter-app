@@ -7,7 +7,7 @@ class ImageGallery extends StatelessWidget {
   Widget build(Object context) {
     return CarouselSlider(
       options: CarouselOptions(
-          height: 250.0,
+          height: (MediaQuery.of(context).size.height / 3),
           autoPlay: true,
           aspectRatio: 16 / 9,
           autoPlayCurve: Curves.fastOutSlowIn,
