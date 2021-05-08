@@ -28,27 +28,29 @@ class FixturesView extends StatelessWidget {
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey[300],
                         highlightColor: Colors.grey[100],
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 10,
-                              height: 30,
-                            ),
-                            Container(
-                              width: 100,
-                              height: 25,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              width: 100,
-                              height: 25,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
+                        child: Column(children: [
+                          SizedBox(
+                            height: 7,
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 10),
+                              Container(
+                                width: 80,
+                                height: 35,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width: 80,
+                                height: 35,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
+                        ]),
                       ),
                     ),
                   ),
@@ -63,6 +65,7 @@ class FixturesView extends StatelessWidget {
               MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
               SliverToBoxAdapter(
                 child: Container(
+                  margin: EdgeInsets.only(left: 5, right: 5),
                   child: Row(
                     children: [TeamDropDown(), WeeksDropDown()],
                   ),
@@ -89,7 +92,8 @@ class TeamDropDown extends StatelessWidget {
             ));
       } else {
         var seasonState = state.store[state.currentSeason.id];
-        var teams = seasonState.teamsMap.values;
+        var teams = [Team(id: '-1', name: 'כל הקבוצות')];
+        teams.addAll(seasonState.teamsMap.values);
         return Container(
           margin: EdgeInsets.only(top: 10, bottom: 0, right: 5, left: 5),
           child: PopupMenuButton<Team>(
@@ -106,18 +110,20 @@ class TeamDropDown extends StatelessWidget {
               print(value);
               BlocProvider.of<LeagueCubit>(context).setWeeksTeam(value);
             },
-            child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white),
-                padding: EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(margin: EdgeInsets.only(left: 5), child: Icon(Icons.arrow_drop_down)),
-                    Text(seasonState.weeksTeam?.name ?? 'קבוצה',
-                        style: Theme.of(context).textTheme.button),
-                  ],
-                )),
+            child: Card(
+              child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white),
+                  padding: EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(seasonState.weeksTeam?.name ?? 'קבוצה',
+                          style: Theme.of(context).textTheme.button),
+                      Container(child: Icon(Icons.arrow_drop_down)),
+                    ],
+                  )),
+            ),
             elevation: 16,
           ),
         );
@@ -140,7 +146,10 @@ class WeeksDropDown extends StatelessWidget {
             ));
       } else {
         var seasonState = state.store[state.currentSeason.id];
-        var weeks = seasonState.weeks;
+        var weeks = [
+          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason.id))
+        ];
+        weeks.addAll(seasonState.weeks.toList());
         return Container(
           margin: EdgeInsets.only(top: 10, bottom: 0, right: 5, left: 5),
           child: PopupMenuButton<Week>(
@@ -158,18 +167,20 @@ class WeeksDropDown extends StatelessWidget {
               BlocProvider.of<LeagueCubit>(context).setWeeksWeek(value);
             },
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-            child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white),
-                padding: EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(margin: EdgeInsets.only(left: 5), child: Icon(Icons.arrow_drop_down)),
-                    Text(seasonState.weeksWeek?.name ?? 'מחזור',
-                        style: Theme.of(context).textTheme.button),
-                  ],
-                )),
+            child: Card(
+              child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white),
+                  padding: EdgeInsets.only(left: 12, top: 7, bottom: 7, right: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(seasonState.weeksWeek?.name ?? 'מחזור',
+                          style: Theme.of(context).textTheme.button),
+                      Container(child: Icon(Icons.arrow_drop_down)),
+                    ],
+                  )),
+            ),
             elevation: 16,
           ),
         );

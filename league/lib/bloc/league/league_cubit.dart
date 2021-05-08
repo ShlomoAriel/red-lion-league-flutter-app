@@ -109,7 +109,7 @@ class LeagueCubit extends Cubit<LeagueState> {
     leagueState.store[state.currentSeason.id].weeksWeek = null;
     leagueState.store[leagueState.currentSeason.id].filteredWeeks =
         state.store[leagueState.currentSeason.id].weeks.map((e) => Week.clone(e)).toList();
-    if (team == leagueState.store[state.currentSeason.id].weeksTeam) {
+    if (team == leagueState.store[state.currentSeason.id].weeksTeam || team.id == '-1') {
       leagueState.store[state.currentSeason.id].weeksTeam = null;
     } else {
       leagueState.store[state.currentSeason.id].weeksTeam = team;
@@ -132,13 +132,20 @@ class LeagueCubit extends Cubit<LeagueState> {
 
   void setWeeksWeek(Week week) {
     LeagueState leagueState = new LeagueState.from(state);
+
     var seasonState = state.store[state.currentSeason.id];
     leagueState.store[state.currentSeason.id].weeksWeek = week;
     leagueState.store[state.currentSeason.id].weeksTeam = null;
-    leagueState.store[leagueState.currentSeason.id].filteredWeeks = state
-        .store[leagueState.currentSeason.id].weeks
-        .where((element) => element.id == seasonState.weeksWeek.id)
-        .toList();
+    if (week.id == '-1') {
+      leagueState.store[state.currentSeason.id].weeksWeek = null;
+      leagueState.store[leagueState.currentSeason.id].filteredWeeks =
+          state.store[leagueState.currentSeason.id].weeks.toList();
+    } else {
+      leagueState.store[leagueState.currentSeason.id].filteredWeeks = state
+          .store[leagueState.currentSeason.id].weeks
+          .where((element) => element.id == seasonState.weeksWeek.id)
+          .toList();
+    }
     emit(leagueState);
   }
 }
