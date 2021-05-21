@@ -15,7 +15,7 @@ class _TableViewState extends State<TableView> {
           height: 53,
           margin: EdgeInsets.symmetric(horizontal: 10),
           child: FilterChip(
-            labelPadding: EdgeInsets.only(top: 2, bottom: 2, left: 15, right: 15),
+            labelPadding: EdgeInsets.only(top: 0, bottom: 0, left: 10, right: 10),
             backgroundColor: Colors.white,
             label: Text(
               'משחקים אחרונים',
@@ -125,7 +125,6 @@ class TableRowView extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                  SizedBox(width: 10),
                   FadeInImage(
                     width: 30,
                     height: 30,
@@ -235,7 +234,6 @@ class TableFormRowView extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                  SizedBox(width: 10),
                   FadeInImage(
                     width: 30,
                     height: 30,
@@ -250,23 +248,25 @@ class TableFormRowView extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(children: [
-                SizedBox(width: 10),
-                for (var item in tableLine.matchForm
-                    .getRange(tableLine.matchForm.length - 5, tableLine.matchForm.length))
-                  Container(
-                    decoration: BoxDecoration(color: item.resultColor, shape: BoxShape.circle),
-                    padding: EdgeInsets.all(4),
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: 5),
-                    width: 30,
-                    child: Text(
-                      item.resultText,
-                      style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
-                    ),
-                  ),
-                SizedBox(width: 15),
-              ]),
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var item in tableLine.matchForm.reversed.take(5).toList().reversed)
+                      Container(
+                        decoration: BoxDecoration(
+                            color: item.resultColor, borderRadius: BorderRadius.circular(5)),
+                        padding: EdgeInsets.all(4),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(left: 5),
+                        width: 25,
+                        child: Text(
+                          item.resultText,
+                          style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
+                        ),
+                      ),
+                    SizedBox(width: 10),
+                  ]),
             ],
           ),
           SizedBox(height: 9)
@@ -275,72 +275,3 @@ class TableFormRowView extends StatelessWidget {
     );
   }
 }
-
-// class TableHeaderRowView extends StatelessWidget {
-//   final columnList;
-//   final columnWidth;
-
-//   const TableHeaderRowView({Key key, this.columnList, this.columnWidth}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       child: Card(
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(0.0),
-//         ),
-//         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-//         color: Colors.white,
-//         child: Column(
-//           children: [
-//             SizedBox(height: 10),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Row(
-//                   children: [
-//                     SizedBox(width: 20),
-//                     Container(
-//                       width: 20,
-//                       child: Text(
-//                         '#',
-//                         style: Theme.of(context).textTheme.overline,
-//                       ),
-//                     ),
-//                     SizedBox(width: 10),
-//                     Container(
-//                       width: 70,
-//                       child: Text(
-//                         'קבוצה',
-//                         style: Theme.of(context).textTheme.overline,
-//                       ),
-//                     ),
-//                     SizedBox(width: 8),
-//                   ],
-//                 ),
-//                 Row(children: [
-//                   for (var item in columnList)
-//                     Row(
-//                       children: [
-//                         Container(
-//                           alignment: Alignment.center,
-//                           // color: Colors.red,
-//                           width: columnWidth,
-//                           child: Text(
-//                             item,
-//                             style: Theme.of(context).textTheme.overline,
-//                           ),
-//                         ),
-//                         SizedBox(width: 10),
-//                       ],
-//                     ),
-//                   SizedBox(width: 5),
-//                 ]),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

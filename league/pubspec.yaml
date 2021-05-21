@@ -60,6 +60,27 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   fonts:
+      - family: Assistant-Bold
+        fonts:
+          - asset: fonts/Assistant/Assistant-Bold.ttf  
+      - family: Assistant-ExtraBold
+        fonts:
+          - asset: fonts/Assistant/Assistant-ExtraBold.ttf
+      - family: Assistant-ExtraLight
+        fonts:
+          - asset: fonts/Assistant/Assistant-ExtraLight.ttf
+      - family: Assistant-Light
+        fonts:
+          - asset: fonts/Assistant/Assistant-Light.ttf
+      - family: Assistant-Medium
+        fonts:
+          - asset: fonts/Assistant/Assistant-Medium.ttf
+      - family: Assistant-Regular
+        fonts:
+          - asset: fonts/Assistant/Assistant-Regular.ttf
+      - family: Assistant-SemiBold
+        fonts:
+          - asset: fonts/Assistant/Assistant-SemiBold.ttf
       - family: OpenSansHebrew-Regular
         fonts:
           - asset: fonts/open-sans-hebrew/OpenSansHebrew-Regular.ttf

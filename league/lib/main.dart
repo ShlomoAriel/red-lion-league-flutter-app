@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/league_cubit.dart';
+import 'package:league/bloc/league/media_cubit.dart';
 import 'package:league/navigation/app_router.dart';
 import 'package:league/bloc/catalog/catalog_cubit.dart';
 import 'package:league/utils/main_theme.dart';
@@ -29,6 +30,9 @@ class ClientelingApp extends StatelessWidget {
         ),
         BlocProvider<LeagueCubit>(
           create: (context) => LeagueCubit()..init(),
+        ),
+        BlocProvider<MediaCubit>(
+          create: (context) => MediaCubit()..init(),
         ),
       ],
       child: MaterialApp(

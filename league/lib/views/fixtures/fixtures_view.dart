@@ -21,7 +21,7 @@ class FixturesView extends StatelessWidget {
             return Container(
                 color: Colors.grey[200],
                 child: CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
-                  MySliverAppBar('ליגת האריה האדום', 'seasonState.season.name'),
+                  MainAppBar('ליגת האריה האדום', 'seasonState.season.name'),
                   SliverPadding(
                     padding: EdgeInsets.all(5),
                     sliver: SliverToBoxAdapter(
@@ -62,7 +62,7 @@ class FixturesView extends StatelessWidget {
           } else {
             var seasonState = state.store[state.currentSeason.id];
             return CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
-              MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
+              MainAppBar('ליגת האריה האדום', seasonState.season.name),
               SliverToBoxAdapter(
                 child: Container(
                   margin: EdgeInsets.only(left: 5, right: 5, top: 5),
@@ -150,6 +150,7 @@ class WeeksDropDown extends StatelessWidget {
         ];
         weeks.addAll(seasonState.weeks.toList());
         return Container(
+          alignment: Alignment.centerRight,
           child: PopupMenuButton<Week>(
             itemBuilder: (BuildContext context) {
               return weeks.map((value) {
@@ -278,7 +279,7 @@ class FixtureView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
           return Row(

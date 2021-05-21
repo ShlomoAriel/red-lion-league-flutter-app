@@ -20,7 +20,7 @@ class ScorersView extends StatelessWidget {
             controller: scrollController,
             physics: const BouncingScrollPhysics(),
             slivers: [
-              MySliverAppBar('ליגת האריה האדום', seasonState?.season?.name ?? 'ss'),
+              MainAppBar('ליגת האריה האדום', seasonState?.season?.name ?? 'ss'),
               SliverSectionView(title: 'כללי'),
               buildStats(seasonState),
               SliverSectionView(title: 'כובשים'),

@@ -32,17 +32,21 @@ class MainView extends StatelessWidget {
             return Container(
                 color: Colors.grey[200],
                 child: CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
-                  MySliverAppBar('ליגת האריה האדום', 'seasonState.season.name'),
-                  SliverListPlaceholder(height: 50.0, count: 10),
-                  SliverGridPlaceholder(count: 4),
+                  MainAppBar('ליגת האריה האדום', 'seasonState.season.name'),
                   SliverToBoxAdapter(
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
+                      child: ChipPlaceholder(
+                    count: 1,
+                    height: 53.0,
+                  )),
+                  SliverListPlaceholder(height: 40.0, count: 10),
+                  SliverToBoxAdapter(
+                      child: Card(
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child:
+                        ClipRRect(borderRadius: BorderRadius.circular(5.0), child: ImageGallery()),
+                  )),
+                  SliverSectionView(title: 'מחזור הבא'),
+                  FixturesPlaceholder(count: 1),
                 ]));
           } else {
             var seasonState = state.store[state.currentSeason.id];
@@ -52,7 +56,7 @@ class MainView extends StatelessWidget {
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  MySliverAppBar('ליגת האריה האדום', seasonState.season.name),
+                  MainAppBar('ליגת האריה האדום', seasonState.season.name),
                   TableView(
                       scrollController: scrollController,
                       seasonId: state.currentSeason.id,
@@ -67,7 +71,7 @@ class MainView extends StatelessWidget {
                   SliverToBoxAdapter(child: FixturesWeekView(week: seasonState.nextWeek)),
                   SliverToBoxAdapter(
                     child: Card(
-                      margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                      margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                       child: Column(children: [
                         Container(
                             margin: EdgeInsets.only(top: 20, bottom: 40),
@@ -105,6 +109,14 @@ class MainView extends StatelessWidget {
                             );
                           },
                           itemCount: sponsors.length,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(20),
+                          child: Text(
+                            '© Shlomo Ariel',
+                            style: TextStyle(fontFamily: 'Montserrat-Medium'),
+                            textDirection: TextDirection.ltr,
+                          ),
                         )
                       ]),
                     ),

@@ -8,12 +8,7 @@ class LeagueState {
   List<Goal> goals;
   Map<String, SeasonState> store;
 
-  LeagueState(
-      {this.isLoading,
-      this.currentSeason,
-      this.seasons,
-      this.goals,
-      this.store});
+  LeagueState({this.isLoading, this.currentSeason, this.seasons, this.goals, this.store});
 
   LeagueState.from(LeagueState state) {
     this.currentSeason = state.currentSeason;

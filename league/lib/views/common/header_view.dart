@@ -5,18 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class MyFlexiableAppBar extends StatelessWidget {
-  final double appBarHeight = 66.0;
+class MainFlexiableAppBar extends StatelessWidget {
+  final double appBarHeight = 0.0;
   final title;
 
-  const MyFlexiableAppBar(this.title);
+  const MainFlexiableAppBar(this.title);
 
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return new Container(
-      padding: new EdgeInsets.only(top: statusBarHeight + 30),
+      padding: new EdgeInsets.only(top: statusBarHeight),
       height: statusBarHeight + appBarHeight,
       child: new Center(
           child: Column(
@@ -28,8 +28,8 @@ class MyFlexiableAppBar extends StatelessWidget {
               children: [
                 Container(
                   child: FadeInImage(
-                    width: 60,
-                    height: 60,
+                    width: 80,
+                    height: 80,
                     placeholder: AssetImage('assets/images/shield-placeholder.png'),
                     image: AssetImage('assets/images/LOGO CLEAN BACKGROUND.png'),
                     fit: BoxFit.cover,
@@ -37,7 +37,7 @@ class MyFlexiableAppBar extends StatelessWidget {
                 ),
                 Text('ליגת האריה האדום',
                     style: Theme.of(context).textTheme.headline6.apply(color: Colors.white)),
-                SeasonDropDown(),
+                SeasonDropDown(textColor: Colors.white),
               ],
             ),
           ),
@@ -50,19 +50,18 @@ class MyFlexiableAppBar extends StatelessWidget {
   }
 }
 
-class MySliverAppBar extends StatelessWidget {
+class MainAppBar extends StatelessWidget {
   final barTitle;
   final expandedBarTitle;
 
-  const MySliverAppBar(this.barTitle, this.expandedBarTitle);
+  const MainAppBar(this.barTitle, this.expandedBarTitle);
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       backgroundColor: Color(0xffDD294D),
-      // title: MyAppBar(barTitle),
       pinned: true,
-      expandedHeight: 160.0,
+      expandedHeight: 170.0,
       flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         var top = constraints.biggest.height;
         return FlexibleSpaceBar(
@@ -74,47 +73,17 @@ class MySliverAppBar extends StatelessWidget {
                   top > 104 ? "" : 'ליגת האריה האדום',
                   style: Theme.of(context).textTheme.headline6.apply(color: Colors.white),
                 )),
-            background: MyFlexiableAppBar(expandedBarTitle));
+            background: MainFlexiableAppBar(expandedBarTitle));
       }),
-      // flexibleSpace: FlexibleSpaceBar(
-      //   stretchModes: [
-      //     StretchMode.zoomBackground,
-      //     StretchMode.blurBackground,
-      //     StretchMode.fadeTitle,
-      //   ],
-      //   background: MyFlexiableAppBar(expandedBarTitle),
-      // ),
-    );
-  }
-}
-
-class MyAppBar extends StatelessWidget {
-  final double barHeight = 66.0;
-  final title;
-  const MyAppBar(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.button.apply(color: Colors.white),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
 
 class SeasonDropDown extends StatelessWidget {
+  final Color textColor;
+
+  const SeasonDropDown({Key key, this.textColor}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
@@ -144,7 +113,8 @@ class SeasonDropDown extends StatelessWidget {
               return state.seasons.map((value) {
                 return new PopupMenuItem<Season>(
                   value: value,
-                  child: new Text(value?.name ?? 'NA', style: Theme.of(context).textTheme.button),
+                  child: new Text(value?.name ?? 'NA',
+                      style: Theme.of(context).textTheme.button.apply(color: Colors.black)),
                 );
               }).toList();
             },
@@ -160,11 +130,9 @@ class SeasonDropDown extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                        // margin: EdgeInsets.only(left: 0),
-                        child: Icon(Icons.arrow_drop_down, color: Colors.white70)),
+                    Container(child: Icon(Icons.arrow_drop_down, color: textColor)),
                     Text(state.currentSeason.name,
-                        style: Theme.of(context).textTheme.button.apply(color: Colors.white70)),
+                        style: Theme.of(context).textTheme.button.apply(color: textColor)),
                   ],
                 )),
             elevation: 16,
@@ -172,5 +140,75 @@ class SeasonDropDown extends StatelessWidget {
         );
       }
     });
+  }
+}
+
+class TeamAppBar extends StatelessWidget {
+  final Team team;
+
+  const TeamAppBar(this.team);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      backgroundColor: Colors.grey[200],
+      pinned: true,
+      expandedHeight: 170.0,
+      flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+        var top = constraints.biggest.height;
+        return FlexibleSpaceBar(
+            title: AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: top > 104 ? 0.0 : 1.0,
+                child: Text(
+                  top > 104 ? "" : team.name,
+                  style: Theme.of(context).textTheme.headline6.apply(color: Colors.black),
+                )),
+            background: TeamHeader(team));
+      }),
+    );
+  }
+}
+
+class TeamHeader extends StatelessWidget {
+  final double appBarHeight = 0.0;
+  final Team team;
+
+  const TeamHeader(this.team);
+
+  @override
+  Widget build(BuildContext context) {
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
+
+    return new Container(
+      padding: new EdgeInsets.only(top: statusBarHeight),
+      height: statusBarHeight + appBarHeight,
+      child: new Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: FadeInImage(
+                    width: 80,
+                    height: 80,
+                    placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                    image: AssetImage('assets/images/logos/' + team.id + '.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Text(team.name,
+                    style: Theme.of(context).textTheme.headline6.apply(color: Colors.black)),
+                SeasonDropDown(textColor: Colors.black),
+              ],
+            ),
+          ),
+        ],
+      )),
+      decoration: new BoxDecoration(color: Colors.grey[200]),
+    );
   }
 }

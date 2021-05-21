@@ -26,24 +26,30 @@ class TeamDetailsView extends StatelessWidget {
             var team = seasonState.teamsMap[state.selectedTeam];
             return CustomScrollView(
               slivers: [
-                MySliverAppBar(team.name, seasonState.season.name),
-                SliverSectionView(title: 'משחקים אחרונים'),
+                TeamAppBar(team),
+                SliverSectionView(title: 'משחקים'),
                 SliverToBoxAdapter(
+                    child: Card(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(children: [
-                          for (var item in team.matchForm
-                              .getRange(team.matchForm.length - 5, team.matchForm.length))
-                            Container(
-                              decoration:
-                                  BoxDecoration(color: item.resultColor, shape: BoxShape.circle),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      height: 70.0,
+                      child: ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(width: 0);
+                          },
+                          padding: EdgeInsets.only(left: 20.0, right: 20),
+                          itemCount: team.matchForm.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (_, index) {
+                            final item = team.matchForm[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: item.resultColor, borderRadius: BorderRadius.circular(5)),
                               padding: EdgeInsets.all(4),
                               alignment: Alignment.center,
                               margin: EdgeInsets.only(left: 5),
                               width: 30,
+                              height: 30,
                               child: Text(
                                 item.resultText,
                                 style: Theme.of(context)
@@ -51,12 +57,9 @@ class TeamDetailsView extends StatelessWidget {
                                     .bodyText1
                                     .apply(color: Colors.white),
                               ),
-                            ),
-                        ]),
-                      ],
-                    ),
-                  ),
-                ),
+                            );
+                          })),
+                )),
                 SliverSectionView(title: 'העונה'),
                 SliverToBoxAdapter(
                   child: Container(
@@ -64,10 +67,13 @@ class TeamDetailsView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(children: [
+                        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                           Container(
-                            color: Colors.green,
-                            padding: EdgeInsets.all(10),
+                            height: 30,
+                            width: 90,
+                            decoration: BoxDecoration(
+                                color: MatchForm.formColorMap['win'],
+                                borderRadius: BorderRadius.circular(5)),
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(left: 5),
                             child: Text(
@@ -77,8 +83,11 @@ class TeamDetailsView extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            color: Colors.blue,
-                            padding: EdgeInsets.all(10),
+                            height: 30,
+                            width: 90,
+                            decoration: BoxDecoration(
+                                color: MatchForm.formColorMap['draw'],
+                                borderRadius: BorderRadius.circular(5)),
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(left: 5),
                             child: Text(
@@ -88,8 +97,11 @@ class TeamDetailsView extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            color: Colors.red,
-                            padding: EdgeInsets.all(10),
+                            height: 30,
+                            width: 90,
+                            decoration: BoxDecoration(
+                                color: MatchForm.formColorMap['loss'],
+                                borderRadius: BorderRadius.circular(5)),
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(left: 5),
                             child: Text(
@@ -113,7 +125,6 @@ class TeamDetailsView extends StatelessWidget {
                             seasonState.teamsMap[state.selectedTeam].seasonPlayers[index];
                         return TeamDetailsRowView(
                           team: team,
-                          // callback: () {},
                           tableLine: player,
                         );
                       },
@@ -142,7 +153,6 @@ class TeamDetailsRowView extends StatelessWidget {
     return GestureDetector(
       onTap: callback,
       child: Container(
-        // padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0.0),

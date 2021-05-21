@@ -141,6 +141,28 @@ class Player {
   }
 }
 
+class ImageGalleryResponse {
+  List<ImageGalleryModel> result;
+
+  ImageGalleryResponse.fromJson(Map<String, dynamic> json) {
+    this.result = (json['result'] as List)
+        .map((imageGalleryJson) => new ImageGalleryModel.fromJson(imageGalleryJson))
+        .toList();
+  }
+}
+
+class ImageGalleryModel {
+  List<String> imageURLs;
+  String name;
+
+  ImageGalleryModel({this.imageURLs, this.name});
+
+  ImageGalleryModel.fromJson(Map<String, dynamic> json) {
+    this.imageURLs = json['images'].cast<String>();
+    this.name = json['Name'];
+  }
+}
+
 class StandingsResponse {
   StandingsResponse({this.list});
 
@@ -228,10 +250,10 @@ class MatchForm {
     this.resultClass = json['ResultClass'];
     this.resultColor = formColorMap[json['ResultClass'].toString()];
   }
-  var formColorMap = {
-    'win': Colors.green,
-    'draw': Colors.blue,
-    'loss': Colors.red,
+  static var formColorMap = {
+    'win': Color(0xff92C47D),
+    'draw': Color(0xff6D9EEB),
+    'loss': Color(0xffE06666),
   };
   var formTextMap = {
     'win': 'W',
