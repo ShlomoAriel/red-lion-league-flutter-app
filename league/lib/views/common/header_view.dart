@@ -3,6 +3,7 @@ import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:league/views/fixtures/fixtures_view.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MainFlexiableAppBar extends StatelessWidget {
@@ -37,7 +38,7 @@ class MainFlexiableAppBar extends StatelessWidget {
                 ),
                 Text('ליגת האריה האדום',
                     style: Theme.of(context).textTheme.headline6.apply(color: Colors.white)),
-                SeasonDropDown(textColor: Colors.white),
+                SeasonSelectionButton(textColor: Colors.white),
               ],
             ),
           ),
@@ -76,6 +77,61 @@ class MainAppBar extends StatelessWidget {
             background: MainFlexiableAppBar(expandedBarTitle));
       }),
     );
+  }
+}
+
+class SeasonSelectionButton extends StatelessWidget {
+  final Color textColor;
+
+  const SeasonSelectionButton({Key key, this.textColor}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
+      if (state == null || state.seasons == null || state.currentSeason == null) {
+        return Container(
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            child: Shimmer.fromColors(
+                baseColor: Colors.grey[400],
+                highlightColor: Colors.grey[100],
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: 100,
+                    height: 10,
+                    color: Colors.grey,
+                  ),
+                ])));
+      } else {
+        var items = state.seasons;
+        return Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+            padding: EdgeInsets.only(left: 30, top: 2, bottom: 7, right: 12),
+            child: GestureDetector(
+              onTap: () {
+                showBottomSheetSelection(context, items, (Season value) {
+                  return Text(value.name);
+                }, (value) {
+                  BlocProvider.of<LeagueCubit>(context).setSeason(value);
+                }, (Season week, text) {
+                  return week.name.contains(text);
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(child: Icon(Icons.arrow_drop_down, color: textColor)),
+                  Text(state.currentSeason.name,
+                      style: Theme.of(context).textTheme.button.apply(color: textColor)),
+                ],
+              ),
+            ));
+      }
+    });
   }
 }
 
@@ -202,7 +258,7 @@ class TeamHeader extends StatelessWidget {
                 ),
                 Text(team.name,
                     style: Theme.of(context).textTheme.headline6.apply(color: Colors.black)),
-                SeasonDropDown(textColor: Colors.black),
+                SeasonSelectionButton(textColor: Colors.black),
               ],
             ),
           ),

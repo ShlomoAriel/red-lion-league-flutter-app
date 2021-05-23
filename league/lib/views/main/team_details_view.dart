@@ -8,6 +8,7 @@ import 'package:league/views/common/header_view.dart';
 import 'package:league/views/common/sliver_section_view.dart';
 
 class TeamDetailsView extends StatelessWidget {
+  final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,111 +28,136 @@ class TeamDetailsView extends StatelessWidget {
             return CustomScrollView(
               slivers: [
                 TeamAppBar(team),
-                SliverSectionView(title: 'משחקים'),
                 SliverToBoxAdapter(
                     child: Card(
-                  child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      height: 70.0,
-                      child: ListView.separated(
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(width: 0);
-                          },
-                          padding: EdgeInsets.only(left: 20.0, right: 20),
-                          itemCount: team.matchForm.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (_, index) {
-                            final item = team.matchForm[index];
-                            return Container(
+                  child: Column(children: [
+                    Container(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: Text('העונה', style: Theme.of(context).textTheme.headline6)),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                            Container(
+                              height: 30,
+                              width: 90,
                               decoration: BoxDecoration(
-                                  color: item.resultColor, borderRadius: BorderRadius.circular(5)),
-                              padding: EdgeInsets.all(4),
+                                  color: MatchForm.formColorMap['win'],
+                                  borderRadius: BorderRadius.circular(5)),
                               alignment: Alignment.center,
                               margin: EdgeInsets.only(left: 5),
-                              width: 30,
-                              height: 30,
                               child: Text(
-                                item.resultText,
+                                'נצחונות: ' + team.standing?.wins.toString(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1
                                     .apply(color: Colors.white),
                               ),
-                            );
-                          })),
+                            ),
+                            Container(
+                              height: 30,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                  color: MatchForm.formColorMap['draw'],
+                                  borderRadius: BorderRadius.circular(5)),
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(left: 5),
+                              child: Text(
+                                'תיקו: ' + team.standing?.draws.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .apply(color: Colors.white),
+                              ),
+                            ),
+                            Container(
+                              height: 30,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                  color: MatchForm.formColorMap['loss'],
+                                  borderRadius: BorderRadius.circular(5)),
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(left: 5),
+                              child: Text(
+                                'הפסדים: ' + team.standing?.losses.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .apply(color: Colors.white),
+                              ),
+                            ),
+                          ]),
+                        ],
+                      ),
+                    ),
+                  ]),
                 )),
-                SliverSectionView(title: 'העונה'),
                 SliverToBoxAdapter(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                          Container(
-                            height: 30,
-                            width: 90,
-                            decoration: BoxDecoration(
-                                color: MatchForm.formColorMap['win'],
-                                borderRadius: BorderRadius.circular(5)),
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.only(left: 5),
-                            child: Text(
-                              'נצחונות: ' + team.standing?.wins.toString(),
-                              style:
-                                  Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 90,
-                            decoration: BoxDecoration(
-                                color: MatchForm.formColorMap['draw'],
-                                borderRadius: BorderRadius.circular(5)),
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.only(left: 5),
-                            child: Text(
-                              'תיקו: ' + team.standing?.draws.toString(),
-                              style:
-                                  Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 90,
-                            decoration: BoxDecoration(
-                                color: MatchForm.formColorMap['loss'],
-                                borderRadius: BorderRadius.circular(5)),
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.only(left: 5),
-                            child: Text(
-                              'הפסדים: ' + team.standing?.losses.toString(),
-                              style:
-                                  Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
-                            ),
-                          ),
-                        ]),
-                      ],
-                    ),
+                    child: Card(
+                  child: Column(children: [
+                    Container(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: Text('משחקים', style: Theme.of(context).textTheme.headline6)),
+                    Container(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        height: 70.0,
+                        child: ListView.separated(
+                            separatorBuilder: (BuildContext context, int index) {
+                              return SizedBox(width: 0);
+                            },
+                            padding: EdgeInsets.only(left: 20.0, right: 20),
+                            itemCount: team.matchForm.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (_, index) {
+                              final item = team.matchForm[index];
+                              return Container(
+                                decoration: BoxDecoration(
+                                    color: item.resultColor,
+                                    borderRadius: BorderRadius.circular(5)),
+                                padding: EdgeInsets.all(4),
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(left: 5),
+                                width: 30,
+                                height: 30,
+                                child: Text(
+                                  item.resultText,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .apply(color: Colors.white),
+                                ),
+                              );
+                            })),
+                  ]),
+                )),
+                SliverToBoxAdapter(
+                    child: Card(
+                  // margin: EdgeInsets.symmetric(horizontal: 5),
+                  child: Column(
+                    children: [
+                      Container(
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: Text('שחקנים', style: Theme.of(context).textTheme.headline6)),
+                      ListView.builder(
+                          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          itemCount: seasonState.teamsMap[state.selectedTeam].seasonPlayers.length,
+                          itemBuilder: (context, index) {
+                            final player =
+                                seasonState.teamsMap[state.selectedTeam].seasonPlayers[index];
+                            return TeamDetailsRowView(
+                              team: team,
+                              tableLine: player,
+                            );
+                          }),
+                    ],
                   ),
-                ),
-                SliverSectionView(title: 'שחקנים'),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final player =
-                            seasonState.teamsMap[state.selectedTeam].seasonPlayers[index];
-                        return TeamDetailsRowView(
-                          team: team,
-                          tableLine: player,
-                        );
-                      },
-                      childCount: seasonState.teamsMap[state.selectedTeam].seasonPlayers.length,
-                    ),
-                  ),
-                ),
+                )),
               ],
             );
           }

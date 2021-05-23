@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:league/views/common/header_view.dart';
+import 'package:league/views/common/selection_list_widget.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -65,9 +66,9 @@ class FixturesView extends StatelessWidget {
               MainAppBar('ליגת האריה האדום', seasonState.season.name),
               SliverToBoxAdapter(
                 child: Container(
-                  margin: EdgeInsets.only(left: 5, right: 5, top: 5),
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 5),
                   child: Row(
-                    children: [TeamDropDown(), WeeksDropDown()],
+                    children: [TeamSelectionButton(), SizedBox(width: 10), WeeksSelectionButton()],
                   ),
                 ),
               ),
@@ -323,4 +324,130 @@ class FixtureView extends StatelessWidget {
           );
         }));
   }
+}
+
+class WeeksSelectionButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
+      if (state == null || state.seasons == null || state.currentSeason == null) {
+        return Container(
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            height: 20,
+            width: 20,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ));
+      } else {
+        var seasonState = state.store[state.currentSeason.id];
+        var weeks = [
+          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason.id))
+        ];
+        weeks.addAll(seasonState.weeks.toList());
+        return Container(
+            alignment: Alignment.centerRight,
+            child: RawMaterialButton(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              onPressed: () {
+                Theme(
+                  data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                  child: showBottomSheetSelection(context, weeks, (Week value) {
+                    return Text(value.name);
+                  }, (value) {
+                    BlocProvider.of<LeagueCubit>(context).setWeeksWeek(value);
+                  }, (Week week, text) {
+                    return week.name.contains(text);
+                  }),
+                );
+              },
+              fillColor: Colors.white,
+              elevation: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(seasonState.weeksWeek?.name ?? 'מחזור',
+                      style: Theme.of(context).textTheme.button),
+                  Container(child: Icon(Icons.arrow_drop_down)),
+                ],
+              ),
+              textStyle: Theme.of(context).textTheme.button,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+            ));
+      }
+    });
+  }
+}
+
+class TeamSelectionButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
+      if (state == null || state.seasons == null || state.currentSeason == null) {
+        return Container(
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            height: 20,
+            width: 20,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ));
+      } else {
+        var seasonState = state.store[state.currentSeason.id];
+        var teams = [Team(id: '-1', name: 'כל הקבוצות')];
+        teams.addAll(seasonState.teamsMap.values);
+        return Container(
+            alignment: Alignment.centerRight,
+            child: RawMaterialButton(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              onPressed: () {
+                Theme(
+                  data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                  child: showBottomSheetSelection(context, teams, (Team value) {
+                    return Text(value.name);
+                  }, (value) {
+                    BlocProvider.of<LeagueCubit>(context).setWeeksTeam(value);
+                  }, (Team team, text) {
+                    return team.name.contains(text);
+                  }),
+                );
+              },
+              fillColor: Colors.white,
+              elevation: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(seasonState.weeksTeam?.name ?? 'קבוצה',
+                      style: Theme.of(context).textTheme.button),
+                  Container(child: Icon(Icons.arrow_drop_down)),
+                ],
+              ),
+              textStyle: Theme.of(context).textTheme.button,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+            ));
+      }
+    });
+  }
+}
+
+showBottomSheetSelection(context, items, cellText, callback, filterFunction) {
+  showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: new BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(15.0), topRight: const Radius.circular(15.0))),
+          child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: SelectionListWidget(
+                  cellText: cellText,
+                  items: items,
+                  callback: callback,
+                  filterFunction: filterFunction)),
+        );
+      });
 }
