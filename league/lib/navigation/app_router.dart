@@ -28,7 +28,7 @@ class AppRouter {
         );
       case '/':
         return MaterialPageRoute(
-          builder: (_) => TabsPage(),
+          builder: (_) => Directionality(textDirection: TextDirection.rtl, child: TabsPage()),
         );
       case '/clientListMembers':
         return MaterialPageRoute(

@@ -253,7 +253,7 @@ class ChipPlaceholder extends StatelessWidget {
           baseColor: Colors.grey[300],
           highlightColor: Colors.grey[100],
           child: FilterChip(
-            labelPadding: EdgeInsets.only(top: 2, bottom: 2, left: 15, right: 15),
+            labelPadding: EdgeInsets.only(top: 0, bottom: 0, left: 15, right: 15),
             backgroundColor: Colors.grey[300],
             label: Text(
               '                   ',
@@ -268,4 +268,16 @@ class ChipPlaceholder extends StatelessWidget {
       ),
     ]);
   }
+}
+
+Widget getShimmer(width, height) {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300],
+    highlightColor: Colors.grey[100],
+    child: Container(
+      width: width,
+      height: height,
+      color: Colors.grey,
+    ),
+  );
 }

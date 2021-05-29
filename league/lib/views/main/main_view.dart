@@ -26,6 +26,7 @@ class MainView extends StatelessWidget {
       child: BlocBuilder<LeagueCubit, LeagueState>(
         builder: (context, state) {
           if (state == null ||
+              // state != null ||
               state.isLoading ||
               state.store == null ||
               state.store[state.currentSeason.id] == null) {
@@ -36,7 +37,7 @@ class MainView extends StatelessWidget {
                   SliverToBoxAdapter(
                       child: ChipPlaceholder(
                     count: 1,
-                    height: 53.0,
+                    height: 58.0,
                   )),
                   SliverListPlaceholder(height: 40.0, count: 10),
                   SliverToBoxAdapter(

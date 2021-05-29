@@ -19,17 +19,17 @@ class TabNavigationItem {
         TabNavigationItem(
           page: Directionality(textDirection: TextDirection.rtl, child: MainView()),
           icon: Icon(Icons.table_chart),
-          title: "Table",
+          title: "טבלה",
         ),
         TabNavigationItem(
           page: Directionality(textDirection: TextDirection.rtl, child: FixturesView()),
           icon: Icon(Icons.calendar_today),
-          title: "Fixtures",
+          title: "משחקים",
         ),
         TabNavigationItem(
           page: Directionality(textDirection: TextDirection.rtl, child: ScorersView()),
           icon: Icon(Icons.leaderboard),
-          title: "Stats",
+          title: "סטטיסטיקות",
         ),
       ];
 }

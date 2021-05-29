@@ -62,6 +62,10 @@ class MainAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Color(0xffDD294D),
       pinned: true,
+      floating: false,
+      elevation: 4,
+      forceElevated: true,
+      shadowColor: Color(0xff2F0238),
       expandedHeight: 170.0,
       flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         var top = constraints.biggest.height;
@@ -114,7 +118,7 @@ class SeasonSelectionButton extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 showBottomSheetSelection(context, items, (Season value) {
-                  return Text(value.name);
+                  return Text(value.name, style: Theme.of(context).textTheme.button);
                 }, (value) {
                   BlocProvider.of<LeagueCubit>(context).setSeason(value);
                 }, (Season week, text) {
@@ -217,10 +221,10 @@ class TeamAppBar extends StatelessWidget {
                 duration: Duration(milliseconds: 300),
                 opacity: top > 104 ? 0.0 : 1.0,
                 child: Text(
-                  top > 104 ? "" : team.name,
+                  (top > 104) ? "" : team?.name ?? '',
                   style: Theme.of(context).textTheme.headline6.apply(color: Colors.black),
                 )),
-            background: TeamHeader(team));
+            background: TeamHeader(team ?? Team(id: '-1', name: '')));
       }),
     );
   }
@@ -248,15 +252,19 @@ class TeamHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: FadeInImage(
-                    width: 80,
-                    height: 80,
-                    placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                    image: AssetImage('assets/images/logos/' + team.id + '.png'),
-                    fit: BoxFit.cover,
-                  ),
+                  width: 80,
+                  height: 80,
+                  child: (team.id == '-1')
+                      ? Image(image: AssetImage('assets/images/shield-placeholder.png'))
+                      : FadeInImage(
+                          width: 80,
+                          height: 80,
+                          placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                          image: AssetImage('assets/images/logos/' + team.id + '.png'),
+                          fit: BoxFit.cover,
+                        ),
                 ),
-                Text(team.name,
+                Text(team.name ?? '',
                     style: Theme.of(context).textTheme.headline6.apply(color: Colors.black)),
                 SeasonSelectionButton(textColor: Colors.black),
               ],

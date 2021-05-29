@@ -79,7 +79,7 @@ class ScorersView extends StatelessWidget {
                             children: [
                               Text(stat.value.toString(),
                                   style: Theme.of(context).textTheme.headline4.apply(
-                                      color: Color(0xffF62880), fontFamily: 'OpenSansHebrew-Bold')),
+                                      color: Colors.white, fontFamily: 'OpenSansHebrew-Bold')),
                               Text(stat.title,
                                   style: Theme.of(context)
                                       .textTheme

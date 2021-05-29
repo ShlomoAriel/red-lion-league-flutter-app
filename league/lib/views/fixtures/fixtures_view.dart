@@ -352,7 +352,7 @@ class WeeksSelectionButton extends StatelessWidget {
                 Theme(
                   data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
                   child: showBottomSheetSelection(context, weeks, (Week value) {
-                    return Text(value.name);
+                    return Text(value.name, style: Theme.of(context).textTheme.button);
                   }, (value) {
                     BlocProvider.of<LeagueCubit>(context).setWeeksWeek(value);
                   }, (Week week, text) {
@@ -402,7 +402,7 @@ class TeamSelectionButton extends StatelessWidget {
                 Theme(
                   data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
                   child: showBottomSheetSelection(context, teams, (Team value) {
-                    return Text(value.name);
+                    return Text(value.name, style: Theme.of(context).textTheme.button);
                   }, (value) {
                     BlocProvider.of<LeagueCubit>(context).setWeeksTeam(value);
                   }, (Team team, text) {
@@ -430,6 +430,7 @@ class TeamSelectionButton extends StatelessWidget {
 
 showBottomSheetSelection(context, items, cellText, callback, filterFunction) {
   showModalBottomSheet(
+      isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -437,6 +438,7 @@ showBottomSheetSelection(context, items, cellText, callback, filterFunction) {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          height: MediaQuery.of(context).size.height / 1.3,
           decoration: new BoxDecoration(
               color: Colors.white,
               borderRadius: new BorderRadius.only(

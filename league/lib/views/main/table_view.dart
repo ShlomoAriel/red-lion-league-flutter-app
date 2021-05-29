@@ -12,10 +12,10 @@ class _TableViewState extends State<TableView> {
     return SliverToBoxAdapter(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
-          height: 53,
+          height: 58,
           margin: EdgeInsets.symmetric(horizontal: 10),
           child: FilterChip(
-            labelPadding: EdgeInsets.only(top: 0, bottom: 0, left: 10, right: 10),
+            labelPadding: EdgeInsets.only(top: 2, bottom: 2, left: 10, right: 10),
             backgroundColor: Colors.white,
             label: Text(
               'משחקים אחרונים',
