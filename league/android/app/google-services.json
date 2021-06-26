@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1038331179354",
+    "project_id": "red-lion-league-mobile-app",
+    "storage_bucket": "red-lion-league-mobile-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038331179354:android:f15aa8cd27b0a7c9ad0363",
+        "android_client_info": {
+          "package_name": "com.shlomoariel.redlionleague"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038331179354-6lgc3ghb0k52aeramsmm56364t31qc8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK1p-Z5z0XLWSHHY4uRROAsPGWHE3mKBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038331179354-6lgc3ghb0k52aeramsmm56364t31qc8g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1038331179354-vlbm0itftre6g4dnou0c1gbjfiagsg65.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shlomoariel.redlionleague"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

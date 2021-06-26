@@ -1,4 +1,4 @@
-package com.shlomoariel.redlionleague
+package com.shlomoariel.league
 
 import io.flutter.embedding.android.FlutterActivity
 
