@@ -16,15 +16,13 @@ class ClientListCubit extends Cubit<ClientListState> {
   }
 
   List<Client> getSelectedClients() {
-    List<Client> selectedClients = new List<Client>();
+    List<Client> selectedClients = [];
 
-    selectedClients.addAll(state.clients
-        .where((f) => state.selectedClientIds.contains(f.id))
-        .toList());
+    selectedClients
+        .addAll(state.clients.where((f) => state.selectedClientIds.contains(f.id)).toList());
 
-    selectedClients.addAll(state.clients
-        .where((f) => state.selectedClientIds.contains(f.id))
-        .toList());
+    selectedClients
+        .addAll(state.clients.where((f) => state.selectedClientIds.contains(f.id)).toList());
 
     return selectedClients;
   }

@@ -10,7 +10,7 @@ class ClientList {
   int position;
   List<Client> clients;
   List<String> clientIds;
-  List<String> selectedClientIds = new List<String>();
+  List<String> selectedClientIds = [];
 
   ClientList.fromClientList(ClientList clientList) {
     this.clientIds = clientList.clientIds;
@@ -80,11 +80,9 @@ class ProductList {
   ProductList({this.products, this.categoryName});
 
   factory ProductList.fromJson(Map<String, dynamic> json) {
-    final products = (json['products'] as List)
-        .map((listingJson) => Product.fromJson(listingJson))
-        .toList();
-    String categoryName =
-        products.length > 0 ? products[0].categoryName : 'Products';
+    final products =
+        (json['products'] as List).map((listingJson) => Product.fromJson(listingJson)).toList();
+    String categoryName = products.length > 0 ? products[0].categoryName : 'Products';
     return ProductList(products: products, categoryName: categoryName);
   }
 }
