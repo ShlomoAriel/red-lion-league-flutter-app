@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'league_models.dart';
 
 final baseUrl = 'domain.redlionleague.com';
+
 final client = http.Client();
 
 Future<List<Season>> getSeasons() async {
