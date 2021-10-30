@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -181,11 +182,11 @@ class TeamDetailsView extends StatelessWidget {
         state.isLoading ||
         state.selectedTeam == null ||
         state.store[state.currentSeason.id] == null) {
-      return null;
+      return [];
     } else {
       var seasonState = state.store[state.currentSeason.id];
       var team = seasonState.teamsMap[state.selectedTeam];
-      return team.seasonPlayers;
+      return team?.seasonPlayers ?? [];
     }
   }
 
@@ -235,12 +236,14 @@ class TeamDetailsRowView extends StatelessWidget {
                         radius: 3.4,
                       ),
                       SizedBox(width: 10),
-                      FadeInImage(
+                      CachedNetworkImage(
                         width: 30,
                         height: 30,
-                        placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                        image: AssetImage('assets/images/logos/' + team.id + '.png'),
-                        fit: BoxFit.cover,
+                        imageUrl: team?.logoURL ?? '',
+                        placeholder: (context, url) =>
+                            new Image.asset('assets/images/shield-placeholder.png'),
+                        errorWidget: (context, url, error) =>
+                            new Image.asset('assets/images/shield-placeholder.png'),
                       ),
                       SizedBox(width: 8),
                       Text(

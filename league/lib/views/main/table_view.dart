@@ -4,6 +4,7 @@ import 'package:league/bloc/league/league_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/views/common/table_header_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class _TableViewState extends State<TableView> {
   var _isForm = false;
@@ -125,12 +126,14 @@ class TableRowView extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                  FadeInImage(
+                  CachedNetworkImage(
                     width: 30,
                     height: 30,
-                    placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                    image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
-                    fit: BoxFit.cover,
+                    imageUrl: tableLine.logoURL,
+                    placeholder: (context, url) =>
+                        new Image.asset('assets/images/shield-placeholder.png'),
+                    errorWidget: (context, url, error) =>
+                        new Image.asset('assets/images/shield-placeholder.png'),
                   ),
                   SizedBox(width: 8),
                   Text(
@@ -234,13 +237,20 @@ class TableFormRowView extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                  FadeInImage(
+                  FadeInImage.assetNetwork(
                     width: 30,
                     height: 30,
-                    placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                    image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
+                    placeholder: 'assets/loading.gif',
+                    image: 'https://picsum.photos/250?image=9',
                     fit: BoxFit.cover,
                   ),
+                  // FadeInImage(
+                  //   width: 30,
+                  //   height: 30,
+                  //   placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                  //   image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
+                  //   fit: BoxFit.cover,
+                  // ),
                   SizedBox(width: 8),
                   Text(
                     tableLine.name,

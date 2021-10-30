@@ -7,6 +7,7 @@ import 'package:league/views/common/header_view.dart';
 import 'package:league/views/common/sliver_section_view.dart';
 import 'package:league/views/common/table_header_view.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ScorersView extends StatelessWidget {
   final scrollController = ScrollController();
@@ -54,17 +55,23 @@ class ScorersView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Text(seasonState.teamsMap[stat.teamId].name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption
+                            .apply(color: Colors.black, fontFamily: 'OpenSansHebrew-Bold')),
                     Container(
                       alignment: Alignment.center,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.0),
-                        child: FadeInImage(
-                          alignment: Alignment.center,
+                        child: CachedNetworkImage(
                           width: 100,
                           height: 100,
-                          placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                          image: AssetImage('assets/images/logos/' + stat.teamId + '.png'),
-                          fit: BoxFit.fitHeight,
+                          imageUrl: seasonState.teamsMap[stat.teamId].logoURL ?? '',
+                          placeholder: (context, url) =>
+                              new Image.asset('assets/images/shield-placeholder.png'),
+                          errorWidget: (context, url, error) =>
+                              new Image.asset('assets/images/shield-placeholder.png'),
                         ),
                       ),
                     ),
@@ -73,7 +80,7 @@ class ScorersView extends StatelessWidget {
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.all(5),
-                          height: 70,
+                          height: 80,
                           color: Color(0xff2F0238),
                           child: Column(
                             children: [
@@ -98,7 +105,7 @@ class ScorersView extends StatelessWidget {
             crossAxisCount: 2,
             mainAxisSpacing: 0,
             crossAxisSpacing: 0,
-            childAspectRatio: 0.92,
+            childAspectRatio: 0.86,
           ),
         ),
       );
@@ -238,9 +245,11 @@ class StatsRowView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        child: Column(
+    return GestureDetector(child: Container(
+      child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
+        var store = state.store[state.currentSeason.id];
+        var logoURL = store?.teamsMap[tableRow.teamId]?.logoURL ?? '';
+        return Column(
           children: [
             SizedBox(height: 20),
             Row(
@@ -253,12 +262,14 @@ class StatsRowView extends StatelessWidget {
                       width: 20,
                       child: Text(tableRow.position, style: Theme.of(context).textTheme.bodyText1),
                     ),
-                    FadeInImage(
+                    CachedNetworkImage(
                       width: 30,
                       height: 30,
-                      placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                      image: AssetImage('assets/images/logos/' + tableRow.teamId + '.png'),
-                      fit: BoxFit.cover,
+                      imageUrl: logoURL,
+                      placeholder: (context, url) =>
+                          new Image.asset('assets/images/shield-placeholder.png'),
+                      errorWidget: (context, url, error) =>
+                          new Image.asset('assets/images/shield-placeholder.png'),
                     ),
                     SizedBox(width: 8),
                     Text(
@@ -272,8 +283,8 @@ class StatsRowView extends StatelessWidget {
             ),
             SizedBox(height: 10)
           ],
-        ),
-      ),
-    );
+        );
+      }),
+    ));
   }
 }

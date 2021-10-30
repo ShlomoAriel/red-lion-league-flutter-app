@@ -9,6 +9,8 @@ import 'package:league/views/common/selection_list_widget.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'fixture_view.dart';
+
 class FixturesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -269,60 +271,6 @@ class FixtureDayView extends StatelessWidget {
             ),
           )
         ]);
-  }
-}
-
-class FixtureView extends StatelessWidget {
-  final Match match;
-
-  const FixtureView({Key key, this.match}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
-            crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
-            children: [
-              Container(
-                  width: 80,
-                  child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Text(match.homeName, style: Theme.of(context).textTheme.bodyText1)
-                  ])),
-              SizedBox(width: 10),
-              FadeInImage(
-                width: 30,
-                height: 30,
-                placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                image: AssetImage('assets/images/logos/' + match.homeId + '.png'),
-                fit: BoxFit.cover,
-              ),
-              SizedBox(width: 10),
-              Text(match.played ? match.homeGoals.toString() : '',
-                  style: Theme.of(context).textTheme.bodyText1),
-              Text(match.played ? ' - ' : match.time, style: Theme.of(context).textTheme.bodyText1),
-              Text(match.played ? match.awayGoals.toString() : '',
-                  style: Theme.of(context).textTheme.bodyText1),
-              SizedBox(width: 10),
-              FadeInImage(
-                width: 30,
-                height: 30,
-                placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                image: AssetImage('assets/images/logos/' + match.awayId + '.png'),
-                fit: BoxFit.cover,
-              ),
-              SizedBox(width: 10),
-              Container(
-                  width: 80,
-                  child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Text(match.awayName, style: Theme.of(context).textTheme.bodyText1)
-                  ])),
-            ],
-          );
-        }));
   }
 }
 

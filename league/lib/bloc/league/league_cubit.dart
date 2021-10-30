@@ -46,20 +46,37 @@ class LeagueCubit extends Cubit<LeagueState> {
       getSeasonScorers(seasonId),
       getSeasonGoals(seasonId)
     ]);
-    var standings = seasonCalls[0]; //await getSeasonStandings(seasonId);
+    StandingsResponse standingsResponse = seasonCalls[0]; //await getSeasonStandings(seasonId);
     var matches = seasonCalls[1]; //await getSeasonMatches(seasonId);
     var weeks = seasonCalls[2]; //await getSeasonWeeks(seasonId);
     var scorers = seasonCalls[3]; //await getSeasonScorers(seasonId);
     var seasonGoals = seasonCalls[4]; //await getSeasonScorers(seasonId);
     // var goals = await getSeasonGoals(seasonId);
     var season = state.seasons.firstWhere((element) => element.id == seasonId);
+    List<String> teamIds = [];
+    for (var standing in standingsResponse.list) {
+      teamIds.add(standing.id);
+    }
+    Map<String, Team> teamsMap = new Map<String, Team>();
+    for (var standing in standingsResponse.list) {
+      Team standingTeam = new Team.fromStanding(standing);
+      teamsMap[standing.id] = standingTeam;
+    }
+    List<Team> teamsSpecs = await getTeamSpecs(teamIds);
+    for (var teamSpec in teamsSpecs) {
+      teamsMap[teamSpec.id].colorHEX = teamSpec.colorHEX;
+      teamsMap[teamSpec.id].logoURL = teamSpec.logoURL;
+    }
+    for (var standing in standingsResponse.list) {
+      standing.logoURL = teamsMap[standing.id].logoURL ?? '';
+    }
     var seasonState = new SeasonState(
         season: season,
         matches: matches,
         scorers: scorers,
         goals: seasonGoals,
-        teamsMap: new Map<String, Team>(),
-        standingsResponse: standings,
+        teamsMap: teamsMap,
+        standingsResponse: standingsResponse,
         weeks: weeks);
     seasonState.refreshed = DateTime.now();
     return seasonState;

@@ -31,9 +31,11 @@ class SeasonState {
     weeksTeam = null;
     weeksWeek = null;
     if (standingsResponse != null) {
-      for (var standing in standingsResponse.list) {
-        teamsMap[standing.id] = new Team.fromStanding(standing);
-      }
+      // for (var standing in standingsResponse.list) {
+      //   Team standingTeam = new Team.fromStanding(standing);
+      //   standingTeam =
+      //   teamsMap[standing.id] =
+      // }
       var mostWins = standingsResponse.list.reduce((a, b) => a.wins > b.wins ? a : b);
       var mostGoals = standingsResponse.list.reduce((a, b) => a.goalsFor > b.goalsFor ? a : b);
       var leastGoals =
@@ -151,6 +153,16 @@ class ImageGalleryResponse {
   }
 }
 
+class TeamSpecsResponse {
+  List<Team> result;
+
+  TeamSpecsResponse.fromJson(Map<String, dynamic> json) {
+    this.result = (json['result'] as List)
+        .map((imageGalleryJson) => new Team.fromJson(imageGalleryJson))
+        .toList();
+  }
+}
+
 class ImageGalleryModel {
   List<String> imageURLs;
   String name;
@@ -208,6 +220,7 @@ class TableLine {
   int wins;
   int draws;
   int losses;
+  String logoURL;
 
   TableLine.fromJson(Map<String, dynamic> json) {
     this.id = json['Id'].toString();
@@ -383,7 +396,10 @@ class Team {
   Team({this.id, this.name, this.matchForm, this.allPlayers, this.seasonPlayers});
 
   String id;
+  String mongooseId;
   String name;
+  String logoURL;
+  String colorHEX;
   TableLine standing;
   List<MatchForm> matchForm;
   List<Player> allPlayers;
@@ -396,6 +412,8 @@ class Team {
     this.standing = team.standing;
     this.allPlayers = team.allPlayers;
     this.seasonPlayers = team.seasonPlayers;
+    this.colorHEX = team.colorHEX;
+    this.logoURL = team.logoURL;
   }
 
   Team.fromStanding(TableLine team) {
@@ -405,6 +423,14 @@ class Team {
     this.standing = team;
     this.allPlayers = List.empty();
     this.seasonPlayers = List.empty();
+  }
+
+  Team.fromJson(Map<String, dynamic> json) {
+    this.id = json['id'];
+    this.mongooseId = json['_id'];
+    this.name = json['name'];
+    this.logoURL = json['logoURL'];
+    this.colorHEX = json['colorHEXPrimary'];
   }
 }
 

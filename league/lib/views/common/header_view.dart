@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:league/views/fixtures/fixtures_view.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MainFlexiableAppBar extends StatelessWidget {
   final double appBarHeight = 0.0;
@@ -256,12 +257,22 @@ class TeamHeader extends StatelessWidget {
                   height: 80,
                   child: (team.id == '-1')
                       ? Image(image: AssetImage('assets/images/shield-placeholder.png'))
-                      : FadeInImage(
-                          width: 80,
-                          height: 80,
-                          placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                          image: AssetImage('assets/images/logos/' + team.id + '.png'),
-                          fit: BoxFit.cover,
+                      :
+                      // FadeInImage(
+                      //     width: 80,
+                      //     height: 80,
+                      //     placeholder: AssetImage('assets/images/shield-placeholder.png'),
+                      //     image: AssetImage('assets/images/logos/' + team.id + '.png'),
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      CachedNetworkImage(
+                          width: 30,
+                          height: 30,
+                          imageUrl: team.logoURL,
+                          placeholder: (context, url) =>
+                              new Image.asset('assets/images/shield-placeholder.png'),
+                          errorWidget: (context, url, error) =>
+                              new Image.asset('assets/images/shield-placeholder.png'),
                         ),
                 ),
                 Text(team.name ?? '',

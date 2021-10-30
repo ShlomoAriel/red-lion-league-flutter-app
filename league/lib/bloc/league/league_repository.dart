@@ -35,6 +35,26 @@ Future<ImageGalleryModel> getGallery() async {
   return null;
 }
 
+Future<List<Team>> getTeamSpecs(List<String> ids) async {
+  final uri = Uri.https('user-management-template.herokuapp.com', '/api/findPublic/Team');
+  final body = jsonEncode({
+    'filter': {'id': ids},
+    'type': 'exactly'
+  });
+  // final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Team');
+  final response = await client.post(uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body);
+  final json = jsonDecode(response.body);
+  final result = TeamSpecsResponse.fromJson(json);
+  if (result.result.length > 0) {
+    return result.result;
+  }
+  return null;
+}
+
 Future<TeamPlayersResponse> getTeamSeasonPlayers(String seasonId, String teamId) async {
   final body = jsonEncode(<String, String>{'SeasonId': seasonId, 'teamId': teamId});
   final uri = Uri.http(baseUrl, '///api/Match/GetTeamSeasonPlayers');

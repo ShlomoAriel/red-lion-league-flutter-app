@@ -18,12 +18,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.2.0+2
 
 environment:
-  sdk: ">=2.11.0 <3.0.0"
+  sdk: '>=2.11.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -34,90 +33,90 @@ dependencies:
   http: ^0.12.2
   cached_network_image: ^2.5.0
   shimmer: ^1.0.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.0
   flutter_test:
     sdk: flutter
-  
+
   flutter_bloc: ^6.1.3
 
 flutter_icons:
   ios: true
   android: true
-  image_path_ios: "assets/launcher/icon.png"
-  image_path_android: "assets/launcher/icon.png"
-  adaptive_icon_background: "assets/launcher/background.png"
-  adaptive_icon_foreground: "assets/launcher/foreground.png"
+  image_path_ios: 'assets/launcher/icon.png'
+  image_path_android: 'assets/launcher/icon.png'
+  adaptive_icon_background: 'assets/launcher/background.png'
+  adaptive_icon_foreground: 'assets/launcher/foreground.png'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
   fonts:
-      - family: Assistant-Bold
-        fonts:
-          - asset: fonts/Assistant/Assistant-Bold.ttf  
-      - family: Assistant-ExtraBold
-        fonts:
-          - asset: fonts/Assistant/Assistant-ExtraBold.ttf
-      - family: Assistant-ExtraLight
-        fonts:
-          - asset: fonts/Assistant/Assistant-ExtraLight.ttf
-      - family: Assistant-Light
-        fonts:
-          - asset: fonts/Assistant/Assistant-Light.ttf
-      - family: Assistant-Medium
-        fonts:
-          - asset: fonts/Assistant/Assistant-Medium.ttf
-      - family: Assistant-Regular
-        fonts:
-          - asset: fonts/Assistant/Assistant-Regular.ttf
-      - family: Assistant-SemiBold
-        fonts:
-          - asset: fonts/Assistant/Assistant-SemiBold.ttf
-      - family: OpenSansHebrew-Regular
-        fonts:
-          - asset: fonts/open-sans-hebrew/OpenSansHebrew-Regular.ttf
-      - family: OpenSansHebrew-Bold
-        fonts:
-          - asset: fonts/open-sans-hebrew/OpenSansHebrew-Bold.ttf
-      - family: OpenSansHebrew-ExtraBold
-        fonts:
-          - asset: fonts/open-sans-hebrew/OpenSansHebrew-ExtraBold.ttf
-      - family: OpenSansHebrew-Light
-        fonts:
-          - asset: fonts/open-sans-hebrew/OpenSansHebrew-Light.ttf
-      - family: Merriweather
-        fonts:
-          - asset: fonts/Merriweather.ttf
-      - family: Roboto
-        fonts:
-          - asset: fonts/Roboto.ttf
-      - family: ABChanelCorpo-Regular
-        fonts:
-          - asset: fonts/ABChanelCorpo-Regular.otf
-      - family: ABChanelCorpo-SemiBold
-        fonts:
-          - asset: fonts/ABChanelCorpo-SemiBold.otf
-      - family: ABChanelCorpo-Light
-        fonts:
-          - asset: fonts/ABChanelCorpo-Light.otf
-      - family: ABChanelCorpo-ExtraLight
-        fonts:
-          - asset: fonts/ABChanelCorpo-ExtraLight.otf
-      - family: HelveticaNeue-Bold
-        fonts:
-          - asset: fonts/HelveticaNeue Bold.ttf
-      - family: Montserrat-Medium
-        fonts:
-          - asset: fonts/Montserrat-Medium.ttf
-          
+    - family: Assistant-Bold
+      fonts:
+        - asset: fonts/Assistant/Assistant-Bold.ttf
+    - family: Assistant-ExtraBold
+      fonts:
+        - asset: fonts/Assistant/Assistant-ExtraBold.ttf
+    - family: Assistant-ExtraLight
+      fonts:
+        - asset: fonts/Assistant/Assistant-ExtraLight.ttf
+    - family: Assistant-Light
+      fonts:
+        - asset: fonts/Assistant/Assistant-Light.ttf
+    - family: Assistant-Medium
+      fonts:
+        - asset: fonts/Assistant/Assistant-Medium.ttf
+    - family: Assistant-Regular
+      fonts:
+        - asset: fonts/Assistant/Assistant-Regular.ttf
+    - family: Assistant-SemiBold
+      fonts:
+        - asset: fonts/Assistant/Assistant-SemiBold.ttf
+    - family: OpenSansHebrew-Regular
+      fonts:
+        - asset: fonts/open-sans-hebrew/OpenSansHebrew-Regular.ttf
+    - family: OpenSansHebrew-Bold
+      fonts:
+        - asset: fonts/open-sans-hebrew/OpenSansHebrew-Bold.ttf
+    - family: OpenSansHebrew-ExtraBold
+      fonts:
+        - asset: fonts/open-sans-hebrew/OpenSansHebrew-ExtraBold.ttf
+    - family: OpenSansHebrew-Light
+      fonts:
+        - asset: fonts/open-sans-hebrew/OpenSansHebrew-Light.ttf
+    - family: Merriweather
+      fonts:
+        - asset: fonts/Merriweather.ttf
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto.ttf
+    - family: ABChanelCorpo-Regular
+      fonts:
+        - asset: fonts/ABChanelCorpo-Regular.otf
+    - family: ABChanelCorpo-SemiBold
+      fonts:
+        - asset: fonts/ABChanelCorpo-SemiBold.otf
+    - family: ABChanelCorpo-Light
+      fonts:
+        - asset: fonts/ABChanelCorpo-Light.otf
+    - family: ABChanelCorpo-ExtraLight
+      fonts:
+        - asset: fonts/ABChanelCorpo-ExtraLight.otf
+    - family: HelveticaNeue-Bold
+      fonts:
+        - asset: fonts/HelveticaNeue Bold.ttf
+    - family: Montserrat-Medium
+      fonts:
+        - asset: fonts/Montserrat-Medium.ttf
+
   assets:
     - assets/images/
     - assets/images/logos/
