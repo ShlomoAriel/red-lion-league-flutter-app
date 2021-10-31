@@ -55,6 +55,20 @@ Future<List<Team>> getTeamSpecs(List<String> ids) async {
   return null;
 }
 
+Future<List<Sponser>> getSponsers() async {
+  final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Sponser');
+  // final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Team');
+  final response = await client.get(uri, headers: <String, String>{
+    'Content-Type': 'application/json; charset=UTF-8',
+  });
+  final json = jsonDecode(response.body);
+  final result = SponsersResponse.fromJson(json);
+  if (result.result.length > 0) {
+    return result.result;
+  }
+  return null;
+}
+
 Future<TeamPlayersResponse> getTeamSeasonPlayers(String seasonId, String teamId) async {
   final body = jsonEncode(<String, String>{'SeasonId': seasonId, 'teamId': teamId});
   final uri = Uri.http(baseUrl, '///api/Match/GetTeamSeasonPlayers');

@@ -163,6 +163,15 @@ class TeamSpecsResponse {
   }
 }
 
+class SponsersResponse {
+  List<Sponser> result;
+
+  SponsersResponse.fromJson(Map<String, dynamic> json) {
+    this.result =
+        (json['result'] as List).map((sponsersJson) => new Sponser.fromJson(sponsersJson)).toList();
+  }
+}
+
 class ImageGalleryModel {
   List<String> imageURLs;
   String name;
@@ -443,8 +452,15 @@ class Stat {
 }
 
 class Sponser {
-  final name;
-  final logoURL;
+  String id;
+  String name;
+  String imageURL;
 
-  Sponser(this.name, this.logoURL);
+  Sponser(this.id, this.name, this.imageURL);
+
+  Sponser.fromJson(Map<String, dynamic> json) {
+    this.id = json['_id'];
+    this.name = json['name'];
+    this.imageURL = json['imageURL'];
+  }
 }

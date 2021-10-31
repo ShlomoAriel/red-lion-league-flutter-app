@@ -8,8 +8,10 @@ class MediaCubit extends Cubit<MediaState> {
 
   void init() async {
     var gallery = await getGallery();
+    var sponsers = await getSponsers();
     if (gallery.imageURLs.length > 0) {
-      MediaState state = new MediaState(isLoading: false, imageGallery: gallery);
+      MediaState state =
+          new MediaState(isLoading: false, imageGallery: gallery, sponsers: sponsers);
       emit(state);
     }
   }
