@@ -55,14 +55,14 @@ Future<List<Team>> getTeamSpecs(List<String> ids) async {
   return null;
 }
 
-Future<List<Sponser>> getSponsers() async {
-  final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Sponser');
+Future<List<Sponsor>> getSponsors() async {
+  final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Sponsor');
   // final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Team');
   final response = await client.get(uri, headers: <String, String>{
     'Content-Type': 'application/json; charset=UTF-8',
   });
   final json = jsonDecode(response.body);
-  final result = SponsersResponse.fromJson(json);
+  final result = SponsorsResponse.fromJson(json);
   if (result.result.length > 0) {
     return result.result;
   }

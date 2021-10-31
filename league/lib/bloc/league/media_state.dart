@@ -3,7 +3,7 @@ import 'package:league/bloc/league/league_models.dart';
 class MediaState {
   bool isLoading;
   ImageGalleryModel imageGallery;
-  List<Sponser> sponsers;
+  List<Sponsor> sponsors;
 
-  MediaState({this.isLoading, this.imageGallery, this.sponsers});
+  MediaState({this.isLoading, this.imageGallery, this.sponsors});
 }

@@ -6,7 +6,7 @@ import 'package:league/bloc/league/media_cubit.dart';
 import 'package:league/bloc/league/media_state.dart';
 import 'package:shimmer/shimmer.dart';
 
-class SponsersView extends StatelessWidget {
+class SponsorsView extends StatelessWidget {
   @override
   Widget build(Object context) {
     return BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
@@ -40,7 +40,7 @@ class SponsersView extends StatelessWidget {
                   MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 3),
             ),
             itemBuilder: (context, index) {
-              final category = state.sponsers[index];
+              final category = state.sponsors[index];
               return Column(
                 children: [
                   Container(
@@ -59,7 +59,7 @@ class SponsersView extends StatelessWidget {
                 ],
               );
             },
-            itemCount: state.sponsers.length,
+            itemCount: state.sponsors.length,
           ),
           Container(
             padding: EdgeInsets.all(20),

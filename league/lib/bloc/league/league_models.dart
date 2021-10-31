@@ -163,12 +163,12 @@ class TeamSpecsResponse {
   }
 }
 
-class SponsersResponse {
-  List<Sponser> result;
+class SponsorsResponse {
+  List<Sponsor> result;
 
-  SponsersResponse.fromJson(Map<String, dynamic> json) {
+  SponsorsResponse.fromJson(Map<String, dynamic> json) {
     this.result =
-        (json['result'] as List).map((sponsersJson) => new Sponser.fromJson(sponsersJson)).toList();
+        (json['result'] as List).map((sponsorsJson) => new Sponsor.fromJson(sponsorsJson)).toList();
   }
 }
 
@@ -451,14 +451,14 @@ class Stat {
   Stat(this.title, this.teamId, this.value);
 }
 
-class Sponser {
+class Sponsor {
   String id;
   String name;
   String imageURL;
 
-  Sponser(this.id, this.name, this.imageURL);
+  Sponsor(this.id, this.name, this.imageURL);
 
-  Sponser.fromJson(Map<String, dynamic> json) {
+  Sponsor.fromJson(Map<String, dynamic> json) {
     this.id = json['_id'];
     this.name = json['name'];
     this.imageURL = json['imageURL'];
