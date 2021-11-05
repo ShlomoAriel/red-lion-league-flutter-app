@@ -237,20 +237,15 @@ class TableFormRowView extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                  FadeInImage.assetNetwork(
+                  CachedNetworkImage(
                     width: 30,
                     height: 30,
-                    placeholder: 'assets/loading.gif',
-                    image: 'https://picsum.photos/250?image=9',
-                    fit: BoxFit.cover,
+                    imageUrl: tableLine.logoURL,
+                    placeholder: (context, url) =>
+                        new Image.asset('assets/images/shield-placeholder.png'),
+                    errorWidget: (context, url, error) =>
+                        new Image.asset('assets/images/shield-placeholder.png'),
                   ),
-                  // FadeInImage(
-                  //   width: 30,
-                  //   height: 30,
-                  //   placeholder: AssetImage('assets/images/shield-placeholder.png'),
-                  //   image: AssetImage('assets/images/logos/' + tableLine.id + '.png'),
-                  //   fit: BoxFit.cover,
-                  // ),
                   SizedBox(width: 8),
                   Text(
                     tableLine.name,
