@@ -8,6 +8,7 @@ import 'package:league/views/common/sliver_section_view.dart';
 import 'package:league/views/fixtures/fixtures_view.dart';
 import 'package:league/views/main/sponsors_view.dart';
 import 'package:league/views/main/table_view.dart';
+import 'package:shimmer/shimmer.dart';
 import 'image_gallery_view.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
 
@@ -80,6 +81,24 @@ class MainView extends StatelessWidget {
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class MainView2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 500,
+        width: 500,
+        child: Shimmer.fromColors(
+          baseColor: Colors.black,
+          highlightColor: Colors.white,
+          child: Image.asset("assets/images/LOGO CLEAN BACKGROUND2.png"),
+          period: Duration(seconds: 2),
+        ),
       ),
     );
   }
