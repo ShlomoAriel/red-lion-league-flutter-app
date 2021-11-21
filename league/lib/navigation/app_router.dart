@@ -5,6 +5,7 @@ import 'package:league/views/catalog/catalog_view.dart';
 import 'package:league/views/catalog/product_details_view.dart';
 import 'package:league/views/catalog/product_list_view.dart';
 import 'package:league/views/catalog/collection_list_view.dart';
+import 'package:league/views/fixtures/match_view.dart';
 import 'package:league/views/main/team_details_view.dart';
 
 class AppRouter {
@@ -38,6 +39,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) =>
               Directionality(textDirection: TextDirection.rtl, child: TeamDetailsView()),
+        );
+      case '/matchDetails':
+        return MaterialPageRoute(
+          builder: (_) => Directionality(textDirection: TextDirection.rtl, child: MatchView()),
         );
       default:
         return null;

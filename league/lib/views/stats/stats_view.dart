@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
@@ -22,6 +23,12 @@ class ScorersView extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             slivers: [
               MainAppBar('ליגת האריה האדום', seasonState?.season?.name ?? 'ss'),
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  final cubit = BlocProvider.of<LeagueCubit>(context);
+                  await cubit.createAndSetSeason(state.currentSeason);
+                },
+              ),
               SliverSectionView(title: 'כללי'),
               buildStats(seasonState),
               SliverSectionView(title: 'כובשים'),

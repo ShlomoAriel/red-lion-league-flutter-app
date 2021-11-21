@@ -66,6 +66,12 @@ class FixturesView extends StatelessWidget {
             var seasonState = state.store[state.currentSeason.id];
             return CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
               MainAppBar('ליגת האריה האדום', seasonState.season.name),
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  final cubit = BlocProvider.of<LeagueCubit>(context);
+                  await cubit.createAndSetSeason(state.currentSeason);
+                },
+              ),
               SliverToBoxAdapter(
                 child: Container(
                   margin: EdgeInsets.only(left: 10, right: 10, top: 5),

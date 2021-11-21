@@ -29,12 +29,33 @@ class LeagueCubit extends Cubit<LeagueState> {
         currentSeason: currentSeason);
     emit(preState);
 
-    SeasonState seasonState = await createSeasonState(currentSeason.id);
-    store[currentSeason.id] = seasonState;
+    createAndSetSeason(currentSeason);
+  }
+
+  Future<SeasonState> createAndSetSeason(Season season) async {
+    SeasonState seasonState = await createSeasonState(season.id);
+    state.store[state.currentSeason.id] = seasonState;
     LeagueState leagueState = new LeagueState(
-        currentSeason: currentSeason, store: store, seasons: seasons, isLoading: false);
+        currentSeason: season, store: state.store, seasons: state.seasons, isLoading: false);
 
     emit(leagueState);
+    return seasonState;
+  }
+
+  Map<String, List<Goal>> getMatchGoals(Match currentMatch) {
+    Map<String, List<Goal>> goals = new Map<String, List<Goal>>();
+    var awayGoals = state.store[state.currentSeason.id].goals
+        .where((element) =>
+            element.match.id == currentMatch.id && element.teamId == currentMatch.awayId)
+        .toList();
+
+    var homeGoals = state.store[state.currentSeason.id].goals
+        .where((element) =>
+            element.match.id == currentMatch.id && element.teamId == currentMatch.homeId)
+        .toList();
+    goals['homeGoals'] = homeGoals;
+    goals['awayGoals'] = awayGoals;
+    return goals;
   }
 
   // Create a season state for the store
@@ -118,6 +139,12 @@ class LeagueCubit extends Cubit<LeagueState> {
     newState.selectedTeam = team.id;
     newState.store[state.currentSeason.id].teamsMap[teamId] = team;
     newState.isLoading = false;
+    emit(newState);
+  }
+
+  void setMatch(Match match) async {
+    var newState = new LeagueState.from(state);
+    newState.selectedMatch = match;
     emit(newState);
   }
 

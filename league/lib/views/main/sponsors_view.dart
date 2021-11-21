@@ -32,6 +32,7 @@ class SponsorsView extends StatelessWidget {
           GridView.builder(
             padding: EdgeInsets.only(top: 0, left: 15, right: 15),
             shrinkWrap: true,
+            physics: new NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 0,
