@@ -39,12 +39,15 @@ class _TableViewState extends State<TableView> {
             children: [
               _isForm
                   ? TableHeaderRowView(
-                      columnList: ['5 משחקים אחרונים'],
+                      columnList: ['משחקים אחרונים'],
                       columnWidth: 150.0,
                     )
                   : TableHeaderRowView(
                       columnList: ['מש', 'נצ', 'תק', 'הפ', 'הש', 'נק'], columnWidth: 20.0),
-              ListView.builder(
+              ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.black12,
+                ),
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
                 physics: const NeverScrollableScrollPhysics(),
                 controller: widget.scrollController,
@@ -112,7 +115,7 @@ class TableRowView extends StatelessWidget {
       onTap: callback,
       child: Column(
         children: [
-          SizedBox(height: 10),
+          SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -204,7 +207,7 @@ class TableRowView extends StatelessWidget {
               ]),
             ],
           ),
-          SizedBox(height: 9),
+          SizedBox(height: 0),
         ],
       ),
     );
@@ -223,7 +226,7 @@ class TableFormRowView extends StatelessWidget {
       onTap: callback,
       child: Column(
         children: [
-          SizedBox(height: 10),
+          SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -274,7 +277,7 @@ class TableFormRowView extends StatelessWidget {
                   ]),
             ],
           ),
-          SizedBox(height: 9)
+          SizedBox(height: 0)
         ],
       ),
     );

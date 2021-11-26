@@ -68,23 +68,15 @@ class TableHeaderRowView extends StatelessWidget {
           children: [
             Row(
               children: [
-                SizedBox(width: 20),
-                Container(
-                  width: 20,
-                  child: Text(
-                    '#',
-                    style: Theme.of(context).textTheme.overline,
-                  ),
-                ),
-                SizedBox(width: 10),
+                SizedBox(width: 30),
                 Container(
                   width: 70,
                   child: Text(
                     'קבוצה',
-                    style: Theme.of(context).textTheme.overline,
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 10),
               ],
             ),
             Row(children: [
@@ -105,6 +97,12 @@ class TableHeaderRowView extends StatelessWidget {
             ]),
           ],
         ),
+        SizedBox(height: 10),
+        Container(
+          height: 1,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.black12.withAlpha(10),
+        )
       ],
     );
   }

@@ -58,7 +58,7 @@ class ScorersView extends StatelessWidget {
                 shadowColor: Colors.black26,
                 color: Colors.white,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -72,8 +72,8 @@ class ScorersView extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.0),
                         child: CachedNetworkImage(
-                          width: 100,
-                          height: 100,
+                          height: (MediaQuery.of(context).size.width / 2.8) -
+                              (MediaQuery.of(context).size.width / 10),
                           imageUrl: seasonState.teamsMap[stat.teamId].logoURL ?? '',
                           placeholder: (context, url) =>
                               new Image.asset('assets/images/shield-placeholder.png'),
@@ -229,7 +229,7 @@ class TableRow {
   List<Widget> trailingColumnsView;
 
   TableRow(this.position, this.teamId, this.title, this.trailingColumns) {
-    this.trailingColumnsView = new List<Widget>();
+    this.trailingColumnsView = [];
     for (var item in this.trailingColumns) {
       this.trailingColumnsView.add(Row(children: [
             Container(

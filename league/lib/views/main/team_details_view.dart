@@ -290,11 +290,10 @@ Widget headerSection(BuildContext context, String title) => SliverPadding(
 
 class ClientMembersDelegate extends SliverPersistentHeaderDelegate {
   final Color backgroundColor;
-  final String _title;
   final String imageURL;
   final String sku;
 
-  ClientMembersDelegate(this.backgroundColor, this._title, this.imageURL, this.sku);
+  ClientMembersDelegate(this.backgroundColor, this.imageURL, this.sku);
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {

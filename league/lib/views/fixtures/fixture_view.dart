@@ -18,7 +18,6 @@ class FixtureView extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
           var store = state.store[state.currentSeason.id];
-          final cubit = BlocProvider.of<LeagueCubit>(context);
           Team homeTeam = store.teamsMap[match.homeId];
           Team awayTeam = store.teamsMap[match.awayId];
           return GestureDetector(

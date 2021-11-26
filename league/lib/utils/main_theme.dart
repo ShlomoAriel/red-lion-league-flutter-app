@@ -4,21 +4,16 @@ ThemeData mainTheme() {
   final ThemeData base = ThemeData.light();
 
   return base.copyWith(
-      appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(color: Colors.black),
-          color: Colors.grey[200],
-          brightness: Brightness.light,
-          textTheme: mainTextTheme(base.textTheme)),
+      appBarTheme:
+          AppBarTheme(iconTheme: IconThemeData(color: Colors.black), color: Colors.grey[200]),
       textTheme: mainTextTheme(base.textTheme),
       primaryColor: Colors.grey[200],
       indicatorColor: Colors.black,
       scaffoldBackgroundColor: Colors.black,
-      accentColor: Colors.black,
       iconTheme: IconThemeData(
         color: Colors.black,
         size: 20.0,
       ),
-      buttonColor: Colors.black,
       backgroundColor: Colors.black,
       tabBarTheme: base.tabBarTheme.copyWith(
         labelColor: Color(0xffce107c),

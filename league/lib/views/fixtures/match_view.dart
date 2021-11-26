@@ -31,19 +31,34 @@ class MatchView extends StatelessWidget {
                 ),
                 matchScore(match, cubit, state, context),
                 SliverToBoxAdapter(
-                    child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: MatchScorerView(
-                            goals: matchGoals['homeGoals'], alignment: Alignment.centerLeft)),
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: MatchScorerView(
-                            goals: matchGoals['awayGoals'], alignment: Alignment.centerRight)),
-                  ],
+                    child: Container(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: (MediaQuery.of(context).size.width / 2) - 7.5,
+                          child: MatchScorerView(
+                              goals: matchGoals['homeGoals'], alignment: Alignment.centerLeft)),
+                      Container(
+                        width: 15,
+                        padding: EdgeInsets.only(top: 10),
+                        child: FadeInImage(
+                          width: 15,
+                          height: 15,
+                          placeholder: AssetImage('assets/images/football.png'),
+                          image: AssetImage('assets/images/football.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          width: (MediaQuery.of(context).size.width / 2) - 7.5,
+                          child: MatchScorerView(
+                              goals: matchGoals['awayGoals'], alignment: Alignment.centerRight)),
+                    ],
+                  ),
                 )),
               ]));
     });
@@ -57,76 +72,77 @@ Widget matchScore(Match match, LeagueCubit cubit, state, context) {
   Team awayTeam = store.teamsMap[match.awayId];
   return SliverToBoxAdapter(
     child: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: GestureDetector(
-          onTap: () {
-            cubit.getMatchGoals(match);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  BlocProvider.of<LeagueCubit>(context)
-                      .setTeamSeasonPlayers(match.seasonId, homeTeam.id.toString());
-                  Navigator.of(context).pushNamed(
-                    '/teamDetails',
-                  );
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CachedNetworkImage(
-                      width: 95,
-                      height: 95,
-                      imageUrl: homeTeam.logoURL ?? '',
-                      placeholder: (context, url) =>
-                          new Image.asset('assets/images/shield-placeholder.png'),
-                      errorWidget: (context, url, error) =>
-                          new Image.asset('assets/images/shield-placeholder.png'),
-                    ),
-                    Container(
-                        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text(match.homeName, style: Theme.of(context).textTheme.headline6)
-                    ])),
-                  ],
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () {
+              BlocProvider.of<LeagueCubit>(context)
+                  .setTeamSeasonPlayers(match.seasonId, homeTeam.id.toString());
+              Navigator.of(context).pushNamed(
+                '/teamDetails',
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CachedNetworkImage(
+                  width: 95,
+                  height: 95,
+                  imageUrl: homeTeam.logoURL ?? '',
+                  placeholder: (context, url) =>
+                      new Image.asset('assets/images/shield-placeholder.png'),
+                  errorWidget: (context, url, error) =>
+                      new Image.asset('assets/images/shield-placeholder.png'),
                 ),
-              ),
-              SizedBox(width: 30),
-              Text(match.played ? match.homeGoals.toString() : '',
-                  style: Theme.of(context).textTheme.headline4),
-              Text(match.played ? ' - ' : match.time, style: Theme.of(context).textTheme.headline4),
-              Text(match.played ? match.awayGoals.toString() : '',
-                  style: Theme.of(context).textTheme.headline4),
-              SizedBox(width: 30),
-              GestureDetector(
-                onTap: () {
-                  BlocProvider.of<LeagueCubit>(context)
-                      .setTeamSeasonPlayers(match.seasonId, awayTeam.id.toString());
-                  Navigator.of(context).pushNamed(
-                    '/teamDetails',
-                  );
-                },
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  CachedNetworkImage(
-                    width: 95,
-                    height: 95,
-                    imageUrl: awayTeam.logoURL ?? '',
-                    placeholder: (context, url) =>
-                        new Image.asset('assets/images/shield-placeholder.png'),
-                    errorWidget: (context, url, error) =>
-                        new Image.asset('assets/images/shield-placeholder.png'),
-                  ),
-                  Container(
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text(match.awayName, style: Theme.of(context).textTheme.headline6)
-                  ])),
-                ]),
-              )
-            ],
+                Container(
+                    child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(match.homeName, style: Theme.of(context).textTheme.headline6)
+                ])),
+              ],
+            ),
           ),
-        )),
+          Container(
+            child: Row(
+              children: [
+                Text(match.played ? match.homeGoals.toString() : '',
+                    style: Theme.of(context).textTheme.headline4),
+                Text(match.played ? ' - ' : match.time,
+                    style: Theme.of(context).textTheme.headline4),
+                Text(match.played ? match.awayGoals.toString() : '',
+                    style: Theme.of(context).textTheme.headline4),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              BlocProvider.of<LeagueCubit>(context)
+                  .setTeamSeasonPlayers(match.seasonId, awayTeam.id.toString());
+              Navigator.of(context).pushNamed(
+                '/teamDetails',
+              );
+            },
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              CachedNetworkImage(
+                width: 95,
+                height: 95,
+                imageUrl: awayTeam.logoURL ?? '',
+                placeholder: (context, url) =>
+                    new Image.asset('assets/images/shield-placeholder.png'),
+                errorWidget: (context, url, error) =>
+                    new Image.asset('assets/images/shield-placeholder.png'),
+              ),
+              Container(
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(match.awayName, style: Theme.of(context).textTheme.headline6)
+              ])),
+            ]),
+          )
+        ],
+      ),
+    ),
   );
 }
 
@@ -139,7 +155,6 @@ class MatchScorerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
         child: ListView.separated(
             separatorBuilder: (BuildContext context, int index) {
               return SizedBox(width: 0);

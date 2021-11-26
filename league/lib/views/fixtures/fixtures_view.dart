@@ -23,7 +23,7 @@ class FixturesView extends StatelessWidget {
               state.store[state.currentSeason.id] == null) {
             return Container(
                 color: Colors.grey[200],
-                child: CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
+                child: CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
                   MainAppBar('ליגת האריה האדום', 'seasonState.season.name'),
                   SliverPadding(
                     padding: EdgeInsets.all(5),
@@ -64,7 +64,7 @@ class FixturesView extends StatelessWidget {
                 ]));
           } else {
             var seasonState = state.store[state.currentSeason.id];
-            return CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
+            return CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
               MainAppBar('ליגת האריה האדום', seasonState.season.name),
               CupertinoSliverRefreshControl(
                 onRefresh: () async {
