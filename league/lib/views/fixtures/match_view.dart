@@ -42,16 +42,20 @@ class MatchView extends StatelessWidget {
                           child: MatchScorerView(
                               goals: matchGoals['homeGoals'], alignment: Alignment.centerLeft)),
                       Container(
-                        width: 15,
-                        padding: EdgeInsets.only(top: 10),
-                        child: FadeInImage(
                           width: 15,
-                          height: 15,
-                          placeholder: AssetImage('assets/images/football.png'),
-                          image: AssetImage('assets/images/football.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          padding: EdgeInsets.only(top: 10),
+                          child: (() {
+                            if (matchGoals['awayGoals'].length > 0 ||
+                                matchGoals['homeGoals'].length > 0) {
+                              return FadeInImage(
+                                width: 15,
+                                height: 15,
+                                placeholder: AssetImage('assets/images/football.png'),
+                                image: AssetImage('assets/images/football.png'),
+                                fit: BoxFit.cover,
+                              );
+                            }
+                          }())),
                       Container(
                           alignment: Alignment.centerLeft,
                           width: (MediaQuery.of(context).size.width / 2) - 7.5,

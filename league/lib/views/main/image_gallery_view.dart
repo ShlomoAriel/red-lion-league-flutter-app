@@ -19,7 +19,7 @@ class ImageGallery extends StatelessWidget {
                 highlightColor: Colors.grey[100],
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
-                    width: (MediaQuery.of(context).size.width),
+                    width: (MediaQuery.of(context).size.width) - 20,
                     height: (MediaQuery.of(context).size.height / 3),
                     color: Colors.grey,
                   ),
@@ -44,7 +44,7 @@ class ImageGallery extends StatelessWidget {
                   child: FadeInImage.assetNetwork(
                     placeholder: 'assets/images/LOGO CLEAN BACKGROUND.png',
                     image: i,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
               );
