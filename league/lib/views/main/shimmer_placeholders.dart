@@ -4,7 +4,7 @@ import 'package:shimmer/shimmer.dart';
 
 class SliverGridPlaceholder extends StatelessWidget {
   final count;
-  const SliverGridPlaceholder({Key key, this.count}) : super(key: key);
+  const SliverGridPlaceholder({Key? key, this.count}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SliverGrid(
@@ -15,8 +15,8 @@ class SliverGridPlaceholder extends StatelessWidget {
             shadowColor: Colors.black26,
             color: Colors.white,
             child: Shimmer.fromColors(
-              baseColor: Colors.grey[300],
-              highlightColor: Colors.grey[100],
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,14 +75,14 @@ class SliverListPlaceholder extends StatelessWidget {
   final count;
   final height;
 
-  const SliverListPlaceholder({Key key, this.count, this.height}) : super(key: key);
+  const SliverListPlaceholder({Key? key, this.count, this.height}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => Shimmer.fromColors(
-            baseColor: Colors.grey[300],
-            highlightColor: Colors.grey[100],
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
             child: Row(children: [
               SizedBox(
                 width: 20,
@@ -121,7 +121,7 @@ class FixturesPlaceholder extends StatelessWidget {
   final count;
   final height;
 
-  const FixturesPlaceholder({Key key, this.count, this.height}) : super(key: key);
+  const FixturesPlaceholder({Key? key, this.count, this.height}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -135,8 +135,8 @@ class FixturesPlaceholder extends StatelessWidget {
                 height: 50,
               ),
               Shimmer.fromColors(
-                baseColor: Colors.grey[300],
-                highlightColor: Colors.grey[100],
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
                 child: Container(
                   width: 60,
                   height: 20,
@@ -150,8 +150,8 @@ class FixturesPlaceholder extends StatelessWidget {
                 height: 30,
               ),
               Shimmer.fromColors(
-                baseColor: Colors.grey[300],
-                highlightColor: Colors.grey[100],
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
                 child: Container(
                   width: 60,
                   height: 15,
@@ -168,8 +168,8 @@ class FixturesPlaceholder extends StatelessWidget {
                 height: 30,
               ),
               Shimmer.fromColors(
-                baseColor: Colors.grey[300],
-                highlightColor: Colors.grey[100],
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
                 child: Container(
                   width: 60,
                   height: 15,
@@ -191,8 +191,8 @@ class FixturePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300],
-      highlightColor: Colors.grey[100],
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         SizedBox(
           width: 10,
@@ -242,7 +242,7 @@ class ChipPlaceholder extends StatelessWidget {
   final count;
   final height;
 
-  const ChipPlaceholder({Key key, this.count, this.height}) : super(key: key);
+  const ChipPlaceholder({Key? key, this.count, this.height}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -250,8 +250,8 @@ class ChipPlaceholder extends StatelessWidget {
         height: height,
         margin: EdgeInsets.symmetric(horizontal: 10),
         child: Shimmer.fromColors(
-          baseColor: Colors.grey[300],
-          highlightColor: Colors.grey[100],
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
           child: FilterChip(
             labelPadding: EdgeInsets.only(top: 0, bottom: 0, left: 15, right: 15),
             backgroundColor: Colors.grey[300],
@@ -272,8 +272,8 @@ class ChipPlaceholder extends StatelessWidget {
 
 Widget getShimmer(width, height) {
   return Shimmer.fromColors(
-    baseColor: Colors.grey[300],
-    highlightColor: Colors.grey[100],
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
     child: Container(
       width: width,
       height: height,

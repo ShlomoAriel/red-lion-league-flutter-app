@@ -13,7 +13,7 @@ class MatchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-      var match = state.selectedMatch;
+      var match = state.selectedMatch!;
       final cubit = BlocProvider.of<LeagueCubit>(context);
       var matchGoals = cubit.getMatchGoals(match);
       return Container(
@@ -26,7 +26,7 @@ class MatchView extends StatelessWidget {
                   pinned: true,
                   floating: false,
                   title:
-                      Text('מחזור ' + match.weekName, style: Theme.of(context).textTheme.headline6),
+                      Text('מחזור ' + match.weekName!, style: Theme.of(context).textTheme.headline6),
                   backgroundColor: Colors.white,
                 ),
                 matchScore(match, cubit, state, context),
@@ -45,8 +45,8 @@ class MatchView extends StatelessWidget {
                           width: 15,
                           padding: EdgeInsets.only(top: 10),
                           child: (() {
-                            if (matchGoals['awayGoals'].length > 0 ||
-                                matchGoals['homeGoals'].length > 0) {
+                            if (matchGoals['awayGoals']!.length > 0 ||
+                                matchGoals['homeGoals']!.length > 0) {
                               return FadeInImage(
                                 width: 15,
                                 height: 15,
@@ -151,10 +151,10 @@ Widget matchScore(Match match, LeagueCubit cubit, state, context) {
 }
 
 class MatchScorerView extends StatelessWidget {
-  final List<Goal> goals;
-  final Alignment alignment;
+  final List<Goal>? goals;
+  final Alignment? alignment;
 
-  const MatchScorerView({Key key, this.goals, this.alignment}) : super(key: key);
+  const MatchScorerView({Key? key, this.goals, this.alignment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -166,17 +166,17 @@ class MatchScorerView extends StatelessWidget {
             shrinkWrap: true,
             physics: new NeverScrollableScrollPhysics(),
             padding: EdgeInsets.only(left: 20, right: 20),
-            itemCount: (goals != null) ? goals.length : 10,
+            itemCount: (goals != null) ? goals!.length : 10,
             itemBuilder: (_, index) {
-              final item = (goals != null) ? goals[index] : null;
+              final item = (goals != null) ? goals![index] : null;
               return (goals != null)
                   ? Container(
                       alignment: alignment,
                       width: 30,
                       height: 30,
                       child: Text(
-                        item.player.name,
-                        style: Theme.of(context).textTheme.bodyText1.apply(),
+                        item!.player!.name!,
+                        style: Theme.of(context).textTheme.bodyText1!.apply(),
                       ))
                   : Container(
                       decoration: BoxDecoration(

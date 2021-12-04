@@ -13,8 +13,8 @@ class SponsorsView extends StatelessWidget {
       if (state.isLoading == true) {
         return Container(
             child: Shimmer.fromColors(
-                baseColor: Colors.grey[400],
-                highlightColor: Colors.grey[100],
+                baseColor: Colors.grey[400]!,
+                highlightColor: Colors.grey[100]!,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
                     width: (MediaQuery.of(context).size.width),
@@ -41,26 +41,26 @@ class SponsorsView extends StatelessWidget {
                   MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 3),
             ),
             itemBuilder: (context, index) {
-              final category = state.sponsors[index];
+              final category = state.sponsors![index];
               return Column(
                 children: [
                   Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(bottom: 5),
-                      child: Text(category.name, style: Theme.of(context).textTheme.headline5)),
+                      child: Text(category.name!, style: Theme.of(context).textTheme.headline5)),
                   Container(
                     height: 80,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.fitHeight,
-                        image: NetworkImage(category.imageURL),
+                        image: NetworkImage(category.imageURL!),
                       ),
                     ),
                   ),
                 ],
               );
             },
-            itemCount: state.sponsors.length,
+            itemCount: state.sponsors!.length,
           ),
           Container(
             padding: EdgeInsets.all(20),

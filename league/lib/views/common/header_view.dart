@@ -38,7 +38,7 @@ class MainFlexiableAppBar extends StatelessWidget {
                   ),
                 ),
                 Text('ליגת האריה האדום',
-                    style: Theme.of(context).textTheme.headline6.apply(color: Colors.white)),
+                    style: Theme.of(context).textTheme.headline6!.apply(color: Colors.white)),
                 SeasonSelectionButton(textColor: Colors.white),
               ],
             ),
@@ -77,7 +77,7 @@ class MainAppBar extends StatelessWidget {
                 // opacity: 1,
                 child: Text(
                   top > 104 ? "" : 'ליגת האריה האדום',
-                  style: Theme.of(context).textTheme.headline6.apply(color: Colors.white),
+                  style: Theme.of(context).textTheme.headline6!.apply(color: Colors.white),
                 )),
             background: MainFlexiableAppBar(expandedBarTitle));
       }),
@@ -86,9 +86,9 @@ class MainAppBar extends StatelessWidget {
 }
 
 class SeasonSelectionButton extends StatelessWidget {
-  final Color textColor;
+  final Color? textColor;
 
-  const SeasonSelectionButton({Key key, this.textColor}) : super(key: key);
+  const SeasonSelectionButton({Key? key, this.textColor}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
@@ -96,8 +96,8 @@ class SeasonSelectionButton extends StatelessWidget {
         return Container(
             margin: EdgeInsets.only(top: 10, bottom: 10),
             child: Shimmer.fromColors(
-                baseColor: Colors.grey[400],
-                highlightColor: Colors.grey[100],
+                baseColor: Colors.grey[400]!,
+                highlightColor: Colors.grey[100]!,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
                     width: 10,
@@ -119,19 +119,19 @@ class SeasonSelectionButton extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 showBottomSheetSelection(context, items, (Season value) {
-                  return Text(value.name, style: Theme.of(context).textTheme.button);
+                  return Text(value.name!, style: Theme.of(context).textTheme.button);
                 }, (value) {
                   BlocProvider.of<LeagueCubit>(context).setSeason(value);
                 }, (Season week, text) {
-                  return week.name.contains(text);
+                  return week.name!.contains(text);
                 });
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(child: Icon(Icons.arrow_drop_down, color: textColor)),
-                  Text(state.currentSeason.name,
-                      style: Theme.of(context).textTheme.button.apply(color: textColor)),
+                  Text(state.currentSeason!.name!,
+                      style: Theme.of(context).textTheme.button!.apply(color: textColor)),
                 ],
               ),
             ));
@@ -141,9 +141,9 @@ class SeasonSelectionButton extends StatelessWidget {
 }
 
 class SeasonDropDown extends StatelessWidget {
-  final Color textColor;
+  final Color? textColor;
 
-  const SeasonDropDown({Key key, this.textColor}) : super(key: key);
+  const SeasonDropDown({Key? key, this.textColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +152,8 @@ class SeasonDropDown extends StatelessWidget {
         return Container(
             margin: EdgeInsets.only(top: 10, bottom: 10),
             child: Shimmer.fromColors(
-                baseColor: Colors.grey[400],
-                highlightColor: Colors.grey[100],
+                baseColor: Colors.grey[400]!,
+                highlightColor: Colors.grey[100]!,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
                     width: 10,
@@ -171,11 +171,11 @@ class SeasonDropDown extends StatelessWidget {
         return Container(
           child: PopupMenuButton<Season>(
             itemBuilder: (BuildContext context) {
-              return state.seasons.map((value) {
+              return state.seasons!.map((value) {
                 return new PopupMenuItem<Season>(
                   value: value,
-                  child: new Text(value?.name ?? 'NA',
-                      style: Theme.of(context).textTheme.button.apply(color: Colors.black)),
+                  child: new Text(value.name ?? 'NA',
+                      style: Theme.of(context).textTheme.button!.apply(color: Colors.black)),
                 );
               }).toList();
             },
@@ -192,8 +192,8 @@ class SeasonDropDown extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(child: Icon(Icons.arrow_drop_down, color: textColor)),
-                    Text(state.currentSeason.name,
-                        style: Theme.of(context).textTheme.button.apply(color: textColor)),
+                    Text(state.currentSeason!.name!,
+                        style: Theme.of(context).textTheme.button!.apply(color: textColor)),
                   ],
                 )),
             elevation: 16,
@@ -205,7 +205,7 @@ class SeasonDropDown extends StatelessWidget {
 }
 
 class TeamAppBar extends StatelessWidget {
-  final Team team;
+  final Team? team;
 
   const TeamAppBar(this.team);
 
@@ -223,7 +223,7 @@ class TeamAppBar extends StatelessWidget {
                 opacity: top > 104 ? 0.0 : 1.0,
                 child: Text(
                   (top > 104) ? "" : team?.name ?? '',
-                  style: Theme.of(context).textTheme.headline6.apply(color: Colors.black),
+                  style: Theme.of(context).textTheme.headline6!.apply(color: Colors.black),
                 )),
             background: TeamHeader(team ?? Team(id: '-1', name: '')));
       }),
@@ -268,7 +268,7 @@ class TeamHeader extends StatelessWidget {
                       CachedNetworkImage(
                           width: 30,
                           height: 30,
-                          imageUrl: team.logoURL,
+                          imageUrl: team.logoURL!,
                           placeholder: (context, url) =>
                               new Image.asset('assets/images/shield-placeholder.png'),
                           errorWidget: (context, url, error) =>
@@ -276,7 +276,7 @@ class TeamHeader extends StatelessWidget {
                         ),
                 ),
                 Text(team.name ?? '',
-                    style: Theme.of(context).textTheme.headline6.apply(color: Colors.black)),
+                    style: Theme.of(context).textTheme.headline6!.apply(color: Colors.black)),
                 SeasonSelectionButton(textColor: Colors.black),
               ],
             ),

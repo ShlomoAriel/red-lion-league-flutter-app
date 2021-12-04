@@ -20,9 +20,9 @@ class MainView extends StatelessWidget {
       child: BlocBuilder<LeagueCubit, LeagueState>(
         builder: (context, state) {
           if (state == null ||
-              state.isLoading ||
+              state.isLoading! ||
               state.store == null ||
-              state.store[state.currentSeason.id] == null) {
+              state.store![state.currentSeason!.id] == null) {
             return Container(
                 color: Colors.grey[200],
                 child: CustomScrollView(physics: const BouncingScrollPhysics(), slivers: [
@@ -30,7 +30,7 @@ class MainView extends StatelessWidget {
                   CupertinoSliverRefreshControl(
                     onRefresh: () async {
                       final cubit = BlocProvider.of<LeagueCubit>(context);
-                      await cubit.createAndSetSeason(state.currentSeason);
+                      await cubit.createAndSetSeason(state.currentSeason!);
                     },
                   ),
                   SliverToBoxAdapter(
@@ -49,24 +49,24 @@ class MainView extends StatelessWidget {
                   FixturesPlaceholder(count: 1),
                 ]));
           } else {
-            var seasonState = state.store[state.currentSeason.id];
+            var seasonState = state.store![state.currentSeason!.id]!;
             return Container(
               color: Colors.grey[200],
               child: CustomScrollView(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                  MainAppBar('ליגת האריה האדום', seasonState.season.name),
+                  MainAppBar('ליגת האריה האדום', seasonState.season!.name),
                   CupertinoSliverRefreshControl(
                     onRefresh: () async {
                       final cubit = BlocProvider.of<LeagueCubit>(context);
-                      await cubit.createAndSetSeason(state.currentSeason);
+                      await cubit.createAndSetSeason(state.currentSeason!);
                     },
                   ),
                   TableView(
                       scrollController: scrollController,
-                      seasonId: state.currentSeason.id,
-                      standingsList: seasonState.standingsResponse.list),
+                      seasonId: state.currentSeason!.id,
+                      standingsList: seasonState.standingsResponse!.list),
                   SliverToBoxAdapter(
                       child: Card(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),

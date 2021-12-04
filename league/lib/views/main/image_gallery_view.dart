@@ -15,8 +15,8 @@ class ImageGallery extends StatelessWidget {
       if (state.isLoading == true) {
         return Container(
             child: Shimmer.fromColors(
-                baseColor: Colors.grey[400],
-                highlightColor: Colors.grey[100],
+                baseColor: Colors.grey[400]!,
+                highlightColor: Colors.grey[100]!,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
                     width: (MediaQuery.of(context).size.width) - 20,
@@ -34,7 +34,7 @@ class ImageGallery extends StatelessWidget {
             enableInfiniteScroll: true,
             autoPlayAnimationDuration: Duration(milliseconds: 800),
             viewportFraction: 1),
-        items: state.imageGallery.imageURLs.map((i) {
+        items: state.imageGallery!.imageURLs!.map((i) {
           return Builder(
             builder: (BuildContext context) {
               return Container(

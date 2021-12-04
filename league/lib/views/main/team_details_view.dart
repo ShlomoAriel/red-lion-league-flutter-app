@@ -44,10 +44,10 @@ class TeamDetailsView extends StatelessWidget {
                             margin: EdgeInsets.only(left: 5),
                             child: (team != null)
                                 ? Text(
-                                    'נצחונות: ' + team?.standing?.wins.toString() ?? '',
+                                    'נצחונות: ' + team!.standing!.wins.toString(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1
+                                        .bodyText1!
                                         .apply(color: Colors.white),
                                   )
                                 : getShimmer(90.0, 60.0),
@@ -62,10 +62,10 @@ class TeamDetailsView extends StatelessWidget {
                             margin: EdgeInsets.only(left: 5),
                             child: (team != null)
                                 ? Text(
-                                    'תיקו: ' + team.standing?.draws.toString(),
+                                    'תיקו: ' + team.standing!.draws.toString(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1
+                                        .bodyText1!
                                         .apply(color: Colors.white),
                                   )
                                 : getShimmer(90.0, 60.0),
@@ -80,10 +80,10 @@ class TeamDetailsView extends StatelessWidget {
                             margin: EdgeInsets.only(left: 5),
                             child: (team != null)
                                 ? Text(
-                                    'הפסדים: ' + team.standing?.losses.toString(),
+                                    'הפסדים: ' + team.standing!.losses.toString(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1
+                                        .bodyText1!
                                         .apply(color: Colors.white),
                                   )
                                 : getShimmer(90.0, 60.0),
@@ -126,7 +126,7 @@ class TeamDetailsView extends StatelessWidget {
                                       item.resultText,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyText1!
                                           .apply(color: Colors.white),
                                     ))
                                 : Container(
@@ -179,37 +179,37 @@ class TeamDetailsView extends StatelessWidget {
 
   getPlayers(LeagueState state) {
     if (state == null ||
-        state.isLoading ||
+        state.isLoading! ||
         state.selectedTeam == null ||
-        state.store[state.currentSeason.id] == null) {
+        state.store![state.currentSeason!.id] == null) {
       return [];
     } else {
-      var seasonState = state.store[state.currentSeason.id];
-      var team = seasonState.teamsMap[state.selectedTeam];
+      var seasonState = state.store![state.currentSeason!.id]!;
+      var team = seasonState.teamsMap![state.selectedTeam];
       return team?.seasonPlayers ?? [];
     }
   }
 
   getTeam(LeagueState state) {
     if (state == null ||
-        state.isLoading ||
+        state.isLoading! ||
         state.selectedTeam == null ||
-        state.store[state.currentSeason.id] == null) {
+        state.store![state.currentSeason!.id] == null) {
       return null;
     } else {
-      var seasonState = state.store[state.currentSeason.id];
-      var team = seasonState.teamsMap[state.selectedTeam];
+      var seasonState = state.store![state.currentSeason!.id]!;
+      var team = seasonState.teamsMap![state.selectedTeam];
       return team;
     }
   }
 }
 
 class TeamDetailsRowView extends StatelessWidget {
-  final VoidCallback callback;
-  final Player tableLine;
-  final Team team;
+  final VoidCallback? callback;
+  final Player? tableLine;
+  final Team? team;
 
-  const TeamDetailsRowView({Key key, this.callback, this.tableLine, this.team}) : super(key: key);
+  const TeamDetailsRowView({Key? key, this.callback, this.tableLine, this.team}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +247,7 @@ class TeamDetailsRowView extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        tableLine.name,
+                        tableLine!.name!,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ],
@@ -256,12 +256,12 @@ class TeamDetailsRowView extends StatelessWidget {
                     SizedBox(width: 10),
                     Container(
                       width: 60,
-                      child: Text(tableLine.position ?? ''),
+                      child: Text(tableLine!.position ?? ''),
                     ),
                     SizedBox(width: 10),
                     Container(
                       width: 20,
-                      child: Text(tableLine.goals ?? ''),
+                      child: Text(tableLine!.goals ?? ''),
                     ),
                     SizedBox(width: 20),
                   ]),

@@ -18,9 +18,9 @@ class FixturesView extends StatelessWidget {
         color: Colors.grey[200],
         child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
           if (state == null ||
-              state.isLoading ||
+              state.isLoading! ||
               state.store == null ||
-              state.store[state.currentSeason.id] == null) {
+              state.store![state.currentSeason!.id] == null) {
             return Container(
                 color: Colors.grey[200],
                 child: CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
@@ -29,8 +29,8 @@ class FixturesView extends StatelessWidget {
                     padding: EdgeInsets.all(5),
                     sliver: SliverToBoxAdapter(
                       child: Shimmer.fromColors(
-                        baseColor: Colors.grey[300],
-                        highlightColor: Colors.grey[100],
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
                         child: Column(children: [
                           SizedBox(
                             height: 7,
@@ -63,13 +63,13 @@ class FixturesView extends StatelessWidget {
                   ),
                 ]));
           } else {
-            var seasonState = state.store[state.currentSeason.id];
+            var seasonState = state.store![state.currentSeason!.id]!;
             return CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
-              MainAppBar('ליגת האריה האדום', seasonState.season.name),
+              MainAppBar('ליגת האריה האדום', seasonState.season!.name),
               CupertinoSliverRefreshControl(
                 onRefresh: () async {
                   final cubit = BlocProvider.of<LeagueCubit>(context);
-                  await cubit.createAndSetSeason(state.currentSeason);
+                  await cubit.createAndSetSeason(state.currentSeason!);
                 },
               ),
               SliverToBoxAdapter(
@@ -100,16 +100,16 @@ class TeamDropDown extends StatelessWidget {
               child: CircularProgressIndicator(),
             ));
       } else {
-        var seasonState = state.store[state.currentSeason.id];
+        var seasonState = state.store![state.currentSeason!.id]!;
         var teams = [Team(id: '-1', name: 'כל הקבוצות')];
-        teams.addAll(seasonState.teamsMap.values);
+        teams.addAll(seasonState.teamsMap!.values);
         return Container(
           child: PopupMenuButton<Team>(
             itemBuilder: (BuildContext context) {
               return teams.map((value) {
                 return new PopupMenuItem<Team>(
                   value: value,
-                  child: new Text(value?.name ?? 'NA', style: Theme.of(context).textTheme.button),
+                  child: new Text(value.name ?? 'NA', style: Theme.of(context).textTheme.button),
                 );
               }).toList();
             },
@@ -153,11 +153,11 @@ class WeeksDropDown extends StatelessWidget {
               child: CircularProgressIndicator(),
             ));
       } else {
-        var seasonState = state.store[state.currentSeason.id];
+        var seasonState = state.store![state.currentSeason!.id]!;
         var weeks = [
-          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason.id))
+          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason!.id!))
         ];
-        weeks.addAll(seasonState.weeks.toList());
+        weeks.addAll(seasonState.weeks!.toList());
         return Container(
           alignment: Alignment.centerRight,
           child: PopupMenuButton<Week>(
@@ -165,7 +165,7 @@ class WeeksDropDown extends StatelessWidget {
               return weeks.map((value) {
                 return new PopupMenuItem<Week>(
                   value: value,
-                  child: new Text(value?.name ?? 'NA', style: Theme.of(context).textTheme.button),
+                  child: new Text(value.name ?? 'NA', style: Theme.of(context).textTheme.button),
                 );
               }).toList();
             },
@@ -198,9 +198,9 @@ class WeeksDropDown extends StatelessWidget {
 }
 
 class FixturesSliverView extends StatelessWidget {
-  final List<Week> weeks;
+  final List<Week>? weeks;
 
-  const FixturesSliverView({Key key, this.weeks}) : super(key: key);
+  const FixturesSliverView({Key? key, this.weeks}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -209,10 +209,10 @@ class FixturesSliverView extends StatelessWidget {
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            final week = weeks[index];
+            final week = weeks![index];
             return FixturesWeekView(week: week);
           },
-          childCount: weeks.length,
+          childCount: weeks!.length,
         ),
       ),
     );
@@ -220,9 +220,9 @@ class FixturesSliverView extends StatelessWidget {
 }
 
 class FixturesWeekView extends StatelessWidget {
-  final Week week;
+  final Week? week;
 
-  const FixturesWeekView({Key key, this.week}) : super(key: key);
+  const FixturesWeekView({Key? key, this.week}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -232,15 +232,15 @@ class FixturesWeekView extends StatelessWidget {
         children: [
           Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: Text('מחזור ' + week.name, style: Theme.of(context).textTheme.headline6)),
+              child: Text('מחזור ' + week!.name!, style: Theme.of(context).textTheme.headline6)),
           ListView.builder(
             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: week.fixtures.keys.toList().length,
+            itemCount: week!.fixtures!.keys.toList().length,
             itemBuilder: (context, index) {
-              final keys = week.fixtures.keys.toList();
-              final list = week.fixtures[keys[index]];
+              final keys = week!.fixtures!.keys.toList();
+              final list = week!.fixtures![keys[index]];
               return FixtureDayView(dateString: keys[index], matches: list);
             },
           )
@@ -251,10 +251,10 @@ class FixturesWeekView extends StatelessWidget {
 }
 
 class FixtureDayView extends StatelessWidget {
-  final List<Match> matches;
-  final String dateString;
+  final List<Match>? matches;
+  final String? dateString;
 
-  const FixtureDayView({Key key, this.matches, this.dateString}) : super(key: key);
+  const FixtureDayView({Key? key, this.matches, this.dateString}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -264,15 +264,15 @@ class FixtureDayView extends StatelessWidget {
         children: [
           Container(
               margin: EdgeInsets.fromLTRB(10, 10, 0, 20),
-              child: Text(dateString, style: Theme.of(context).textTheme.subtitle2)),
+              child: Text(dateString!, style: Theme.of(context).textTheme.subtitle2)),
           Container(
             child: ListView.builder(
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: matches.length,
+              itemCount: matches!.length,
               itemBuilder: (context, index) {
-                return FixtureView(match: matches[index]);
+                return FixtureView(match: matches![index]);
               },
             ),
           )
@@ -293,11 +293,11 @@ class WeeksSelectionButton extends StatelessWidget {
               child: CircularProgressIndicator(),
             ));
       } else {
-        var seasonState = state.store[state.currentSeason.id];
+        var seasonState = state.store![state.currentSeason!.id]!;
         var weeks = [
-          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason.id))
+          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason!.id!))
         ];
-        weeks.addAll(seasonState.weeks.toList());
+        weeks.addAll(seasonState.weeks!.toList());
         return Container(
             alignment: Alignment.centerRight,
             child: RawMaterialButton(
@@ -306,11 +306,11 @@ class WeeksSelectionButton extends StatelessWidget {
                 Theme(
                   data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
                   child: showBottomSheetSelection(context, weeks, (Week value) {
-                    return Text(value.name, style: Theme.of(context).textTheme.button);
+                    return Text(value.name!, style: Theme.of(context).textTheme.button);
                   }, (value) {
                     BlocProvider.of<LeagueCubit>(context).setWeeksWeek(value);
                   }, (Week week, text) {
-                    return week.name.contains(text);
+                    return week.name!.contains(text);
                   }),
                 );
               },
@@ -345,9 +345,9 @@ class TeamSelectionButton extends StatelessWidget {
               child: CircularProgressIndicator(),
             ));
       } else {
-        var seasonState = state.store[state.currentSeason.id];
+        var seasonState = state.store![state.currentSeason!.id]!;
         var teams = [Team(id: '-1', name: 'כל הקבוצות')];
-        teams.addAll(seasonState.teamsMap.values);
+        teams.addAll(seasonState.teamsMap!.values);
         return Container(
             alignment: Alignment.centerRight,
             child: RawMaterialButton(
@@ -356,11 +356,11 @@ class TeamSelectionButton extends StatelessWidget {
                 Theme(
                   data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
                   child: showBottomSheetSelection(context, teams, (Team value) {
-                    return Text(value.name, style: Theme.of(context).textTheme.button);
+                    return Text(value.name!, style: Theme.of(context).textTheme.button);
                   }, (value) {
                     BlocProvider.of<LeagueCubit>(context).setWeeksTeam(value);
                   }, (Team team, text) {
-                    return team.name.contains(text);
+                    return team.name!.contains(text);
                   }),
                 );
               },

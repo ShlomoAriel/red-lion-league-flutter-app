@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:league/bloc/league/media_state.dart';
 import 'league_repository.dart';
@@ -7,9 +9,9 @@ class MediaCubit extends Cubit<MediaState> {
   MediaCubit() : super(MediaState(isLoading: true, imageGallery: defaultGallery()));
 
   void init() async {
-    var gallery = await getGallery();
+    var gallery = await (getGallery());
     var sponsors = await getSponsors();
-    if (gallery.imageURLs.length > 0) {
+    if (gallery!.imageURLs!.length > 0) {
       MediaState state =
           new MediaState(isLoading: false, imageGallery: gallery, sponsors: sponsors);
       emit(state);

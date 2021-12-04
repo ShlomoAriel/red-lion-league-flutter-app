@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'league_models.dart';
 import 'league_repository.dart';
@@ -14,7 +16,7 @@ class LeagueCubit extends Cubit<LeagueState> {
   void init() async {
     var seasons = await getSeasons();
     // var goals = await getGoals();
-    var store = new Map<String, SeasonState>();
+    var store = new Map<String?, SeasonState>();
     for (var season in seasons) {
       store[season.id] = new SeasonState(season: season);
     }
@@ -34,7 +36,7 @@ class LeagueCubit extends Cubit<LeagueState> {
 
   Future<SeasonState> createAndSetSeason(Season season) async {
     SeasonState seasonState = await createSeasonState(season.id);
-    state.store[state.currentSeason.id] = seasonState;
+    state.store![state.currentSeason!.id] = seasonState;
     LeagueState leagueState = new LeagueState(
         currentSeason: season, store: state.store, seasons: state.seasons, isLoading: false);
 
@@ -44,14 +46,14 @@ class LeagueCubit extends Cubit<LeagueState> {
 
   Map<String, List<Goal>> getMatchGoals(Match currentMatch) {
     Map<String, List<Goal>> goals = new Map<String, List<Goal>>();
-    var awayGoals = state.store[state.currentSeason.id].goals
+    var awayGoals = state.store![state.currentSeason!.id]!.goals!
         .where((element) =>
-            element.match.id == currentMatch.id && element.teamId == currentMatch.awayId)
+            element.match!.id == currentMatch.id && element.teamId == currentMatch.awayId)
         .toList();
 
-    var homeGoals = state.store[state.currentSeason.id].goals
+    var homeGoals = state.store![state.currentSeason!.id]!.goals!
         .where((element) =>
-            element.match.id == currentMatch.id && element.teamId == currentMatch.homeId)
+            element.match!.id == currentMatch.id && element.teamId == currentMatch.homeId)
         .toList();
     goals['homeGoals'] = homeGoals;
     goals['awayGoals'] = awayGoals;
@@ -59,7 +61,7 @@ class LeagueCubit extends Cubit<LeagueState> {
   }
 
   // Create a season state for the store
-  Future<SeasonState> createSeasonState(String seasonId) async {
+  Future<SeasonState> createSeasonState(String? seasonId) async {
     var seasonCalls = await Future.wait([
       getSeasonStandings(seasonId),
       getSeasonMatches(seasonId),
@@ -67,45 +69,46 @@ class LeagueCubit extends Cubit<LeagueState> {
       getSeasonScorers(seasonId),
       getSeasonGoals(seasonId)
     ]);
-    StandingsResponse standingsResponse = seasonCalls[0]; //await getSeasonStandings(seasonId);
+    StandingsResponse standingsResponse =
+        seasonCalls[0] as StandingsResponse; //await getSeasonStandings(seasonId);
     var matches = seasonCalls[1]; //await getSeasonMatches(seasonId);
     var weeks = seasonCalls[2]; //await getSeasonWeeks(seasonId);
     var scorers = seasonCalls[3]; //await getSeasonScorers(seasonId);
     var seasonGoals = seasonCalls[4]; //await getSeasonScorers(seasonId);
     // var goals = await getSeasonGoals(seasonId);
-    var season = state.seasons.firstWhere((element) => element.id == seasonId);
-    List<String> teamIds = [];
-    for (var standing in standingsResponse.list) {
+    var season = state.seasons!.firstWhere((element) => element.id == seasonId);
+    List<String?> teamIds = [];
+    for (var standing in standingsResponse.list!) {
       teamIds.add(standing.id);
     }
-    Map<String, Team> teamsMap = new Map<String, Team>();
-    for (var standing in standingsResponse.list) {
+    Map<String?, Team> teamsMap = new Map<String?, Team>();
+    for (var standing in standingsResponse.list!) {
       Team standingTeam = new Team.fromStanding(standing);
       teamsMap[standing.id] = standingTeam;
     }
-    List<Team> teamsSpecs = await getTeamSpecs(teamIds);
-    for (var teamSpec in teamsSpecs) {
-      teamsMap[teamSpec.id].colorHEX = teamSpec.colorHEX;
-      teamsMap[teamSpec.id].logoURL = teamSpec.logoURL;
+    List<Team>? teamsSpecs = await getTeamSpecs(teamIds);
+    for (var teamSpec in teamsSpecs!) {
+      teamsMap[teamSpec.id]!.colorHEX = teamSpec.colorHEX;
+      teamsMap[teamSpec.id]!.logoURL = teamSpec.logoURL;
     }
-    for (var standing in standingsResponse.list) {
-      standing.logoURL = teamsMap[standing.id].logoURL ?? '';
+    for (var standing in standingsResponse.list!) {
+      standing.logoURL = teamsMap[standing.id]!.logoURL ?? '';
     }
     var seasonState = new SeasonState(
         season: season,
-        matches: matches,
-        scorers: scorers,
-        goals: seasonGoals,
+        matches: matches as List<Match>?,
+        scorers: scorers as List<Scorer>?,
+        goals: seasonGoals as List<Goal>?,
         teamsMap: teamsMap,
         standingsResponse: standingsResponse,
-        weeks: weeks);
+        weeks: weeks as List<Week>?);
     seasonState.refreshed = DateTime.now();
     return seasonState;
   }
 
   void setSeason(Season season) async {
     // Check if season exists in store
-    if (state.store[season.id].refreshed != null) {
+    if (state.store![season.id]!.refreshed != null) {
       LeagueState tempState = new LeagueState.from(state);
       tempState.currentSeason = season;
       emit(tempState);
@@ -119,30 +122,30 @@ class LeagueCubit extends Cubit<LeagueState> {
     // Download and set season
     SeasonState seasonState = await createSeasonState(season.id);
     LeagueState leagueState = new LeagueState.from(state);
-    leagueState.store[season.id] = seasonState;
+    leagueState.store![season.id] = seasonState;
     leagueState.currentSeason = season;
     leagueState.isLoading = false;
     emit(leagueState);
   }
 
-  void setTeamSeasonPlayers(String seasonId, String teamId) async {
+  void setTeamSeasonPlayers(String? seasonId, String teamId) async {
     var tempState = new LeagueState.from(state);
     tempState.isLoading = true;
     emit(tempState);
     TeamPlayersResponse response = await getTeamSeasonPlayers(seasonId, teamId);
     var team = new Team();
-    if (state.store[state.currentSeason.id].teamsMap[teamId] != null) {
-      team = Team.from(state.store[state.currentSeason.id].teamsMap[teamId]);
+    if (state.store![state.currentSeason!.id]!.teamsMap![teamId] != null) {
+      team = Team.from(state.store![state.currentSeason!.id]!.teamsMap![teamId]!);
     }
     var newState = new LeagueState.from(state);
     team.seasonPlayers = response.list;
     newState.selectedTeam = team.id;
-    newState.store[state.currentSeason.id].teamsMap[teamId] = team;
+    newState.store![state.currentSeason!.id]!.teamsMap![teamId] = team;
     newState.isLoading = false;
     emit(newState);
   }
 
-  void setMatch(Match match) async {
+  void setMatch(Match? match) async {
     var newState = new LeagueState.from(state);
     newState.selectedMatch = match;
     emit(newState);
@@ -150,19 +153,19 @@ class LeagueCubit extends Cubit<LeagueState> {
 
   void setWeeksTeam(Team team) {
     LeagueState leagueState = new LeagueState.from(state);
-    leagueState.store[state.currentSeason.id].weeksWeek = null;
-    leagueState.store[leagueState.currentSeason.id].filteredWeeks =
-        state.store[leagueState.currentSeason.id].weeks.map((e) => Week.clone(e)).toList();
-    if (team == leagueState.store[state.currentSeason.id].weeksTeam || team.id == '-1') {
-      leagueState.store[state.currentSeason.id].weeksTeam = null;
+    leagueState.store![state.currentSeason!.id]!.weeksWeek = null;
+    leagueState.store![leagueState.currentSeason!.id]!.filteredWeeks =
+        state.store![leagueState.currentSeason!.id]!.weeks!.map((e) => Week.clone(e)).toList();
+    if (team == leagueState.store![state.currentSeason!.id]!.weeksTeam || team.id == '-1') {
+      leagueState.store![state.currentSeason!.id]!.weeksTeam = null;
     } else {
-      leagueState.store[state.currentSeason.id].weeksTeam = team;
-      for (Week week in leagueState.store[leagueState.currentSeason.id].filteredWeeks) {
+      leagueState.store![state.currentSeason!.id]!.weeksTeam = team;
+      for (Week week in leagueState.store![leagueState.currentSeason!.id]!.filteredWeeks!) {
         var filteredMatches = new Map<String, List<Match>>();
-        week.fixtures.forEach((key, value) {
+        week.fixtures!.forEach((key, value) {
           for (var item in value) {
-            if (item.awayId == leagueState.store[state.currentSeason.id].weeksTeam.id ||
-                item.homeId == leagueState.store[state.currentSeason.id].weeksTeam.id) {
+            if (item.awayId == leagueState.store![state.currentSeason!.id]!.weeksTeam!.id ||
+                item.homeId == leagueState.store![state.currentSeason!.id]!.weeksTeam!.id) {
               filteredMatches[key] = [item];
               break;
             }
@@ -177,17 +180,17 @@ class LeagueCubit extends Cubit<LeagueState> {
   void setWeeksWeek(Week week) {
     LeagueState leagueState = new LeagueState.from(state);
 
-    var seasonState = state.store[state.currentSeason.id];
-    leagueState.store[state.currentSeason.id].weeksWeek = week;
-    leagueState.store[state.currentSeason.id].weeksTeam = null;
+    var seasonState = state.store![state.currentSeason!.id];
+    leagueState.store![state.currentSeason!.id]!.weeksWeek = week;
+    leagueState.store![state.currentSeason!.id]!.weeksTeam = null;
     if (week.id == '-1') {
-      leagueState.store[state.currentSeason.id].weeksWeek = null;
-      leagueState.store[leagueState.currentSeason.id].filteredWeeks =
-          state.store[leagueState.currentSeason.id].weeks.toList();
+      leagueState.store![state.currentSeason!.id]!.weeksWeek = null;
+      leagueState.store![leagueState.currentSeason!.id]!.filteredWeeks =
+          state.store![leagueState.currentSeason!.id]!.weeks!.toList();
     } else {
-      leagueState.store[leagueState.currentSeason.id].filteredWeeks = state
-          .store[leagueState.currentSeason.id].weeks
-          .where((element) => element.id == seasonState.weeksWeek.id)
+      leagueState.store![leagueState.currentSeason!.id]!.filteredWeeks = state
+          .store![leagueState.currentSeason!.id]!.weeks!
+          .where((element) => element.id == seasonState!.weeksWeek!.id)
           .toList();
     }
     emit(leagueState);

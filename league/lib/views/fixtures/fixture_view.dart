@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class FixtureView extends StatelessWidget {
-  final Match match;
+  final Match? match;
 
-  const FixtureView({Key key, this.match}) : super(key: key);
+  const FixtureView({Key? key, this.match}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +17,9 @@ class FixtureView extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-          var store = state.store[state.currentSeason.id];
-          Team homeTeam = store.teamsMap[match.homeId];
-          Team awayTeam = store.teamsMap[match.awayId];
+          var store = state.store![state.currentSeason!.id]!;
+          Team homeTeam = store.teamsMap![match!.homeId]!;
+          Team awayTeam = store.teamsMap![match!.awayId]!;
           return GestureDetector(
             onTap: () {
               BlocProvider.of<LeagueCubit>(context).setMatch(match);
@@ -34,7 +34,7 @@ class FixtureView extends StatelessWidget {
                 Container(
                     width: 90,
                     child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                      Text(match.homeName, style: Theme.of(context).textTheme.bodyText1)
+                      Text(match!.homeName!, style: Theme.of(context).textTheme.bodyText1)
                     ])),
                 SizedBox(width: 5),
                 TeamColorView(team: homeTeam),
@@ -49,11 +49,11 @@ class FixtureView extends StatelessWidget {
                       new Image.asset('assets/images/shield-placeholder.png'),
                 ),
                 SizedBox(width: 10),
-                Text(match.played ? match.homeGoals.toString() : '',
+                Text(match!.played! ? match!.homeGoals.toString() : '',
                     style: Theme.of(context).textTheme.bodyText1),
-                Text(match.played ? ' - ' : match.time,
+                Text(match!.played! ? ' - ' : match!.time!,
                     style: Theme.of(context).textTheme.bodyText1),
-                Text(match.played ? match.awayGoals.toString() : '',
+                Text(match!.played! ? match!.awayGoals.toString() : '',
                     style: Theme.of(context).textTheme.bodyText1),
                 SizedBox(width: 10),
                 CachedNetworkImage(
@@ -71,7 +71,7 @@ class FixtureView extends StatelessWidget {
                 Container(
                     width: 90,
                     child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      Text(match.awayName, style: Theme.of(context).textTheme.bodyText1)
+                      Text(match!.awayName!, style: Theme.of(context).textTheme.bodyText1)
                     ])),
               ],
             ),
@@ -83,7 +83,7 @@ class FixtureView extends StatelessWidget {
 class TeamColorView extends StatelessWidget {
   final Team team;
 
-  const TeamColorView({Key key, this.team}) : super(key: key);
+  const TeamColorView({Key? key, required this.team}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +91,7 @@ class TeamColorView extends StatelessWidget {
       width: 10,
       height: 10,
       decoration: BoxDecoration(
-          color: HexColor(team.colorHEX),
-          // border: Border.all(color: Colors.black, width: 1.0),
+          color: HexColor(team.colorHEX ?? 'FFFFFF'),
           borderRadius: BorderRadius.circular(15),
           boxShadow: [BoxShadow(blurRadius: 2, color: Colors.grey, offset: Offset(0, 0))]),
     );

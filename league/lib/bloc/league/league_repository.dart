@@ -12,11 +12,11 @@ Future<List<Season>> getSeasons() async {
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   final seasons = (json as List).map((listingJson) => Season.fromJson(listingJson)).toList();
-  seasons.sort((a, b) => b.priority.compareTo(a.priority));
+  seasons.sort((a, b) => b.priority!.compareTo(a.priority!));
   return seasons;
 }
 
-Future<ImageGalleryModel> getGallery() async {
+Future<ImageGalleryModel?> getGallery() async {
   final uri = Uri.https('user-management-template.herokuapp.com', '/api/findPublic/ImageGallery');
   final body = jsonEncode({
     'filter': {'name': 'Gallery'},
@@ -35,7 +35,7 @@ Future<ImageGalleryModel> getGallery() async {
   return null;
 }
 
-Future<List<Team>> getTeamSpecs(List<String> ids) async {
+Future<List<Team>?> getTeamSpecs(List<String?> ids) async {
   final uri = Uri.https('user-management-template.herokuapp.com', '/api/findPublic/Team');
   final body = jsonEncode({
     'filter': {'id': ids},
@@ -49,13 +49,13 @@ Future<List<Team>> getTeamSpecs(List<String> ids) async {
       body: body);
   final json = jsonDecode(response.body);
   final result = TeamSpecsResponse.fromJson(json);
-  if (result.result.length > 0) {
+  if (result.result!.length > 0) {
     return result.result;
   }
   return null;
 }
 
-Future<List<Sponsor>> getSponsors() async {
+Future<List<Sponsor>?> getSponsors() async {
   final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Sponsor');
   // final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Team');
   final response = await client.get(uri, headers: <String, String>{
@@ -63,14 +63,14 @@ Future<List<Sponsor>> getSponsors() async {
   });
   final json = jsonDecode(response.body);
   final result = SponsorsResponse.fromJson(json);
-  if (result.result.length > 0) {
+  if (result.result!.length > 0) {
     return result.result;
   }
   return null;
 }
 
-Future<TeamPlayersResponse> getTeamSeasonPlayers(String seasonId, String teamId) async {
-  final body = jsonEncode(<String, String>{'SeasonId': seasonId, 'teamId': teamId});
+Future<TeamPlayersResponse> getTeamSeasonPlayers(String? seasonId, String teamId) async {
+  final body = jsonEncode(<String, String?>{'SeasonId': seasonId, 'teamId': teamId});
   final uri = Uri.http(baseUrl, '///api/Match/GetTeamSeasonPlayers');
   final response = await client.post(uri,
       headers: <String, String>{
@@ -82,7 +82,7 @@ Future<TeamPlayersResponse> getTeamSeasonPlayers(String seasonId, String teamId)
   return TeamPlayersResponse.fromJson(json);
 }
 
-Future<StandingsResponse> getSeasonStandings(String seasonId) async {
+Future<StandingsResponse> getSeasonStandings(String? seasonId) async {
   final queryParameters = {'id': seasonId};
   final uri = Uri.http(baseUrl, '///api/Match/GetStandings', queryParameters);
   final response = await client.get(uri);
@@ -90,7 +90,7 @@ Future<StandingsResponse> getSeasonStandings(String seasonId) async {
   return StandingsResponse.fromJson(json);
 }
 
-Future<List<Match>> getSeasonMatches(String seasonId) async {
+Future<List<Match>> getSeasonMatches(String? seasonId) async {
   final queryParameters = {'seasonId': seasonId};
   final uri = Uri.http(baseUrl, '///api/Match/GetMatchesBySeason', queryParameters);
   final response = await client.get(uri);
@@ -99,7 +99,7 @@ Future<List<Match>> getSeasonMatches(String seasonId) async {
   return matches;
 }
 
-Future<List<Week>> getSeasonWeeks(String seasonId) async {
+Future<List<Week>> getSeasonWeeks(String? seasonId) async {
   final queryParameters = {'seasonId': seasonId};
   final uri = Uri.http(baseUrl, '///api/Match/GetWeeksBySeason', queryParameters);
   final response = await client.get(uri);
@@ -108,7 +108,7 @@ Future<List<Week>> getSeasonWeeks(String seasonId) async {
   return weeks;
 }
 
-Future<List<Goal>> getSeasonGoals(String seasonId) async {
+Future<List<Goal>> getSeasonGoals(String? seasonId) async {
   final queryParameters = {'seasonId': seasonId};
   final uri = Uri.http(baseUrl, '///api/Match/GetGoalsBySeason', queryParameters);
   final response = await client.get(uri);
@@ -117,7 +117,7 @@ Future<List<Goal>> getSeasonGoals(String seasonId) async {
   return weeks;
 }
 
-Future<List<Scorer>> getSeasonScorers(String seasonId) async {
+Future<List<Scorer>> getSeasonScorers(String? seasonId) async {
   final queryParameters = {'season': seasonId};
   final uri = Uri.http(baseUrl, '///api/Match/GetScorers', queryParameters);
   final response = await client.get(uri);

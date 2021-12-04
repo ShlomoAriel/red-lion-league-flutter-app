@@ -10,9 +10,9 @@ class TabNavigationItem {
   final Icon icon;
 
   TabNavigationItem({
-    @required this.page,
-    @required this.title,
-    @required this.icon,
+    required this.page,
+    required this.title,
+    required this.icon,
   });
 
   static List<TabNavigationItem> get items => [

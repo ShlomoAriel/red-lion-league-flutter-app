@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
@@ -15,7 +16,10 @@ class ScorersView extends StatelessWidget {
   @override
   Widget build(Object context) {
     return BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-      var seasonState = state.store[state.currentSeason?.id ?? null];
+      var seasonState = state.store![state.currentSeason?.id ?? null];
+      if (kIsWeb) {
+        return Text('Is web');
+      }
       return Container(
         color: Colors.grey[200],
         child: CustomScrollView(
@@ -26,7 +30,7 @@ class ScorersView extends StatelessWidget {
               CupertinoSliverRefreshControl(
                 onRefresh: () async {
                   final cubit = BlocProvider.of<LeagueCubit>(context);
-                  await cubit.createAndSetSeason(state.currentSeason);
+                  await cubit.createAndSetSeason(state.currentSeason!);
                 },
               ),
               SliverSectionView(title: 'כללי'),
@@ -43,7 +47,7 @@ class ScorersView extends StatelessWidget {
     });
   }
 
-  Widget buildStats(SeasonState seasonState) {
+  Widget buildStats(SeasonState? seasonState) {
     if (seasonState == null || seasonState.scorers == null) {
       return SliverGridPlaceholder(count: 6);
     } else {
@@ -52,7 +56,7 @@ class ScorersView extends StatelessWidget {
         sliver: SliverGrid(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              final stat = seasonState.stats[index];
+              final stat = seasonState.stats![index];
               return Card(
                 elevation: 15,
                 shadowColor: Colors.black26,
@@ -62,10 +66,10 @@ class ScorersView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(seasonState.teamsMap[stat.teamId].name,
+                    Text(seasonState.teamsMap![stat.teamId]!.name!,
                         style: Theme.of(context)
                             .textTheme
-                            .caption
+                            .caption!
                             .apply(color: Colors.black, fontFamily: 'OpenSansHebrew-Bold')),
                     Container(
                       alignment: Alignment.center,
@@ -74,7 +78,7 @@ class ScorersView extends StatelessWidget {
                         child: CachedNetworkImage(
                           height: (MediaQuery.of(context).size.width / 2.8) -
                               (MediaQuery.of(context).size.width / 10),
-                          imageUrl: seasonState.teamsMap[stat.teamId].logoURL ?? '',
+                          imageUrl: seasonState.teamsMap![stat.teamId]!.logoURL ?? '',
                           placeholder: (context, url) =>
                               new Image.asset('assets/images/shield-placeholder.png'),
                           errorWidget: (context, url, error) =>
@@ -92,12 +96,12 @@ class ScorersView extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(stat.value.toString(),
-                                  style: Theme.of(context).textTheme.headline4.apply(
+                                  style: Theme.of(context).textTheme.headline4!.apply(
                                       color: Colors.white, fontFamily: 'OpenSansHebrew-Bold')),
                               Text(stat.title,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .subtitle2!
                                       .apply(color: Colors.white)),
                             ],
                           ),
@@ -106,7 +110,7 @@ class ScorersView extends StatelessWidget {
                 ),
               );
             },
-            childCount: seasonState.stats.length,
+            childCount: seasonState.stats!.length,
           ),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -119,7 +123,7 @@ class ScorersView extends StatelessWidget {
     }
   }
 
-  Widget buildScorerSliver(SeasonState seasonState) {
+  Widget buildScorerSliver(SeasonState? seasonState) {
     if (seasonState == null || seasonState.scorers == null) {
       return SliverListPlaceholder(count: 10);
     } else {
@@ -133,9 +137,9 @@ class ScorersView extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               controller: scrollController,
               shrinkWrap: true,
-              itemCount: seasonState.scorers.length,
+              itemCount: seasonState.scorers!.length,
               itemBuilder: (context, index) {
-                final scorer = seasonState.scorers[index];
+                final scorer = seasonState.scorers![index];
                 final tableRow = TableRow((index + 1).toString(), scorer.teamId, scorer.name,
                     [TableRowColumn(35, scorer.goals.toString())]);
                 return StatsRowView(tableRow: tableRow);
@@ -147,11 +151,11 @@ class ScorersView extends StatelessWidget {
     }
   }
 
-  Widget buildGoalsScoredTable(SeasonState seasonState) {
+  Widget buildGoalsScoredTable(SeasonState? seasonState) {
     if (seasonState == null || seasonState.standingsResponse == null) {
       return SliverListPlaceholder(count: 10);
     } else {
-      var sortedList = seasonState.standingsResponse.list.toList();
+      var sortedList = seasonState.standingsResponse!.list!.toList();
       sortedList.sort((a, b) => b.goalsFortAverage.compareTo(a.goalsFortAverage));
       return SliverToBoxAdapter(
         child: Card(
@@ -180,11 +184,11 @@ class ScorersView extends StatelessWidget {
     }
   }
 
-  Widget buildGoalsConcededTable(SeasonState seasonState) {
+  Widget buildGoalsConcededTable(SeasonState? seasonState) {
     if (seasonState == null || seasonState.standingsResponse == null) {
       return SliverListPlaceholder(count: 10);
     } else {
-      var sortedList = seasonState.standingsResponse.list.toList();
+      var sortedList = seasonState.standingsResponse!.list!.toList();
       sortedList.sort((a, b) => a.goalsAgainstAverage.compareTo(b.goalsAgainstAverage));
       return SliverToBoxAdapter(
         child: Card(
@@ -223,10 +227,10 @@ class TableRowColumn {
 
 class TableRow {
   final String position;
-  final String teamId;
-  final String title;
+  final String? teamId;
+  final String? title;
   final List<TableRowColumn> trailingColumns;
-  List<Widget> trailingColumnsView;
+  late List<Widget> trailingColumnsView;
 
   TableRow(this.position, this.teamId, this.title, this.trailingColumns) {
     this.trailingColumnsView = [];
@@ -246,16 +250,16 @@ class TableRow {
 }
 
 class StatsRowView extends StatelessWidget {
-  final TableRow tableRow;
+  final TableRow? tableRow;
 
-  const StatsRowView({Key key, this.tableRow}) : super(key: key);
+  const StatsRowView({Key? key, this.tableRow}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(child: Container(
       child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-        var store = state.store[state.currentSeason.id];
-        var logoURL = store?.teamsMap[tableRow.teamId]?.logoURL ?? '';
+        var store = state.store![state.currentSeason!.id];
+        var logoURL = store?.teamsMap![tableRow!.teamId]?.logoURL ?? '';
         return Column(
           children: [
             SizedBox(height: 20),
@@ -267,7 +271,7 @@ class StatsRowView extends StatelessWidget {
                     SizedBox(width: 20),
                     Container(
                       width: 20,
-                      child: Text(tableRow.position, style: Theme.of(context).textTheme.bodyText1),
+                      child: Text(tableRow!.position, style: Theme.of(context).textTheme.bodyText1),
                     ),
                     CachedNetworkImage(
                       width: 30,
@@ -280,12 +284,12 @@ class StatsRowView extends StatelessWidget {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      tableRow.title,
+                      tableRow!.title!,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
                 ),
-                Row(children: tableRow.trailingColumnsView),
+                Row(children: tableRow!.trailingColumnsView),
               ],
             ),
             SizedBox(height: 10)

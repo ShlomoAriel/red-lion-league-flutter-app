@@ -6,10 +6,10 @@ class SelectionListWidget<T> extends StatefulWidget {
   final cellText;
   final callback;
   final filterFunction;
-  final List<T> items;
+  final List<T>? items;
 
   const SelectionListWidget(
-      {Key key, this.title, this.callback, this.items, this.cellText, this.filterFunction})
+      {Key? key, this.title, this.callback, this.items, this.cellText, this.filterFunction})
       : super(key: key);
 
   @override
@@ -17,12 +17,12 @@ class SelectionListWidget<T> extends StatefulWidget {
 }
 
 class _SelectionListWidgetState<T> extends State<SelectionListWidget> {
-  List<T> filteredItems;
+  List<T>? filteredItems;
 
   @override
   void initState() {
     super.initState();
-    filteredItems = widget.items;
+    filteredItems = widget.items as List<T>?;
   }
 
   @override
@@ -41,7 +41,7 @@ class _SelectionListWidgetState<T> extends State<SelectionListWidget> {
             onChanged: (value) {
               setState(() {
                 filteredItems =
-                    widget.items.where((element) => widget.filterFunction(element, value)).toList();
+                    widget.items!.where((element) => widget.filterFunction(element, value)).toList() as List<T>?;
               });
               print(filteredItems);
             }),
@@ -53,13 +53,13 @@ class _SelectionListWidgetState<T> extends State<SelectionListWidget> {
                 color: Colors.grey[100],
               );
             },
-            itemCount: filteredItems.length,
+            itemCount: filteredItems!.length,
             itemBuilder: (context, index) {
               return ListTile(
                   title: Transform.translate(
-                      offset: Offset(-16, 0), child: widget.cellText(filteredItems[index])),
+                      offset: Offset(-16, 0), child: widget.cellText(filteredItems![index])),
                   onTap: () {
-                    widget.callback(filteredItems[index]);
+                    widget.callback(filteredItems![index]);
                     Navigator.pop(context);
                   });
             },

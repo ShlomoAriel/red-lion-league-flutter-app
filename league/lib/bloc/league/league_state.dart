@@ -1,13 +1,13 @@
 import 'league_models.dart';
 
 class LeagueState {
-  bool isLoading;
-  Season currentSeason;
-  Match selectedMatch;
-  String selectedTeam;
-  List<Season> seasons;
-  List<Goal> goals;
-  Map<String, SeasonState> store;
+  bool? isLoading;
+  Season? currentSeason;
+  Match? selectedMatch;
+  String? selectedTeam;
+  List<Season>? seasons;
+  List<Goal>? goals;
+  Map<String?, SeasonState>? store;
 
   LeagueState({this.isLoading, this.currentSeason, this.seasons, this.goals, this.store});
 

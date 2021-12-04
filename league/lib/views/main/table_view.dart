@@ -20,7 +20,7 @@ class _TableViewState extends State<TableView> {
             backgroundColor: Colors.white,
             label: Text(
               'משחקים אחרונים',
-              style: Theme.of(context).textTheme.button,
+              style: Theme.of(context as BuildContext).textTheme.button,
             ),
             showCheckmark: false,
             selected: _isForm,
@@ -97,17 +97,17 @@ class TableView extends StatefulWidget {
   final seasonId;
   final scrollController;
   final isForm;
-  TableView({Key key, this.standingsList, this.seasonId, this.scrollController, this.isForm})
+  TableView({Key? key, this.standingsList, this.seasonId, this.scrollController, this.isForm})
       : super(key: key);
 
   _TableViewState createState() => _TableViewState();
 }
 
 class TableRowView extends StatelessWidget {
-  final VoidCallback callback;
-  final TableLine tableLine;
+  final VoidCallback? callback;
+  final TableLine? tableLine;
 
-  const TableRowView({Key key, this.callback, this.tableLine}) : super(key: key);
+  const TableRowView({Key? key, this.callback, this.tableLine}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -125,14 +125,14 @@ class TableRowView extends StatelessWidget {
                   Container(
                     width: 20,
                     child: Text(
-                      tableLine.position.toString(),
+                      tableLine!.position.toString(),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
                   CachedNetworkImage(
                     width: 30,
                     height: 30,
-                    imageUrl: tableLine.logoURL,
+                    imageUrl: tableLine!.logoURL,
                     placeholder: (context, url) =>
                         new Image.asset('assets/images/shield-placeholder.png'),
                     errorWidget: (context, url, error) =>
@@ -140,7 +140,7 @@ class TableRowView extends StatelessWidget {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    tableLine.name,
+                    tableLine!.name!,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -151,7 +151,7 @@ class TableRowView extends StatelessWidget {
                   width: 20,
                   alignment: Alignment.center,
                   child: Text(
-                    tableLine.games.toString(),
+                    tableLine!.games.toString(),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -160,7 +160,7 @@ class TableRowView extends StatelessWidget {
                   width: 20,
                   alignment: Alignment.center,
                   child: Text(
-                    tableLine.wins.toString(),
+                    tableLine!.wins.toString(),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -169,7 +169,7 @@ class TableRowView extends StatelessWidget {
                   width: 20,
                   alignment: Alignment.center,
                   child: Text(
-                    tableLine.draws.toString(),
+                    tableLine!.draws.toString(),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -178,7 +178,7 @@ class TableRowView extends StatelessWidget {
                   width: 20,
                   alignment: Alignment.center,
                   child: Text(
-                    tableLine.losses.toString(),
+                    tableLine!.losses.toString(),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -189,7 +189,7 @@ class TableRowView extends StatelessWidget {
                     width: 20,
                     alignment: Alignment.center,
                     child: Text(
-                      tableLine.goalsDifference.toString(),
+                      tableLine!.goalsDifference.toString(),
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
@@ -199,7 +199,7 @@ class TableRowView extends StatelessWidget {
                   width: 20,
                   alignment: Alignment.center,
                   child: Text(
-                    tableLine.points.toString(),
+                    tableLine!.points.toString(),
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -215,10 +215,10 @@ class TableRowView extends StatelessWidget {
 }
 
 class TableFormRowView extends StatelessWidget {
-  final VoidCallback callback;
-  final TableLine tableLine;
+  final VoidCallback? callback;
+  final TableLine? tableLine;
 
-  const TableFormRowView({Key key, this.callback, this.tableLine}) : super(key: key);
+  const TableFormRowView({Key? key, this.callback, this.tableLine}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -236,14 +236,14 @@ class TableFormRowView extends StatelessWidget {
                   Container(
                     width: 20,
                     child: Text(
-                      tableLine.position.toString(),
+                      tableLine!.position.toString(),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
                   CachedNetworkImage(
                     width: 30,
                     height: 30,
-                    imageUrl: tableLine.logoURL,
+                    imageUrl: tableLine!.logoURL,
                     placeholder: (context, url) =>
                         new Image.asset('assets/images/shield-placeholder.png'),
                     errorWidget: (context, url, error) =>
@@ -251,7 +251,7 @@ class TableFormRowView extends StatelessWidget {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    tableLine.name,
+                    tableLine!.name!,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -260,7 +260,7 @@ class TableFormRowView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for (var item in tableLine.matchForm.reversed.take(5).toList().reversed)
+                    for (var item in tableLine!.matchForm!.reversed.take(5).toList().reversed)
                       Container(
                         decoration: BoxDecoration(
                             color: item.resultColor, borderRadius: BorderRadius.circular(5)),
@@ -269,8 +269,8 @@ class TableFormRowView extends StatelessWidget {
                         margin: EdgeInsets.only(left: 5),
                         width: 25,
                         child: Text(
-                          item.resultText,
-                          style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.white),
+                          item.resultText!,
+                          style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.white),
                         ),
                       ),
                     SizedBox(width: 10),
