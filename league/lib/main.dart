@@ -1,5 +1,7 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,6 +9,9 @@ import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/media_cubit.dart';
 import 'package:league/navigation/app_router.dart';
 import 'package:league/utils/main_theme.dart';
+import 'package:overlay_support/overlay_support.dart';
+
+import 'bloc/notifications/notifications_cubit.dart';
 
 // const AndroidNotificationChannel channel = AndroidNotificationChannel(
 //     'high_importance_channel', // id
@@ -23,8 +28,27 @@ import 'package:league/utils/main_theme.dart';
 // }
 
 Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // await flutterLocalNotificationsPlugin
@@ -49,10 +73,32 @@ class ClientelingApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext appContext) {
+    // late FirebaseMessaging messaging;
     return StatefulWrapper(
-      onInit: () {},
+      onInit: () {
+        // messaging = FirebaseMessaging.instance;
+        // messaging.getToken().then((value) {
+        //   print("Token: ");
+        //   print(value);
+        // });
+        // messaging.getAPNSToken().then((value) {
+        //   print("APNS Token: ");
+        //   print(value);
+        // });
+
+        // FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+        //   print("message recieved");
+        //   print(event.notification!.body);
+        // });
+        // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        //   print('Message clicked!');
+        // });
+      },
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<NotificationsCubit>(
+            create: (context) => NotificationsCubit()..init(),
+          ),
           BlocProvider<LeagueCubit>(
             create: (context) => LeagueCubit()..init(),
           ),
@@ -60,11 +106,13 @@ class ClientelingApp extends StatelessWidget {
             create: (context) => MediaCubit()..init(),
           ),
         ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: mainTheme(),
-          onGenerateRoute: appRouter.onGenerateRoute,
+        child: OverlaySupport(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: mainTheme(),
+            onGenerateRoute: appRouter.onGenerateRoute,
+          ),
         ),
       ),
     );
@@ -81,11 +129,31 @@ class StatefulWrapper extends StatefulWidget {
 }
 
 class _StatefulWrapperState extends State<StatefulWrapper> {
-  int _counter = 0;
-
+  // late FirebaseMessaging messaging;
   @override
   void initState() {
+    // if(widget.onInit != null) {
+    widget.onInit();
+    // }
     super.initState();
+
+    // messaging = FirebaseMessaging.instance;
+    // messaging.getToken().then((value) {
+    //   print("Token: ");
+    //   print(value);
+    // });
+    // messaging.getAPNSToken().then((value) {
+    //   print("APNS Token: ");
+    //   print(value);
+    // });
+
+    // FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+    //   print("message recieved");
+    //   print(event.notification!.body);
+    // });
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    //   print('Message clicked!');
+    // });
     // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     //   RemoteNotification notification = message.notification;
     //   AndroidNotification android = message.notification?.android;

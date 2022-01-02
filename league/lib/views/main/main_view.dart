@@ -8,6 +8,7 @@ import 'package:league/views/common/sliver_section_view.dart';
 import 'package:league/views/fixtures/fixtures_view.dart';
 import 'package:league/views/main/sponsors_view.dart';
 import 'package:league/views/main/table_view.dart';
+import 'package:league/views/notifications/notifications_view.dart';
 import 'package:shimmer/shimmer.dart';
 import 'image_gallery_view.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
@@ -75,7 +76,8 @@ class MainView extends StatelessWidget {
                   )),
                   SliverSectionView(title: 'מחזור הבא'),
                   SliverToBoxAdapter(child: FixturesWeekView(week: seasonState.nextWeek)),
-                  SliverToBoxAdapter(child: SponsorsView())
+                  SliverToBoxAdapter(child: SponsorsView()),
+                  SliverToBoxAdapter(child: NotificationView())
                 ],
               ),
             );
