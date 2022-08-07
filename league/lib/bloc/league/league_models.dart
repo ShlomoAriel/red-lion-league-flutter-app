@@ -40,8 +40,8 @@ class SeasonState {
       var mostGoals = standingsResponse!.list!.reduce((a, b) => a.goalsFor! > b.goalsFor! ? a : b);
       var leastGoals =
           standingsResponse!.list!.reduce((a, b) => a.goalsAgainst! < b.goalsAgainst! ? a : b);
-      var goalDifference =
-          standingsResponse!.list!.reduce((a, b) => a.goalsDifference! > b.goalsDifference! ? a : b);
+      var goalDifference = standingsResponse!.list!
+          .reduce((a, b) => a.goalsDifference! > b.goalsDifference! ? a : b);
       var draws = standingsResponse!.list!.reduce((a, b) => a.draws! > b.draws! ? a : b);
       var losses = standingsResponse!.list!.reduce((a, b) => a.losses! > b.losses! ? a : b);
       this.stats = [
@@ -122,10 +122,11 @@ class Goal {
     this.matchId = json['MatchId'].toString();
     this.playerId = json['PlayerId'] != null ? json['Goals'].toString() : '0';
     this.seasonId = json['SeasonId'].toString();
-    this.weekId = json['Match']['WeekId'].toString();
-    this.player = Player.fromJson(json['Player']);
-    this.teamId = Player.fromJson(json['Player']).teamId;
-    this.match = Match.fromJson(json['Match']);
+    this.weekId = json['match']['WeekId'].toString();
+    this.weekId = json['SeasonId'].toString();
+    this.player = Player.fromJson(json['player']);
+    this.teamId = Player.fromJson(json['player']).teamId;
+    this.match = Match.fromJson(json['match']);
   }
 }
 
@@ -142,7 +143,7 @@ class Player {
     this.id = json['Id'].toString();
     this.name = json['Name'];
     this.goals = json['Goals'] != null ? json['Goals'].toString() : '0';
-    this.position = json['Position']['Name'];
+    this.position = json['PositionName'];
     this.teamId = json['TeamId'].toString();
   }
 }
@@ -236,21 +237,21 @@ class TableLine {
   late String logoURL;
 
   TableLine.fromJson(Map<String, dynamic> json) {
-    this.id = json['Id'].toString();
-    this.name = json['Name'];
-    this.position = json['Position'];
-    this.goalsFor = json['GoalsFor'];
-    this.matchForm =
-        (json['MatchForm'] as List).map((matchForm) => new MatchForm.fromJson(matchForm)).toList();
-    this.goalsAgainst = json['GoalsAgainst'];
-    this.goalsDifference = json['GoalsDifference'];
-    this.games = json['Games'];
+    this.id = json['id'].toString();
+    this.name = json['name'];
+    this.position = json['position'];
+    this.goalsFor = json['goalsFor'];
+    this.matchForm = []; //
+    // (json['matchForm'] as List).map((matchForm) => new MatchForm.fromJson(matchForm)).toList();
+    this.goalsAgainst = json['goalsAgainst'];
+    this.goalsDifference = json['goalsDifference'];
+    this.games = json['games'];
     this.goalsFortAverage = (this.goalsFor! / this.games!);
     this.goalsAgainstAverage = (this.goalsAgainst! / this.games!);
-    this.points = json['Points'];
-    this.wins = json['Wins'];
-    this.draws = json['Draws'];
-    this.losses = json['Losses'];
+    this.points = json['points'];
+    this.wins = json['wins'];
+    this.draws = json['draws'];
+    this.losses = json['losses'];
   }
 }
 
@@ -288,6 +289,15 @@ class MatchForm {
   };
 }
 
+class SeasoneResponse {
+  List<Season>? entities;
+
+  SeasoneResponse.fromJson(Map<String, dynamic> json) {
+    this.entities =
+        (json['entities'] as List).map((seasonJson) => new Season.fromJson(seasonJson)).toList();
+  }
+}
+
 class Season {
   Season({this.id, this.name, this.nextWeek, this.priority, this.hasTable});
 
@@ -295,7 +305,7 @@ class Season {
   String? name;
   String? nextWeek;
   int? priority;
-  bool? hasTable;
+  int? hasTable;
 
   Season.fromJson(Map<String, dynamic> json) {
     this.id = json['Id'].toString();
@@ -350,7 +360,7 @@ class Scorer {
     this.id = json['Id'].toString();
     this.name = json['Name'];
     this.goals = json['Goals'];
-    this.teamName = json['Team']['Name'];
+    this.teamName = 'To Be Done'; //json['Team']['Name'];
     this.teamId = json['TeamId'].toString();
   }
 }
@@ -391,17 +401,18 @@ class Match {
     this.id = json['Id'].toString();
     this.name = json['Name'];
     this.awayGoals = json['AwayGoals'];
-    this.awayName = json['Away']['Name'];
+    this.awayName = json['AwayName'];
     this.awayId = json['AwayId'].toString();
     this.homeGoals = json['HomeGoals'];
-    this.homeName = json['Home']['Name'];
+    this.homeName = json['HomeName'];
     this.homeId = json['HomeId'].toString();
     this.date = DateTime.parse(json['Date']);
     this.played = json['Played'];
     this.seasonId = json['SeasonId'].toString();
     this.time = json['Time'];
     this.weekId = json['WeekId'].toString();
-    this.weekName = json['Week']['Number'];
+    this.weekName = json['WeekId'].toString();
+    // this.weekName = json['Week']['Number'];
   }
 }
 

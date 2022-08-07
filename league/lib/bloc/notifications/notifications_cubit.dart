@@ -1,4 +1,4 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,35 +12,35 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   var notification;
 
   void init() async {
-    messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value) {
-      print("Token: ");
-      print(value);
-    });
-    messaging.getAPNSToken().then((value) {
-      print("APNS Token: ");
-      print(value);
-    });
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      notification = PushNotificationMessage(
-        title: event.notification?.title ?? "NA",
-        body: event.notification?.body ?? "NA",
-      );
-      showOverlayNotification((context) {
-        return MessageNotification(
-          notification: notification,
-          onReplay: () {
-            OverlaySupportEntry.of(context)?.dismiss(); //use OverlaySupportEntry to dismiss overlay
-            toast('you checked this message');
-          },
-        );
-      });
-      print("message recieved");
-      print(event.notification!.body);
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
+    // messaging = FirebaseMessaging.instance;
+    // messaging.getToken().then((value) {
+    //   print("Token: ");
+    //   print(value);
+    // });
+    // messaging.getAPNSToken().then((value) {
+    //   print("APNS Token: ");
+    //   print(value);
+    // });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+    //   notification = PushNotificationMessage(
+    //     title: event.notification?.title ?? "NA",
+    //     body: event.notification?.body ?? "NA",
+    //   );
+    //   showOverlayNotification((context) {
+    //     return MessageNotification(
+    //       notification: notification,
+    //       onReplay: () {
+    //         OverlaySupportEntry.of(context)?.dismiss(); //use OverlaySupportEntry to dismiss overlay
+    //         toast('you checked this message');
+    //       },
+    //     );
+    //   });
+    //   print("message recieved");
+    //   print(event.notification!.body);
+    // });
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    //   print('Message clicked!');
+    // });
     NotificationsState state = new NotificationsState();
     emit(state);
   }
