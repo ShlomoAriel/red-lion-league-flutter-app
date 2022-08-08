@@ -124,8 +124,8 @@ Future<List<Goal>> getSeasonGoals(String? seasonId) async {
 }
 
 Future<List<Scorer>> getSeasonScorers(String? seasonId) async {
-  final queryParameters = {'season': seasonId};
-  final uri = Uri.http(baseUrl, '/api/getPublic/Player', queryParameters);
+  final queryParameters = {'seasonId': seasonId};
+  final uri = Uri.http(baseUrl, '/api/getScorers', queryParameters);
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   final scorers = (json as List).map((listingJson) => Scorer.fromJson(listingJson)).toList();
