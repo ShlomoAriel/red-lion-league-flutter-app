@@ -9,7 +9,7 @@ import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/media_cubit.dart';
 import 'package:league/navigation/app_router.dart';
 import 'package:league/utils/main_theme.dart';
-import 'package:overlay_support/overlay_support.dart';
+// import 'package:overlay_support/overlay_support.dart';
 
 import 'bloc/notifications/notifications_cubit.dart';
 
@@ -106,14 +106,14 @@ class ClientelingApp extends StatelessWidget {
             create: (context) => MediaCubit()..init(),
           ),
         ],
-        child: OverlaySupport(
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: mainTheme(),
-            onGenerateRoute: appRouter.onGenerateRoute,
-          ),
+        // child: OverlaySupport(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: mainTheme(),
+          onGenerateRoute: appRouter.onGenerateRoute,
         ),
+        // ),
       ),
     );
   }
