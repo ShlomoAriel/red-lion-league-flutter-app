@@ -77,7 +77,7 @@ class MainView extends StatelessWidget {
                   SliverSectionView(title: 'מחזור הבא'),
                   SliverToBoxAdapter(child: FixturesWeekView(week: seasonState.nextWeek)),
                   SliverToBoxAdapter(child: SponsorsView()),
-                  SliverToBoxAdapter(child: NotificationView())
+                  // SliverToBoxAdapter(child: NotificationView())
                 ],
               ),
             );
