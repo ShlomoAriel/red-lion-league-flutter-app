@@ -154,9 +154,7 @@ class WeeksDropDown extends StatelessWidget {
             ));
       } else {
         var seasonState = state.store![state.currentSeason!.id]!;
-        var weeks = [
-          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason!.id!))
-        ];
+        var weeks = [Week(id: '-1', name: 'כל המחזורים', seasonId: state.currentSeason!.id!)];
         weeks.addAll(seasonState.weeks!.toList());
         return Container(
           alignment: Alignment.centerRight,
@@ -294,9 +292,7 @@ class WeeksSelectionButton extends StatelessWidget {
             ));
       } else {
         var seasonState = state.store![state.currentSeason!.id]!;
-        var weeks = [
-          Week(id: '-1', name: 'כל המחזורים', seasonId: int.parse(state.currentSeason!.id!))
-        ];
+        var weeks = [Week(id: '-1', name: 'כל המחזורים', seasonId: state.currentSeason!.id!)];
         weeks.addAll(seasonState.weeks!.toList());
         return Container(
             alignment: Alignment.centerRight,

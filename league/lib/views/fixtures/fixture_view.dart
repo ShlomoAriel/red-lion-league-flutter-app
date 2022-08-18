@@ -17,9 +17,12 @@ class FixtureView extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: BlocBuilder<LeagueCubit, LeagueState>(builder: (context, state) {
-          var store = state.store![state.currentSeason!.id]!;
-          Team homeTeam = store.teamsMap![match!.homeId]!;
-          Team awayTeam = store.teamsMap![match!.awayId]!;
+          var store = state.store?[state.currentSeason?.id] ?? null;
+          if (store == null || store.teamsMap == null) {
+            return (Text('Empty'));
+          }
+          Team homeTeam = store.teamsMap![match?.homeId] ?? Team();
+          Team awayTeam = store.teamsMap![match?.awayId] ?? Team();
           return GestureDetector(
             onTap: () {
               BlocProvider.of<LeagueCubit>(context).setMatch(match);
@@ -34,7 +37,7 @@ class FixtureView extends StatelessWidget {
                 Container(
                     width: 90,
                     child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                      Text(match!.homeName!, style: Theme.of(context).textTheme.bodyText1)
+                      Text(match?.homeName ?? "", style: Theme.of(context).textTheme.bodyText1)
                     ])),
                 SizedBox(width: 5),
                 TeamColorView(team: homeTeam),
@@ -49,11 +52,11 @@ class FixtureView extends StatelessWidget {
                       new Image.asset('assets/images/shield-placeholder.png'),
                 ),
                 SizedBox(width: 10),
-                Text(match!.played! ? match!.homeGoals.toString() : '',
+                Text(match?.played ?? false ? (match?.homeGoals ?? '-').toString() : '',
                     style: Theme.of(context).textTheme.bodyText1),
-                Text(match!.played! ? ' - ' : match!.time!,
+                Text(match?.played ?? false ? ' - ' : match?.time ?? '-',
                     style: Theme.of(context).textTheme.bodyText1),
-                Text(match!.played! ? match!.awayGoals.toString() : '',
+                Text(match?.played ?? false ? (match?.awayGoals ?? '-').toString() : '',
                     style: Theme.of(context).textTheme.bodyText1),
                 SizedBox(width: 10),
                 CachedNetworkImage(
@@ -71,7 +74,7 @@ class FixtureView extends StatelessWidget {
                 Container(
                     width: 90,
                     child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      Text(match!.awayName!, style: Theme.of(context).textTheme.bodyText1)
+                      Text(match?.awayName ?? "", style: Theme.of(context).textTheme.bodyText1)
                     ])),
               ],
             ),

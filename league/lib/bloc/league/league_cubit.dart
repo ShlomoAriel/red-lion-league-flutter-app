@@ -87,11 +87,11 @@ class LeagueCubit extends Cubit<LeagueState> {
       Team standingTeam = new Team.fromStanding(standing);
       teamsMap[standing.id] = standingTeam;
     }
-    List<Team>? teamsSpecs = await getTeamSpecs(teamIds);
-    for (var teamSpec in teamsSpecs!) {
-      teamsMap[teamSpec.id]!.colorHEX = teamSpec.colorHEX;
-      teamsMap[teamSpec.id]!.logoURL = teamSpec.logoURL;
-    }
+    // List<Team>? teamsSpecs = await getTeamSpecs(teamIds);
+    // for (var teamSpec in teamsSpecs!) {
+    //   teamsMap[teamSpec.id]!.colorHEX = teamSpec.colorHEX;
+    //   teamsMap[teamSpec.id]!.logoURL = teamSpec.logoURL;
+    // }
     for (var standing in standingsResponse.list!) {
       standing.logoURL = teamsMap[standing.id]!.logoURL ?? '';
     }

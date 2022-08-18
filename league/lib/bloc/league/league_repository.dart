@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
 
 import 'league_models.dart';
 
-final baseUrl = 'redlionleague.herokuapp.com';
-// final baseUrl = 'localhost:3001';
+// final baseUrl = 'redlionleague.herokuapp.com';
+final baseUrl = 'localhost:3001';
 
 final client = http.Client();
 
 Future<List<Season>> getSeasons() async {
-  final uri = Uri.https(baseUrl, '/api/getSeasons');
+  final uri = Uri.http(baseUrl, '/api/getPublic/Season');
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   final seasonResponse = SeasoneResponse.fromJson(json);
@@ -42,7 +43,7 @@ Future<ImageGalleryModel?> getGallery() async {
 Future<List<Team>?> getTeamSpecs(List<String?> ids) async {
   final uri = Uri.https('user-management-template.herokuapp.com', '/api/findPublic/Team');
   final body = jsonEncode({
-    'filter': {'id': ids},
+    'filter': {'_id': ids},
     'type': 'exactly'
   });
   // final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Team');
@@ -76,7 +77,7 @@ Future<List<Sponsor>?> getSponsors() async {
 Future<TeamPlayersResponse> getTeamSeasonPlayers(String? seasonId, String teamId) async {
   // final body = jsonEncode(<String, String?>{'SeasonId': seasonId, 'teamId': teamId});
   final queryParameters = {'seasonId': seasonId, 'teamId': teamId};
-  final uri = Uri.https(baseUrl, '/api/GetTeamSeasonPlayers', queryParameters);
+  final uri = Uri.http(baseUrl, '/api/GetTeamSeasonPlayers', queryParameters);
   final response = await client.get(uri);
   // final response = await client.post(uri,
   //     headers: <String, String>{
@@ -89,8 +90,7 @@ Future<TeamPlayersResponse> getTeamSeasonPlayers(String? seasonId, String teamId
 }
 
 Future<StandingsResponse> getSeasonStandings(String? seasonId) async {
-  // final queryParameters = {'id': seasonId};
-  final uri = Uri.https(baseUrl, '/api/getStandings/' + seasonId.toString());
+  final uri = Uri.http(baseUrl, '/api/getStandings/' + seasonId.toString());
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   return StandingsResponse.fromJson(json);
@@ -98,7 +98,7 @@ Future<StandingsResponse> getSeasonStandings(String? seasonId) async {
 
 Future<List<Match>> getSeasonMatches(String? seasonId) async {
   final queryParameters = {'seasonId': seasonId};
-  final uri = Uri.https(baseUrl, '/api/GetSeasonMatches', queryParameters);
+  final uri = Uri.http(baseUrl, '/api/GetSeasonMatches', queryParameters);
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   final matches = (json as List).map((listingJson) => Match.fromJson(listingJson)).toList();
@@ -106,8 +106,8 @@ Future<List<Match>> getSeasonMatches(String? seasonId) async {
 }
 
 Future<List<Week>> getSeasonWeeks(String? seasonId) async {
-  final queryParameters = {'seasonId': seasonId};
-  final uri = Uri.https(baseUrl, '/api/GetSeasonWeeks', queryParameters);
+  // final queryParameters = {'seasonId': seasonId};
+  final uri = Uri.http(baseUrl, '/api/GetSeasonWeeks/' + seasonId.toString());
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   final weeks = (json as List).map((listingJson) => Week.fromJson(listingJson)).toList();
@@ -115,17 +115,18 @@ Future<List<Week>> getSeasonWeeks(String? seasonId) async {
 }
 
 Future<List<Goal>> getSeasonGoals(String? seasonId) async {
-  final queryParameters = {'seasonId': seasonId};
-  final uri = Uri.https(baseUrl, '/api/Goal', queryParameters);
+  final uri = Uri.http(baseUrl, '/api/GetSeasonGoals/' + seasonId.toString());
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
-  final weeks = (json as List).map((listingJson) => Goal.fromJson(listingJson)).toList();
-  return weeks;
+  final goals = (json as List).map((listingJson) {
+    return Goal.fromJson(listingJson);
+  }).toList();
+  return goals;
 }
 
 Future<List<Scorer>> getSeasonScorers(String? seasonId) async {
   final queryParameters = {'seasonId': seasonId};
-  final uri = Uri.https(baseUrl, '/api/getScorers', queryParameters);
+  final uri = Uri.http(baseUrl, '/api/getScorers', queryParameters);
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   final scorers = (json as List).map((listingJson) => Scorer.fromJson(listingJson)).toList();
@@ -133,9 +134,11 @@ Future<List<Scorer>> getSeasonScorers(String? seasonId) async {
 }
 
 Future<List<Goal>> getGoals() async {
-  final uri = Uri.https(baseUrl, '/api/Goal');
+  final uri = Uri.http(baseUrl, '/api/Goal');
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
-  final goals = (json as List).map((listingJson) => Goal.fromJson(listingJson)).toList();
+  final goals = (json as List).map((listingJson) {
+    return Goal.fromJson(listingJson);
+  }).toList();
   return goals;
 }
