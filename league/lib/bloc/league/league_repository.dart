@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:developer' as developer;
 
 import 'league_models.dart';
 
@@ -75,17 +74,10 @@ Future<List<Sponsor>?> getSponsors() async {
 }
 
 Future<TeamPlayersResponse> getTeamSeasonPlayers(String? seasonId, String teamId) async {
-  // final body = jsonEncode(<String, String?>{'SeasonId': seasonId, 'teamId': teamId});
   final queryParameters = {'seasonId': seasonId, 'teamId': teamId};
   final uri = Uri.http(baseUrl, '/api/GetTeamSeasonPlayers', queryParameters);
   final response = await client.get(uri);
-  // final response = await client.post(uri,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: body);
   final json = jsonDecode(response.body);
-
   return TeamPlayersResponse.fromJson(json);
 }
 

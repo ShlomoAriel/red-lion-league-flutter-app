@@ -49,12 +49,12 @@ class LeagueCubit extends Cubit<LeagueState> {
     Map<String, List<Goal>> goals = new Map<String, List<Goal>>();
     var awayGoals = state.store![state.currentSeason!.id]!.goals!
         .where((element) =>
-            element.match!.id == currentMatch.id && element.teamId == currentMatch.awayId)
+            element.matchId == currentMatch.id && element.teamId == currentMatch.awayId)
         .toList();
 
     var homeGoals = state.store![state.currentSeason!.id]!.goals!
         .where((element) =>
-            element.match!.id == currentMatch.id && element.teamId == currentMatch.homeId)
+            element.matchId == currentMatch.id && element.teamId == currentMatch.homeId)
         .toList();
     goals['homeGoals'] = homeGoals;
     goals['awayGoals'] = awayGoals;

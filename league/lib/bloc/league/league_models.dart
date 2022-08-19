@@ -119,7 +119,7 @@ class Goal {
 
   Goal.fromJson(Map<String, dynamic> json) {
     this.id = json['_id'].toString();
-    this.matchId = json['match'].toString();
+    this.matchId = json['match']['_id'].toString();
     this.playerId = json['player']['_id'].toString();
     this.seasonId = json['season'].toString();
     this.weekId = json['match']['_id'].toString();
@@ -139,11 +139,11 @@ class Player {
   String? position;
 
   Player.fromJson(Map<String, dynamic> json) {
-    this.id = json['Id'].toString();
-    this.name = json['Name'];
-    this.goals = json['Goals'] != null ? json['Goals'].toString() : '0';
-    this.position = json['PositionName'];
-    this.teamId = json['TeamId'].toString();
+    this.id = json['_id'].toString();
+    this.name = json['name'];
+    this.goals = json['goals'] != null ? json['goals'].toString() : '0';
+    this.position = json['positionName'];
+    this.teamId = json['team'].toString();
   }
 }
 
@@ -366,7 +366,7 @@ class Scorer {
     this.name = json['player']['name'];
     this.goals = json['goals'];
     this.teamName = ''; //json['Team']['Name'];
-    this.teamId = json['team'];
+    this.teamId = json['team']['_id'];
   }
 }
 
