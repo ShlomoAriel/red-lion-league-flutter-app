@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'league_models.dart';
 
-// final baseUrl = 'redlionleague.herokuapp.com';
+// final baseUrl = 'red-lion-league-backend.herokuapp.com';
 final baseUrl = 'localhost:3001';
 
 final client = http.Client();
@@ -13,9 +13,7 @@ Future<List<Season>> getSeasons() async {
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
   final seasonResponse = SeasoneResponse.fromJson(json);
-  // final seasonResponse = (json as SeasoneResponse);
   final seasons = seasonResponse.entities ?? [];
-  // final seasons = (json as List).map((listingJson) => Season.fromJson(listingJson)).toList();
   seasons.sort((a, b) => b.priority!.compareTo(a.priority!));
   return seasons;
 }
@@ -61,7 +59,6 @@ Future<List<Team>?> getTeamSpecs(List<String?> ids) async {
 
 Future<List<Sponsor>?> getSponsors() async {
   final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Sponsor');
-  // final uri = Uri.https('user-management-template.herokuapp.com', '/api/getPublic/Team');
   final response = await client.get(uri, headers: <String, String>{
     'Content-Type': 'application/json; charset=UTF-8',
   });
@@ -97,12 +94,21 @@ Future<List<Match>> getSeasonMatches(String? seasonId) async {
   return matches;
 }
 
+Future<List<Match>> getMatcheHistory(String team1, String team2) async {
+  final queryParameters = {'team1': team1, 'team2': team2};
+  final uri = Uri.http(baseUrl, '/api/GetMatcHistory', queryParameters);
+  final response = await client.get(uri);
+  final json = jsonDecode(response.body);
+  final matches =
+      (json['result'] as List).map((listingJson) => Match.fromJson(listingJson)).toList();
+  return matches;
+}
+
 Future<List<Week>> getSeasonWeeks(String? seasonId) async {
-  // final queryParameters = {'seasonId': seasonId};
   final uri = Uri.http(baseUrl, '/api/GetSeasonWeeks/' + seasonId.toString());
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
-  final weeks = (json as List).map((listingJson) => Week.fromJson(listingJson)).toList();
+  final weeks = (json['result'] as List).map((listingJson) => Week.fromJson(listingJson)).toList();
   return weeks;
 }
 
@@ -110,7 +116,7 @@ Future<List<Goal>> getSeasonGoals(String? seasonId) async {
   final uri = Uri.http(baseUrl, '/api/GetSeasonGoals/' + seasonId.toString());
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
-  final goals = (json as List).map((listingJson) {
+  final goals = (json['result'] as List).map((listingJson) {
     return Goal.fromJson(listingJson);
   }).toList();
   return goals;
@@ -121,7 +127,8 @@ Future<List<Scorer>> getSeasonScorers(String? seasonId) async {
   final uri = Uri.http(baseUrl, '/api/getScorers', queryParameters);
   final response = await client.get(uri);
   final json = jsonDecode(response.body);
-  final scorers = (json as List).map((listingJson) => Scorer.fromJson(listingJson)).toList();
+  final scorers =
+      (json['result'] as List).map((listingJson) => Scorer.fromJson(listingJson)).toList();
   return scorers;
 }
 

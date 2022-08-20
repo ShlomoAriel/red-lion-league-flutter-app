@@ -75,7 +75,10 @@ class MainView extends StatelessWidget {
                         ClipRRect(borderRadius: BorderRadius.circular(5.0), child: ImageGallery()),
                   )),
                   SliverSectionView(title: 'מחזור הבא'),
-                  SliverToBoxAdapter(child: FixturesWeekView(week: seasonState.nextWeek)),
+                  SliverToBoxAdapter(
+                      child: FixturesListView(
+                          title: 'מחזור ' + (seasonState.nextWeek?.name ?? ''),
+                          fixtures: seasonState.nextWeek?.fixtures ?? {})),
                   SliverToBoxAdapter(child: SponsorsView()),
                   // SliverToBoxAdapter(child: NotificationView())
                 ],

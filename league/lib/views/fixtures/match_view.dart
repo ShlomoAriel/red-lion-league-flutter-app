@@ -2,10 +2,11 @@ import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
+
+import 'fixtures_view.dart';
 
 class MatchView extends StatelessWidget {
   final scrollController = ScrollController();
@@ -17,7 +18,7 @@ class MatchView extends StatelessWidget {
       final cubit = BlocProvider.of<LeagueCubit>(context);
       var matchGoals = cubit.getMatchGoals(match);
       return Container(
-          color: Colors.white,
+          color: Colors.grey[200],
           child: CustomScrollView(
               controller: scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
@@ -25,14 +26,13 @@ class MatchView extends StatelessWidget {
                 SliverAppBar(
                   pinned: true,
                   floating: false,
-                  title:
-                      Text('מחזור ' + match.weekName!, style: Theme.of(context).textTheme.headline6),
+                  title: Text('', style: Theme.of(context).textTheme.headline6),
                   backgroundColor: Colors.white,
                 ),
                 matchScore(match, cubit, state, context),
                 SliverToBoxAdapter(
                     child: Container(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -64,6 +64,9 @@ class MatchView extends StatelessWidget {
                     ],
                   ),
                 )),
+                SliverToBoxAdapter(
+                    child: FixturesListView(
+                        title: 'מפגשים קודמים', fixtures: state.selectedMatches ?? {}))
               ]));
     });
   }
@@ -76,7 +79,7 @@ Widget matchScore(Match match, LeagueCubit cubit, state, context) {
   Team awayTeam = store.teamsMap[match.awayId];
   return SliverToBoxAdapter(
     child: Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,

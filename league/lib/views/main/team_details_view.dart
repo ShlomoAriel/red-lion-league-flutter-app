@@ -6,6 +6,7 @@ import 'package:league/bloc/league/league_cubit.dart';
 import 'package:league/bloc/league/league_models.dart';
 import 'package:league/bloc/league/league_state.dart';
 import 'package:league/views/common/header_view.dart';
+import 'package:league/views/fixtures/match_view.dart';
 import 'package:league/views/main/shimmer_placeholders.dart';
 
 class TeamDetailsView extends StatelessWidget {
@@ -18,6 +19,7 @@ class TeamDetailsView extends StatelessWidget {
         builder: (context, state) {
           var team = getTeam(state);
           var players = getPlayers(state);
+          final cubit = BlocProvider.of<LeagueCubit>(context);
           return CustomScrollView(
             slivers: [
               TeamAppBar(team),
@@ -38,7 +40,7 @@ class TeamDetailsView extends StatelessWidget {
                             height: 30,
                             width: 90,
                             decoration: BoxDecoration(
-                                color: MatchForm.formColorMap['win'],
+                                color: MatchForm.formColorMap['W'],
                                 borderRadius: BorderRadius.circular(5)),
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(left: 5),
@@ -56,7 +58,7 @@ class TeamDetailsView extends StatelessWidget {
                             height: 30,
                             width: 90,
                             decoration: BoxDecoration(
-                                color: MatchForm.formColorMap['draw'],
+                                color: MatchForm.formColorMap['D'],
                                 borderRadius: BorderRadius.circular(5)),
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(left: 5),
@@ -74,7 +76,7 @@ class TeamDetailsView extends StatelessWidget {
                             height: 30,
                             width: 90,
                             decoration: BoxDecoration(
-                                color: MatchForm.formColorMap['loss'],
+                                color: MatchForm.formColorMap['L'],
                                 borderRadius: BorderRadius.circular(5)),
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(left: 5),
@@ -102,10 +104,10 @@ class TeamDetailsView extends StatelessWidget {
                       child: Text('משחקים', style: Theme.of(context).textTheme.headline6)),
                   Container(
                       padding: EdgeInsets.symmetric(vertical: 20),
-                      height: 70.0,
+                      height: 100.0,
                       child: ListView.separated(
                           separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(width: 0);
+                            return SizedBox(width: 40);
                           },
                           padding: EdgeInsets.only(left: 20.0, right: 20),
                           itemCount: (team != null) ? team.matchForm.length : 10,
@@ -113,22 +115,7 @@ class TeamDetailsView extends StatelessWidget {
                           itemBuilder: (_, index) {
                             final item = (team != null) ? team.matchForm[index] : null;
                             return (team != null)
-                                ? Container(
-                                    decoration: BoxDecoration(
-                                        color: item?.resultColor ?? Colors.grey,
-                                        borderRadius: BorderRadius.circular(5)),
-                                    padding: EdgeInsets.all(4),
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.only(left: 5),
-                                    width: 30,
-                                    height: 30,
-                                    child: Text(
-                                      item.resultText,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .apply(color: Colors.white),
-                                    ))
+                                ? MatchScoreHeader(item.match, cubit, state, context)
                                 : Container(
                                     decoration: BoxDecoration(
                                         color: Colors.grey[300],
@@ -314,4 +301,77 @@ class ClientMembersDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return true;
   }
+}
+
+Widget MatchScoreHeader(Match match, LeagueCubit cubit, state, context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      GestureDetector(
+        onTap: () {
+          BlocProvider.of<LeagueCubit>(context)
+              .setTeamSeasonPlayers(match.seasonId, match.homeTeam?.id ?? '');
+          Navigator.of(context).pushNamed(
+            '/teamDetails',
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CachedNetworkImage(
+              width: 45,
+              height: 45,
+              imageUrl: match.homeTeam?.logoURL ?? '',
+              placeholder: (context, url) =>
+                  new Image.asset('assets/images/shield-placeholder.png'),
+              errorWidget: (context, url, error) =>
+                  new Image.asset('assets/images/shield-placeholder.png'),
+            ),
+            Container(
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              // Text(match.homeName ?? '', style: Theme.of(context).textTheme.bodyText1)
+            ])),
+          ],
+        ),
+      ),
+      SizedBox(width: 5),
+      Container(
+        child: Row(
+          children: [
+            Text(match.played ?? false ? match.homeGoals.toString() : '',
+                style: Theme.of(context).textTheme.headline6),
+            Text(match.played ?? false ? ' - ' : match.time ?? '-',
+                style: Theme.of(context).textTheme.headline6),
+            Text(match.played ?? false ? match.awayGoals.toString() : '',
+                style: Theme.of(context).textTheme.headline6),
+          ],
+        ),
+      ),
+      SizedBox(width: 5),
+      GestureDetector(
+        onTap: () {
+          BlocProvider.of<LeagueCubit>(context)
+              .setTeamSeasonPlayers(match.seasonId, match.awayTeam?.id ?? '');
+          Navigator.of(context).pushNamed(
+            '/teamDetails',
+          );
+        },
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          CachedNetworkImage(
+            width: 45,
+            height: 45,
+            imageUrl: match.awayTeam?.logoURL ?? '',
+            placeholder: (context, url) => new Image.asset('assets/images/shield-placeholder.png'),
+            errorWidget: (context, url, error) =>
+                new Image.asset('assets/images/shield-placeholder.png'),
+          ),
+          Container(
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            // Text(match.awayName ?? '', style: Theme.of(context).textTheme.bodyText1)
+          ])),
+        ]),
+      )
+    ],
+  );
 }

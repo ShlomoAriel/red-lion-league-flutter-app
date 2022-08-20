@@ -93,12 +93,12 @@ class TeamPlayersResponse {
 
   List<Player>? list;
 
-  factory TeamPlayersResponse.fromJson(List<dynamic>? json) {
-    if (json is List) {
-      final objectList = json.cast<Map<String, dynamic>>();
-      final tableLines = objectList.map((e) => Player.fromJson(e));
+  factory TeamPlayersResponse.fromJson(Map<String, dynamic> json) {
+    if (json['result'] is List) {
+      final tableLines =
+          (json['result'] as List).map((seasonJson) => new Player.fromJson(seasonJson)).toList();
 
-      return TeamPlayersResponse(list: tableLines.toList());
+      return TeamPlayersResponse(list: tableLines);
     } else {
       throw Exception('No table in response');
     }
@@ -192,12 +192,10 @@ class StandingsResponse {
   StandingsResponse({this.list});
 
   List<TableLine>? list;
-
-  factory StandingsResponse.fromJson(List<dynamic>? json) {
-    if (json is List) {
-      final objectList = json.cast<Map<String, dynamic>>();
-      final tableLines = objectList.map((e) => TableLine.fromJson(e));
-
+  factory StandingsResponse.fromJson(Map<String, dynamic> json) {
+    if (json['result'] is List) {
+      final tableLines =
+          (json['result'] as List).map((seasonJson) => new TableLine.fromJson(seasonJson)).toList();
       return StandingsResponse(list: tableLines.toList());
     } else {
       throw Exception('No table in response');
@@ -243,8 +241,8 @@ class TableLine {
     this.colorHEXPrimary = json['colorHEXPrimary'];
     this.position = json['position'];
     this.goalsFor = json['goalsFor'];
-    this.matchForm = []; //
-    // (json['matchForm'] as List).map((matchForm) => new MatchForm.fromJson(matchForm)).toList();
+    this.matchForm =
+        (json['matchForm'] as List).map((matchForm) => new MatchForm.fromJson(matchForm)).toList();
     this.goalsAgainst = json['goalsAgainst'];
     this.goalsDifference = json['goalsDifference'];
     this.games = json['games'];
@@ -268,39 +266,42 @@ class MatchForm {
   Color? resultColor;
   String? resultClass;
   String? resultText;
+  Team? homeTeam;
+  Team? awayTeam;
+  Match? match;
 
   MatchForm.fromJson(Map<String, dynamic> json) {
-    this.id = json['Id'].toString();
-    this.name = json['Name'];
-    this.goalsAgainst = json['GoalsAgainst'];
-    this.goalsFor = json['GoalsFor'];
-    this.result = json['Result'];
-    this.resultText = formTextMap[json['ResultClass'].toString()];
-    this.resultClass = json['ResultClass'];
-    this.resultColor = formColorMap[json['ResultClass'].toString()];
+    // this.id = json['Id'].toString();
+    // this.name = json['Name'];
+    this.goalsAgainst = json['goalsAgainst'];
+    this.goalsFor = json['goalsFor'];
+    this.result = json['resultClass'];
+    this.resultText = json['resultClass'];
+    this.resultClass = json['resultClass'];
+    this.resultColor = formColorMap[json['resultClass'].toString()];
+    this.match = Match.fromJson(json['match']);
+    this.homeTeam = Team.fromJson(json['homeTeam']);
+    ;
+    this.awayTeam = Team.fromJson(json['awayTeam']);
+    ;
   }
   static var formColorMap = {
-    'win': Color(0xff92C47D),
-    'draw': Color(0xff6D9EEB),
-    'loss': Color(0xffE06666),
-  };
-  var formTextMap = {
-    'win': 'W',
-    'draw': 'D',
-    'loss': 'L',
+    'W': Color(0xff92C47D),
+    'D': Color(0xff6D9EEB),
+    'L': Color(0xffE06666),
   };
 }
 
 class SeasoneResponse {
   List<Season>? entities;
 
-  // SeasoneResponse.fromJson(Map<String, dynamic> json) {
-  //   this.entities =
-  //       (json['entities'] as List).map((seasonJson) => new Season.fromJson(seasonJson)).toList();
-  // }
-  SeasoneResponse.fromJson(List<dynamic> json) {
-    this.entities = json.map((seasonJson) => new Season.fromJson(seasonJson)).toList();
+  SeasoneResponse.fromJson(Map<String, dynamic> json) {
+    this.entities =
+        (json['result'] as List).map((seasonJson) => new Season.fromJson(seasonJson)).toList();
   }
+  // SeasoneResponse.fromJson(List<dynamic> json) {
+  //   this.entities = json.map((seasonJson) => new Season.fromJson(seasonJson)).toList();
+  // }
 }
 
 class Season {
@@ -399,6 +400,8 @@ class Match {
   String? time;
   String? weekId;
   String? weekName;
+  Team? homeTeam;
+  Team? awayTeam;
 
   Match.fromJson(Map<String, dynamic> json) {
     this.id = json['_id'].toString();
@@ -407,6 +410,8 @@ class Match {
     this.awayId = json['awayTeam']['_id'];
     this.homeGoals = json['homeGoals'];
     this.homeName = json['homeTeam']['name'];
+    this.homeTeam = Team.fromJson(json['homeTeam']);
+    this.awayTeam = Team.fromJson(json['awayTeam']);
     this.homeId = json['homeTeam']['_id'];
     this.date = DateTime.parse(json['date']);
     this.played = json['played'];

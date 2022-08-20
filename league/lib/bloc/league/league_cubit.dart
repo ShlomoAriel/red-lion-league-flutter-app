@@ -2,9 +2,11 @@ import 'dart:async';
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'league_models.dart';
 import 'league_repository.dart';
 import 'league_state.dart';
+import "package:collection/collection.dart";
 
 class LeagueCubit extends Cubit<LeagueState> {
   LeagueCubit()
@@ -59,6 +61,20 @@ class LeagueCubit extends Cubit<LeagueState> {
     goals['homeGoals'] = homeGoals;
     goals['awayGoals'] = awayGoals;
     return goals;
+  }
+
+  void setMatchHistory(Match match) async {
+    var tempState = new LeagueState.from(state);
+    tempState.isLoading = true;
+    emit(tempState);
+    List<Match> matches = await getMatcheHistory(match.homeId ?? '', match.awayId ?? '');
+    var groupedMatches = groupBy(matches, (Match obj) {
+      return DateFormat('EEEE dd MMMM yyyy', 'HE').format(obj.date!);
+    });
+    var newState = new LeagueState.from(state);
+    newState.selectedMatches = groupedMatches;
+    newState.isLoading = false;
+    emit(newState);
   }
 
   // Create a season state for the store

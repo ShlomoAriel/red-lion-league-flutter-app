@@ -26,6 +26,7 @@ class FixtureView extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               BlocProvider.of<LeagueCubit>(context).setMatch(match);
+              BlocProvider.of<LeagueCubit>(context).setMatchHistory(match ?? Match());
               Navigator.of(context).pushNamed(
                 '/matchDetails',
               );

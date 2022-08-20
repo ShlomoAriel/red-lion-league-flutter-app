@@ -208,7 +208,7 @@ class FixturesSliverView extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             final week = weeks![index];
-            return FixturesWeekView(week: week);
+            return FixturesListView(title: 'מחזור ' + week.name!, fixtures: week.fixtures ?? {});
           },
           childCount: weeks!.length,
         ),
@@ -217,10 +217,11 @@ class FixturesSliverView extends StatelessWidget {
   }
 }
 
-class FixturesWeekView extends StatelessWidget {
-  final Week? week;
+class FixturesListView extends StatelessWidget {
+  final Map<String, List<Match>> fixtures;
+  final String title;
 
-  const FixturesWeekView({Key? key, this.week}) : super(key: key);
+  const FixturesListView({Key? key, required this.fixtures, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -230,15 +231,15 @@ class FixturesWeekView extends StatelessWidget {
         children: [
           Container(
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: Text('מחזור ' + week!.name!, style: Theme.of(context).textTheme.headline6)),
+              child: Text(title, style: Theme.of(context).textTheme.headline6)),
           ListView.builder(
             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: week!.fixtures!.keys.toList().length,
+            itemCount: fixtures.keys.toList().length,
             itemBuilder: (context, index) {
-              final keys = week!.fixtures!.keys.toList();
-              final list = week!.fixtures![keys[index]];
+              final keys = fixtures.keys.toList();
+              final list = fixtures[keys[index]];
               return FixtureDayView(dateString: keys[index], matches: list);
             },
           )
