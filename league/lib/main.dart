@@ -109,7 +109,7 @@ class ClientelingApp extends StatelessWidget {
         // child: OverlaySupport(
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Red Lion League',
           theme: mainTheme(),
           onGenerateRoute: appRouter.onGenerateRoute,
         ),
